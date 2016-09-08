@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TusLibros.lib;
+using TusLibros.tests.support;
 
 namespace TusLibros
 {
@@ -11,54 +13,54 @@ namespace TusLibros
     [TestClass]
     public class TestCart
     {
-        protected Cart cart;
-        private string an_invalid_book;
-        private string a_book;
-        private ObjectProvider objectProvider;
+        protected Cart Cart;
+        private string _anInvalidBook;
+        private string _aBook;
+        private ObjectProvider _objectProvider;
 
         [TestInitialize]
-        public void setUp()
+        public void SetUp()
         {
-            objectProvider = new ObjectProvider();
-            cart = objectProvider.emptyCart();
-            a_book = objectProvider.aBook();
-            an_invalid_book = objectProvider.anInvalidBook();
+            _objectProvider = new ObjectProvider();
+            Cart = _objectProvider.EmptyCart();
+            _aBook = _objectProvider.ABook();
+            _anInvalidBook = _objectProvider.AnInvalidBook();
         }
 
         [TestMethod]
-        public void test01AtTheBeginTheCartIsEmpty()
+        public void Test01AtTheBeginTheCartIsEmpty()
         {
-            Assert.AreEqual(cart.totalItems(), 0);
+            Assert.AreEqual(Cart.TotalItems(), 0);
         }
 
         [TestMethod]
-        public void test02CanAddBooksToTheCart()
+        public void Test02CanAddBooksToTheCart()
         {
-            cart.addItem(a_book);
-            Assert.AreEqual(cart.totalItems(), 1);
-            Assert.IsTrue(cart.hasABook(a_book));
+            Cart.AddItem(_aBook);
+            Assert.AreEqual(Cart.TotalItems(), 1);
+            Assert.IsTrue(Cart.HasABook(_aBook));
         }
 
-        [TestMethod]
-        public void test03CanNotAddBooksFromOtherEditorialToTheCart()
+        /*
+        public void Test03CanNotAddBooksFromOtherEditorialToTheCart()
         {
             try
             {
-                cart.addItem(an_invalid_book);
+                Cart.AddItem(_anInvalidBook);
                 Assert.Fail();
             }
             catch (Exception e)
             {
-                Assert.AreEqual(Cart.ERROR_MESSAGE_FOR_INVALID_BOOK, e.Message);
+                Assert.AreEqual(Cart.ErrorMessageForInvalidBook, e.Message);
             }
-        }
+        }*/
 
         [TestMethod]
-        public void test04CanAddMoreThanOnceOfTheSameBookToTheCart()
+        public void Test04CanAddMoreThanOnceOfTheSameBookToTheCart()
         {
-            cart.addItemSomeTimes(a_book, 2);
-            Assert.AreEqual(cart.totalItems(), 2);
-            Assert.IsTrue(cart.hasABook(a_book));
+            Cart.AddItemSomeTimes(_aBook, 2);
+            Assert.AreEqual(Cart.TotalItems(), 2);
+            Assert.IsTrue(Cart.HasABook(_aBook));
         }
     }
 }

@@ -48,6 +48,9 @@
   <ItemGroup>
     <Compile Include="lib\Cart.cs" />
     <Compile Include="lib\Cashier.cs" />
+    <Compile Include="lib\CreditCard.cs" />
+    <Compile Include="lib\FacadeYourBooks.cs" />
+    <Compile Include="lib\MerchantProcessor.cs" />
     <Compile Include="tests\support\ObjectProvider.cs" />
     <Compile Include="lib\TusLibrosApp.cs" />
     <Compile Include="tests\TestCart.cs" />
