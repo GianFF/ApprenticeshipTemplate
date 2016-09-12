@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace TusLibros.lib
 {
-    class Cashier
+    public class Cashier
     {
         protected List<Cart> SalesRecord;
         protected Hashtable Catalog;
@@ -20,7 +20,7 @@ namespace TusLibros.lib
             AMerchantProcessor = aMerchantProcessor;
         }
 
-        protected int PriceFor(Cart aCart)
+        public int PriceFor(Cart aCart)
         {
             AssertThatTheCartIsNotEmpty(aCart);
             return SumPricesIn(aCart.GetItems());//.map { | un_libro | @catalogo[un_libro] } # TODO ver
@@ -41,14 +41,6 @@ namespace TusLibros.lib
             return (int) Catalog[aProduct];
         }
 
-        private void AssertThatTheCartIsNotEmpty(Cart aCart)
-        {
-            if (aCart.IsEmpty())
-            {
-                throw new System.NotImplementedException();//Ver esto
-            }            
-        }
-
         public void CheckoutFor(CreditCard aCreditCard, Cart aCart)
         {
             VerifyIfTheCreditCardIsInvalid(aCreditCard);
@@ -56,13 +48,19 @@ namespace TusLibros.lib
             SalesRecord.Add((aCart));
         }
 
-
-
         private void VerifyIfTheCreditCardIsInvalid(CreditCard aCreditCard)
         {
             if (aCreditCard.IsExpired())
             {
-                throw new NotImplementedException();
+                throw new CannotCheckoutFor("The credit card is expired");//Ver esto
+            }
+        }
+
+        private void AssertThatTheCartIsNotEmpty(Cart aCart)
+        {
+            if (aCart.IsEmpty())
+            {
+                throw new CannotCheckoutFor("The cart cannot be empty for checkout");//Ver esto
             }
         }
 
@@ -76,4 +74,5 @@ namespace TusLibros.lib
             return SalesRecord.Contains(aSale);
         }
     }
+    
 }

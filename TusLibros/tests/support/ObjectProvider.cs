@@ -42,9 +42,9 @@ namespace TusLibros.tests.support {
             return cart;
         }
 
-        public Cashier ACashier()
+        public Cashier ACashier(MerchantProcessor aMerchantProcessor)
         {
-            return new Cashier(AnMerchantProcessor());
+            return new Cashier(aMerchantProcessor);
         }
 
         public Cart ACartWithTwoDiferentsBooks()

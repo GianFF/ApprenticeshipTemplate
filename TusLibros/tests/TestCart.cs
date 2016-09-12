@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 using TusLibros.lib;
 using TusLibros.tests.support;
 
-namespace TusLibros
+namespace TusLibros.tests
 {
-    
     [TestClass]
     public class TestCart
     {
