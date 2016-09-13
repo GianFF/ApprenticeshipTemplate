@@ -33,7 +33,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files (x86)\PROGRAMMING\NHibernate-4.0.4.GA-bin\Required_Bins\Iesi.Collections.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files (x86)\PROGRAMMING\NHibernate-4.0.4.GA-bin\Required_Bins\NHibernate.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -48,6 +56,9 @@
   <ItemGroup>
     <Compile Include="lib\Cart.cs" />
     <Compile Include="lib\Cashier.cs" />
+    <Compile Include="lib\Entity.cs" />
+    <Compile Include="mappers\CartMap.cs" />
+    <Compile Include="mappers\NHibernateConfiguration.cs" />
     <Compile Include="tests\support\ObjectProvider.cs" />
     <Compile Include="lib\TusLibrosApp.cs" />
     <Compile Include="tests\TestCart.cs" />

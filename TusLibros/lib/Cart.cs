@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TusLibros
 {
-    public class Cart
+    public class Cart : Entity
     {
         internal static string ERROR_MESSAGE_FOR_INVALID_BOOK = "You are trying to add an invalid book";
         private List<string> items = new List<string>();
