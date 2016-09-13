@@ -21,43 +21,11 @@ namespace TusLibros.tests
         }
 
         [TestMethod]
-        public void Test01CanRegisterAUser()
+        public void Test01CanGetAnEmptyCartForAUser()
         {
-            facade.Register(anUser);
+            Cart cart = facade.CartFor(anUser);
 
-            Assert.IsTrue(facade.IsRegistered(anUser));
-        }
-
-        [TestMethod]
-        public void Test02CanNotLogginAnInvalidUser()
-        {
-            try
-            {
-                facade.Loggin(anUser);
-                Assert.Fail();
-            }
-            catch (SystemException e)
-            {
-                Assert.AreEqual("Not registered user", e.Message);
-            }
-        }
-
-        [TestMethod]
-        public void Test03WhenAUserLogginThenObtainsACart()
-        {
-            facade.Register(anUser);
-            Cart userCart = facade.Loggin(anUser);
-
-            Assert.AreEqual(objectProvider.EmptyCart(), userCart);
-        }
-
-        [TestMethod]
-        public void Test04AUserThanDoNotBuyAnthingHasAnEmptyCart()
-        {
-            facade.Register(anUser);
-            Cart userCart = facade.Loggin(anUser);
-
-            Assert.IsTrue(userCart.IsEmpty());
+            Assert.IsTrue(cart.IsEmpty());
         }
     }
 }
