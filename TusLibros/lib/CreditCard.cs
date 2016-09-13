@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TusLibros.lib
 {
@@ -18,7 +14,5 @@ namespace TusLibros.lib
         {
             return ExpirationDate < DateTime.Now;
         }
-        
     }
-
 }

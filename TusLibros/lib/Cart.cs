@@ -8,23 +8,24 @@ namespace TusLibros.lib
     public class Cart : Entity
 
     {
-        protected List<string> Items = new List<string>();
+        public List<string> Items;
 
-        public List<string> GetItems()
+        public Cart()
         {
-            return Items;
+            Items = new List<string>();
         }
-        internal int TotalItems()
+
+        public int TotalItems()
         {
             return Items.Count;
         }
 
-        internal void AddItem(string aBook)
+        public void AddItem(string aBook)
         {
             Items.Add(aBook);
         }
 
-        internal void AddItemSomeTimes(string aBook, int aNumber)
+        public void AddItemSomeTimes(string aBook, int aNumber)
         {
             for (int i = 0; i < aNumber; i++)
             {
@@ -32,7 +33,7 @@ namespace TusLibros.lib
             }
         }
 
-        internal bool HasABook(string aBook)
+        public bool HasABook(string aBook)
         {
             return Items.Contains(aBook);
         }
@@ -59,25 +60,8 @@ namespace TusLibros.lib
             {
                 return false;
             }
-
-            return Items.Equals(aCart.Items);
-        }
-
-        public bool Equals(Cart otherCart)
-        {
             
-            if ((object)otherCart == null)
-            {
-                return false;
-            }
-
-            // Return true if the fields match:
-            return Items.Equals(otherCart.Items);
-        }
-
-        public override int GetHashCode()
-        {
-            return Items.GetHashCode();
+            return Items.Count == aCart.Items.Count;
         }
     }
 }

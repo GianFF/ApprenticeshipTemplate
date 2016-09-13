@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TusLibros.lib
 {
@@ -15,25 +16,25 @@ namespace TusLibros.lib
         {
             SalesRecord = new List<Cart>();
             Catalog = new Hashtable();
+            
+            // TODO: pasar por parametro el catalogo?
+
             Catalog.Add("nacidos de la bruma", 20);
             Catalog.Add("nacidos de la bruma el imperio final", 30);
+
             AMerchantProcessor = aMerchantProcessor;
         }
 
         public int PriceFor(Cart aCart)
         {
             AssertThatTheCartIsNotEmpty(aCart);
-            return SumPricesIn(aCart.GetItems());//.map { | un_libro | @catalogo[un_libro] } # TODO ver
+            IEnumerable<int> productPrices = aCart.Items.Select(aProduct => PriceForProduct(aProduct));
+            return SumPricesIn(productPrices);
         }
 
-        protected int SumPricesIn(List<String> aProductList)
+        protected int SumPricesIn(IEnumerable<int> productPrices)
         {
-            int sumOfProducts = 0;
-            foreach (var aProduct in aProductList)
-            {
-                sumOfProducts += PriceForProduct(aProduct);
-            }
-            return sumOfProducts;
+            return productPrices.Sum();
         }
 
         protected int PriceForProduct(String aProduct)
@@ -46,6 +47,11 @@ namespace TusLibros.lib
             VerifyIfTheCreditCardIsInvalid(aCreditCard);
             AMerchantProcessor.RegisterTransaction(aCreditCard, PriceFor(aCart));
             SalesRecord.Add((aCart));
+        }
+
+        public bool IsRegistered(Cart aSale)
+        {
+            return SalesRecord.Contains(aSale);
         }
 
         private void VerifyIfTheCreditCardIsInvalid(CreditCard aCreditCard)
@@ -63,16 +69,5 @@ namespace TusLibros.lib
                 throw new CannotCheckoutFor("The cart cannot be empty for checkout");//Ver esto
             }
         }
-
-        public List<Cart> GetSalesRecord()
-        {
-            return SalesRecord;
-        }
-
-        public bool IsRegistered(Cart aSale)
-        {
-            return SalesRecord.Contains(aSale);
-        }
-    }
-    
+    }   
 }

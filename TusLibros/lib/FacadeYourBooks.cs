@@ -5,18 +5,24 @@ namespace TusLibros.lib
 {
     internal class FacadeYourBooks
     {
-        protected List<String> LoginUsers;
+        protected List<String> RegisterUsers;
+
         public FacadeYourBooks()
         {
-            LoginUsers = new List<string>();
+            RegisterUsers = new List<string>();
         }
 
         public void Register(String anUser)
         {
-            LoginUsers.Add(anUser);
+            RegisterUsers.Add(anUser);
         }
 
-        public Cart Loguin(String anUser)
+        public bool IsRegistered(string anUser)
+        {
+            return ExistsUser(anUser);
+        }
+
+        public Cart Loggin(String anUser)
         {
             VerifyThatExistsUser(anUser);
             return CartFor(anUser);
@@ -31,18 +37,14 @@ namespace TusLibros.lib
         {
             if (!ExistsUser(anUser))
             {
-                throw new NotImplementedException();
+                throw new SystemException("Not registered user");
             }
         }
 
         private bool ExistsUser(string anUser)
         {
-            return LoginUsers.Contains(anUser);
+            return RegisterUsers.Contains(anUser);
         }
 
-        public List<Cart> BuysFor(String aClient)
-        {
-            return new List<Cart>();
-        }
     }
 }

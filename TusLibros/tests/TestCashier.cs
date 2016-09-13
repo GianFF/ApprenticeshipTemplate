@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TusLibros.lib;
 using TusLibros.tests.support;
 
@@ -84,7 +77,7 @@ namespace TusLibros.tests
             Assert.IsTrue(aCashier.IsRegistered(aSale));
         }
 
-        public void TestAssertTheLastOperationSuccesfullIsTheRight(Cashier aCashier, int mountOfOperation)
+        private void TestAssertTheLastOperationSuccesfullIsTheRight(Cashier aCashier, int mountOfOperation)
         {
             Assert.AreEqual(mountOfOperation, merchantProcessor.LastSuccessfulOperationFor(aclient));
         }
@@ -112,18 +105,9 @@ namespace TusLibros.tests
         }
 
         [TestMethod]
-        public void TestAssertThatIsNotRegisteredTheSale(Cashier aCashier , Cart aSale )
+        private void TestAssertThatIsNotRegisteredTheSale(Cashier aCashier , Cart aSale )
         {
             Assert.IsFalse(aCashier.IsRegistered(aSale));
         }
     }  
 }
-
-/*context 'con una tarjeta expirada' do
-      
-
-      it 'lanza una excepcion: Tarjeta de credito expirada!' do
-        expect{subject}.to raise_error RuntimeError, 'Tarjeta de credito expirada!'
-      end
-    end
-    */

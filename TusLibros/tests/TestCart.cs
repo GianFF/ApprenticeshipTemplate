@@ -13,7 +13,6 @@ namespace TusLibros.tests
     public class TestCart
     {
         protected Cart cart;
-        private string anInvalidBook;
         private string aBook;
         private string otherBook;
         private ObjectProvider objectProvider;
@@ -25,7 +24,6 @@ namespace TusLibros.tests
             cart = objectProvider.EmptyCart();
             aBook = objectProvider.ABook();
             otherBook = objectProvider.OtherBook();
-            anInvalidBook = objectProvider.AnInvalidBook();
         }
 
         [TestMethod]

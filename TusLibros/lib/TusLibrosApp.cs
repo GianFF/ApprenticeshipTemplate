@@ -1,9 +1,4 @@
 using NHibernate.Cfg;
-using NHibernate.Connection;
-using NHibernate.Dialect;
-using NHibernate.Driver;
-using NHibernate.Mapping.ByCode;
-using NHibernate.Tool.hbm2ddl;
 using TusLibros.mappers;
 
 namespace TusLibros
