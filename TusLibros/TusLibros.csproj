@@ -46,12 +46,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="lib\exceptions\CannotCheckoutFor.cs" />
     <Compile Include="lib\Cart.cs" />
     <Compile Include="lib\Cashier.cs" />
+    <Compile Include="lib\CreditCard.cs" />
+    <Compile Include="lib\FacadeYourBooks.cs" />
+    <Compile Include="lib\MerchantProcessor.cs" />
     <Compile Include="tests\support\ObjectProvider.cs" />
     <Compile Include="lib\TusLibrosApp.cs" />
     <Compile Include="tests\TestCart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="tests\TestCashier.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

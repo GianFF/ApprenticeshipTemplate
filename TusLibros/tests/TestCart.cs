@@ -4,61 +4,98 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TusLibros.lib;
+using TusLibros.tests.support;
 
-namespace TusLibros
+namespace TusLibros.tests
 {
-    
     [TestClass]
     public class TestCart
     {
         protected Cart cart;
-        private string an_invalid_book;
-        private string a_book;
+        private string anInvalidBook;
+        private string aBook;
+        private string otherBook;
         private ObjectProvider objectProvider;
 
         [TestInitialize]
-        public void setUp()
+        public void SetUp()
         {
             objectProvider = new ObjectProvider();
-            cart = objectProvider.emptyCart();
-            a_book = objectProvider.aBook();
-            an_invalid_book = objectProvider.anInvalidBook();
+            cart = objectProvider.EmptyCart();
+            aBook = objectProvider.ABook();
+            otherBook = objectProvider.OtherBook();
+            anInvalidBook = objectProvider.AnInvalidBook();
         }
 
         [TestMethod]
-        public void test01AtTheBeginTheCartIsEmpty()
+        public void Test01AtTheBeginTheCartIsEmpty()
         {
-            Assert.AreEqual(cart.totalItems(), 0);
+            Assert.IsTrue(cart.IsEmpty());
         }
 
         [TestMethod]
-        public void test02CanAddBooksToTheCart()
+        public void Test02WhenAddBooksToTheCartThisNotIsEmpty()
         {
-            cart.addItem(a_book);
-            Assert.AreEqual(cart.totalItems(), 1);
-            Assert.IsTrue(cart.hasABook(a_book));
+            cart.AddItem(aBook);
+            Assert.IsFalse(cart.IsEmpty());
         }
 
         [TestMethod]
-        public void test03CanNotAddBooksFromOtherEditorialToTheCart()
+        public void Test03WhitOneBookHasOnlyTheBookThatAdd()
         {
-            try
-            {
-                cart.addItem(an_invalid_book);
-                Assert.Fail();
-            }
-            catch (Exception e)
-            {
-                Assert.AreEqual(Cart.ERROR_MESSAGE_FOR_INVALID_BOOK, e.Message);
-            }
+            cart.AddItem(aBook);
+            Assert.IsTrue(cart.HasABook(aBook));
         }
 
         [TestMethod]
-        public void test04CanAddMoreThanOnceOfTheSameBookToTheCart()
+        public void Test04CanAddMoreThanOnceOfTheSameBookToTheCart()
         {
-            cart.addItemSomeTimes(a_book, 2);
-            Assert.AreEqual(cart.totalItems(), 2);
-            Assert.IsTrue(cart.hasABook(a_book));
+            cart.AddItemSomeTimes(aBook, 2);
+            Assert.AreEqual(cart.TotalItems(), 2);
+            Assert.IsTrue(cart.HasABook(aBook));
+        }
+
+        [TestMethod]
+        public void Test05WhenConsultForABookThatIsNotAddedReturnsFalse()
+        {
+            cart.AddItem(aBook);
+            Assert.IsTrue(cart.HasABook(aBook));
+            Assert.IsFalse(cart.HasABook(otherBook));
+        }
+
+        [TestMethod]
+        public void Test06WhenAddSeveralTimesABookReturnTheSameOcurrencesOfThisBook()
+        {
+            cart.AddItemSomeTimes(aBook, 4);
+            Assert.AreEqual(cart.QuantityOf(aBook), 4);
         }
     }
 }
+
+
+/* context 'con un libro de otra editorial' do
+    let(:libro_invalido) {proveedor_de_objetos.un_libro_invalido}
+    it 'retorna error al agregarlo' do
+      expect{carrito.agregar_libro(libro_invalido)}.
+          to raise_error ArgumentError,Carrito.mensaje_error_libro_de_otra_editorial
+    end
+  end
+
+end
+----
+    public void Test03CanNotAddBooksFromOtherEditorialToTheCart()
+    {
+        try
+        {
+            cart.AddItem(anInvalidBook);
+            Assert.Fail();
+        }
+        catch (Exception e)
+        {
+            Assert.AreEqual(cart.ErrorMessageForInvalidBook, e.Message);
+        }
+    }*/
+
+
+
