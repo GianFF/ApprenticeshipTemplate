@@ -4,9 +4,10 @@ using System.Linq;
 
 namespace TusLibros.lib
 {
-    public class Cart : System.Object
+
+    public class Cart : Entity
+
     {
-        //internal static string ErrorMessageForInvalidBook = "You are trying to add an invalid book";
         protected List<string> Items = new List<string>();
 
         public List<string> GetItems()
@@ -20,8 +21,6 @@ namespace TusLibros.lib
 
         internal void AddItem(string aBook)
         {
-            //if (aBook == "Book from other editorial")
-              //  throw new ArgumentException(ErrorMessageForInvalidBook);
             Items.Add(aBook);
         }
 

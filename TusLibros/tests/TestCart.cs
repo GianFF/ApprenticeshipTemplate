@@ -74,28 +74,4 @@ namespace TusLibros.tests
 }
 
 
-/* context 'con un libro de otra editorial' do
-    let(:libro_invalido) {proveedor_de_objetos.un_libro_invalido}
-    it 'retorna error al agregarlo' do
-      expect{carrito.agregar_libro(libro_invalido)}.
-          to raise_error ArgumentError,Carrito.mensaje_error_libro_de_otra_editorial
-    end
-  end
-
-end
-----
-    public void Test03CanNotAddBooksFromOtherEditorialToTheCart()
-    {
-        try
-        {
-            cart.AddItem(anInvalidBook);
-            Assert.Fail();
-        }
-        catch (Exception e)
-        {
-            Assert.AreEqual(cart.ErrorMessageForInvalidBook, e.Message);
-        }
-    }*/
-
-
 
