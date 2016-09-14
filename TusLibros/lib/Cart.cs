@@ -5,27 +5,28 @@ using System.Linq;
 namespace TusLibros.lib
 {
 
-    public class Cart : Entity
+    public class Cart
 
     {
-        public List<string> Items;
+        public virtual int Id { get; protected set; }
+        public virtual List<string> Items { get; set; }
 
         public Cart()
         {
             Items = new List<string>();
         }
 
-        public int TotalItems()
+        public virtual int TotalItems()
         {
             return Items.Count;
         }
 
-        public void AddItem(string aBook)
+        public virtual void AddItem(string aBook)
         {
             Items.Add(aBook);
         }
 
-        public void AddItemSomeTimes(string aBook, int aNumber)
+        public virtual void AddItemSomeTimes(string aBook, int aNumber)
         {
             for (int i = 0; i < aNumber; i++)
             {
@@ -33,17 +34,17 @@ namespace TusLibros.lib
             }
         }
 
-        public bool HasABook(string aBook)
+        public virtual bool HasABook(string aBook)
         {
             return Items.Contains(aBook);
         }
 
-        public bool IsEmpty()
+        public virtual bool IsEmpty()
         {
             return !Items.Any();
         }
 
-        public int QuantityOf(String aBook)
+        public virtual int QuantityOf(String aBook)
         {
             return Items.Count(book => book == aBook );
         }

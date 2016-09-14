@@ -94,5 +94,10 @@ namespace TusLibros.tests.support {
         {
             return "valid user";
         }
+
+        public Clock AClock()
+        {
+            return new Clock();
+        }
     }
 }
