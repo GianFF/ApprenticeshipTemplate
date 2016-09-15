@@ -4,7 +4,7 @@ using TusLibros.facade;
 using TusLibros.lib;
 using TusLibros.tests.support;
 
-namespace TusLibros.tests
+namespace TusLibros.tests.facade
 {
     [TestClass]
     public class TestFacadeYourBooks

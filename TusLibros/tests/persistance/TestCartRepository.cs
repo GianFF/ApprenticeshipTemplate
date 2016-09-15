@@ -2,14 +2,13 @@
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
-using NUnit.Framework;
 using TusLibros.lib;
 using TusLibros.repositories;
 using TusLibros.tests.support;
 
 namespace TusLibros.tests.persistance
 {
-    [TestFixture]
+    [TestClass]
     public class TestCartRepository
     {
         private ObjectProvider objectProvider;
@@ -17,19 +16,15 @@ namespace TusLibros.tests.persistance
         private CartRepository cartRepository;
         private Cart cart;
 
-        [OneTimeSetUp]
+        [TestInitialize]
         public void SetUp()
         {
             configuration = new Configuration();
             configuration.Configure();
             configuration.AddAssembly(typeof(Cart).Assembly);
 
-            ISessionFactory sessionFactory = configuration.BuildSessionFactory();
-        }
+            configuration.BuildSessionFactory();
 
-        [SetUp]
-        public void SetupContext()
-        {
             objectProvider = new ObjectProvider();
 
             cart = objectProvider.EmptyCart();
@@ -38,7 +33,7 @@ namespace TusLibros.tests.persistance
             new SchemaExport(configuration).Execute(false, true, false);
         }
 
-        [Test]
+        [TestMethod]
         public void Test001CanAddNewCart()
         {
             cartRepository.Add(cart);

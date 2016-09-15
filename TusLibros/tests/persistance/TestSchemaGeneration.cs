@@ -1,14 +1,14 @@
-﻿using NHibernate.Cfg;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
 using TusLibros.lib;
-using NUnit.Framework;
 
 namespace TusLibros.tests.persistance
 {
-    [TestFixture]
+    [TestClass]
     class TestSchemaGeneration
     {
-        [Test] 
+        [TestMethod] 
         public void Test001CanGenerateSchema()
         {
             var cfg = new Configuration();
