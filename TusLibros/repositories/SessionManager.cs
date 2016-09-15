@@ -1,5 +1,6 @@
 ﻿using NHibernate;
 using NHibernate.Cfg;
+using TusLibros.facade;
 using TusLibros.lib;
 
 namespace TusLibros.repositories
@@ -16,6 +17,7 @@ namespace TusLibros.repositories
                     var configuration = new Configuration();
                     configuration.Configure();
                     configuration.AddAssembly(typeof(Cart).Assembly);
+                    configuration.AddAssembly(typeof(UsersSession).Assembly);
                     sessionFactory = configuration.BuildSessionFactory();
 
                 }

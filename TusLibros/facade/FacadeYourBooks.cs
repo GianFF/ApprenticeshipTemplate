@@ -1,40 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
 using TusLibros.lib;
+using TusLibros.repositories;
 
 namespace TusLibros.facade
 {
     internal class FacadeYourBooks
     {
-        public Clock clock;
+        private UsersSessionRepository UsersSessionRepository;
+        public Clock Clock;
         private List<UsersSession> UsersSessions;
 
         public FacadeYourBooks()
         {
-            clock = new Clock();
+            Clock = new Clock();
+            UsersSessions = new List<UsersSession>();
         }
 
         public Cart CreateCart()
         {
             Cart aCart = new Cart();
-            UsersSessions.Add(new UsersSession(aCart, clock.TimeNow()));
-            // TODO: persistir carrito
-            // TODO: persistir sesion
+            UsersSessions.Add(new UsersSession(aCart, Clock.TimeNow()));
+            // TODO: persistir sesion, que persiste el carrito
             return aCart;
         }
 
-        public void AddItem(string aBook, Cart aCart)
+        public void AddItem(string aBook, Guid aCartGuid)
         {
-            // TODO: agarrar carrito de la BD
-            UsersSessionFor(aCart).AssertIsCartExpired(clock.TimeNow());
+            UsersSession userSession = UsersSessionFor(aCartGuid);
+            userSession.AssertIsCartExpired(Clock.TimeNow());
+
+            Cart aCart = userSession.Cart;
+
             aCart.AddItem(aBook);
-            // TODO: persistir carrito
+            // TODO: persistir la sesion, que a su vez persiste al carrito.
         }
 
-        private UsersSession UsersSessionFor(Cart aCart)
+        private UsersSession UsersSessionFor(Guid aCartId)
         {
-            // TODO: agarrar sesion de la BD
-            throw new NotImplementedException();
+            return UsersSessionRepository.GetByCartId(aCartId);
         }
     }
 }

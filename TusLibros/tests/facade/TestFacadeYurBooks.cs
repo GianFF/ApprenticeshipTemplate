@@ -27,7 +27,7 @@ namespace TusLibros.tests.facade
         }
 
         [TestMethod]
-        public void Test01CanGetAnEmptyCartForAUser()
+        public void Test01CanGetAnEmptyCart()
         {
             Cart cart = facade.CreateCart();
 
@@ -39,7 +39,7 @@ namespace TusLibros.tests.facade
         {
             Cart aCart = facade.CreateCart();
 
-            facade.AddItem(aBook, aCart);
+            facade.AddItem(aBook, aCart.Id);
 
             Assert.IsFalse(aCart.IsEmpty());
         }
@@ -49,7 +49,7 @@ namespace TusLibros.tests.facade
         {
             Cart aCart = facade.CreateCart();
 
-            facade.AddItem(aBook, aCart);
+            facade.AddItem(aBook, aCart.Id);
 
             Assert.IsTrue(aCart.HasABook(aBook));
         }
