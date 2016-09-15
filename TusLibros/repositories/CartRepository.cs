@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NHibernate;
-using NHibernate.Linq;
+using TusLibros.lib;
 
-namespace TusLibros.lib.repositories
+namespace TusLibros.repositories
 {
     class CartRepository
     {

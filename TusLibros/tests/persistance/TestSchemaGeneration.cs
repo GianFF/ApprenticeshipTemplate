@@ -9,8 +9,7 @@ namespace TusLibros.tests.persistance
     class TestSchemaGeneration
     {
         [Test] 
-        //TODO: esto no anda. no se porque no se puede hacer correr el test para ver si se genera bien es schema.
-        public void Aaaaaa()
+        public void Test001CanGenerateSchema()
         {
             var cfg = new Configuration();
             cfg.Configure();

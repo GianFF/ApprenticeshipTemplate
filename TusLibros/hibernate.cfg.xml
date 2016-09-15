@@ -9,6 +9,6 @@
     <property name="connection.connection_string">Server=localhost;Database=tuslibros;User ID=root;Password=root;</property>
     <property name="show_sql">true</property>
     <!-- mapings -->
-    <mapping resource="TusLibros.Cart.hbm.xml" assembly="TusLibros" />
+    <!--  <mapping resource="TusLibros/mappings/Cart.hbm.xml" assembly="TusLibros" /> -->
   </session-factory>
 </hibernate-configuration>

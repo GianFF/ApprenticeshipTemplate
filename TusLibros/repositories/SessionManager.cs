@@ -1,7 +1,8 @@
 ﻿using NHibernate;
 using NHibernate.Cfg;
+using TusLibros.lib;
 
-namespace TusLibros.lib.repositories
+namespace TusLibros.repositories
 {
     public static class SessionManager
     {

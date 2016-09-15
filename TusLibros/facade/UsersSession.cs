@@ -1,6 +1,7 @@
 ﻿using System;
+using TusLibros.lib;
 
-namespace TusLibros.lib
+namespace TusLibros.facade
 {
     internal class UsersSession
     {

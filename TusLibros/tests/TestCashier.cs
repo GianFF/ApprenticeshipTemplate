@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TusLibros.lib;
+using TusLibros.lib.exceptions;
 using TusLibros.tests.support;
 
 namespace TusLibros.tests

@@ -1,54 +1,47 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
+using NUnit.Framework;
 using TusLibros.lib;
-using TusLibros.lib.repositories;
+using TusLibros.repositories;
 using TusLibros.tests.support;
 
 namespace TusLibros.tests.persistance
 {
-    [TestClass]
+    [TestFixture]
     public class TestCartRepository
     {
-        private ISessionFactory sessionFactory;
-        private Configuration configuration;
-
-        protected Cart cart;
-        private string aBook;
-        private string otherBook;
         private ObjectProvider objectProvider;
+        private Configuration configuration;
         private CartRepository cartRepository;
+        private Cart cart;
 
-        [TestInitialize]
+        [OneTimeSetUp]
         public void SetUp()
         {
-            //configuration = dataBase.Configuration();
+            configuration = new Configuration();
+            configuration.Configure();
             configuration.AddAssembly(typeof(Cart).Assembly);
-            sessionFactory = configuration.BuildSessionFactory();
 
-            new SchemaExport(configuration).Execute(false, true, false);
+            ISessionFactory sessionFactory = configuration.BuildSessionFactory();
+        }
 
-            cartRepository = new CartRepository();
+        [SetUp]
+        public void SetupContext()
+        {
             objectProvider = new ObjectProvider();
 
             cart = objectProvider.EmptyCart();
-            aBook = objectProvider.ABook();
-            otherBook = objectProvider.OtherBook();
+            cartRepository = new CartRepository();
+
+            new SchemaExport(configuration).Execute(false, true, false);
         }
 
-        [TestMethod]
-        public void Test01CanAddAnEmptyCart()
+        [Test]
+        public void Test001CanAddNewCart()
         {
             cartRepository.Add(cart);
         }
     }
 }
-
-
-

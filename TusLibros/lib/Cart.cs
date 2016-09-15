@@ -8,7 +8,7 @@ namespace TusLibros.lib
     public class Cart
 
     {
-        public virtual int Id { get; protected set; }
+        public virtual Guid Id { get; protected set; }
         public virtual List<string> Items { get; set; }
 
         public Cart()

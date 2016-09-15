@@ -66,17 +66,16 @@
     <Compile Include="lib\Cart.cs" />
     <Compile Include="lib\Cashier.cs" />
     <Compile Include="lib\CreditCard.cs" />
-    <Compile Include="lib\FacadeYourBooks.cs" />
+    <Compile Include="facade\FacadeYourBooks.cs" />
     <Compile Include="lib\MerchantProcessor.cs" />
-    <Compile Include="lib\Entity.cs" />
-    <Compile Include="lib\repositories\CartRepository.cs" />
-    <Compile Include="lib\repositories\SessionManager.cs" />
-    <Compile Include="lib\UsersSession.cs" />
+    <Compile Include="repositories\CartRepository.cs" />
+    <Compile Include="repositories\SessionManager.cs" />
+    <Compile Include="facade\UsersSession.cs" />
     <Compile Include="lib\Clock.cs" />
     <Compile Include="tests\persistance\TestCartRepository.cs" />
     <Compile Include="tests\persistance\TestSchemaGeneration.cs" />
     <Compile Include="tests\support\ObjectProvider.cs" />
-    <Compile Include="lib\main\TusLibrosApp.cs" />
+    <Compile Include="app\TusLibrosApp.cs" />
     <Compile Include="tests\TestCart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="tests\TestCashier.cs" />
@@ -91,8 +90,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="mappings\Cart.hbm.xml" />
-    <Content Include="mappings\hibernate.cfg..xml" />
+    <EmbeddedResource Include="mappings\Cart.hbm.xml" />
+    <Content Include="hibernate.cfg.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
