@@ -62,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="repositories\UsersSessionRepository.cs" />
     <Compile Include="lib\exceptions\CannotCheckoutFor.cs" />
     <Compile Include="lib\Cart.cs" />
     <Compile Include="lib\Cashier.cs" />
@@ -90,6 +91,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <EmbeddedResource Include="mappings\UsersSession.hbm.xml" />
     <EmbeddedResource Include="mappings\Cart.hbm.xml" />
     <Content Include="hibernate.cfg.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

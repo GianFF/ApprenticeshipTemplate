@@ -25,9 +25,9 @@ namespace TusLibros.facade
             return aCart;
         }
 
-        public void AddItem(string aBook, Guid aCartGuid)
+        public void AddItem(string aBook, Guid aCartId)
         {
-            UsersSession userSession = UsersSessionFor(aCartGuid);
+            UsersSession userSession = UsersSessionFor(aCartId);
             userSession.AssertIsCartExpired(Clock.TimeNow());
 
             Cart aCart = userSession.Cart;
