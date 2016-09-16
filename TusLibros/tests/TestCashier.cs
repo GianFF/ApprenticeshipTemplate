@@ -8,7 +8,7 @@ namespace TusLibros.tests
     [TestClass]
     public class TestCashier
     {
-        private ObjectProvider objectProvider;
+        private TestObjectProvider objectProvider;
         protected Cashier cashier;
         protected Cart cart;
         protected Cart aCartWithOneBook;
@@ -21,7 +21,7 @@ namespace TusLibros.tests
         [TestInitialize]
         public void SetUp()
         {
-            objectProvider = new ObjectProvider();
+            objectProvider = new TestObjectProvider();
             merchantProcessor = objectProvider.AnMerchantProcessor();
             cashier = objectProvider.ACashier(merchantProcessor);
             cart = objectProvider.EmptyCart();

@@ -10,12 +10,12 @@ namespace TusLibros.tests
         protected Cart cart;
         private string aBook;
         private string otherBook;
-        private ObjectProvider objectProvider;
+        private TestObjectProvider objectProvider;
 
         [TestInitialize]
         public void SetUp()
         {
-            objectProvider = new ObjectProvider();
+            objectProvider = new TestObjectProvider();
             cart = objectProvider.EmptyCart();
             aBook = objectProvider.ABook();
             otherBook = objectProvider.OtherBook();

@@ -4,7 +4,7 @@ using TusLibros.clocks;
 using TusLibros.lib;
 
 namespace TusLibros.tests.support {
-    class ObjectProvider
+    class TestObjectProvider
     {
         public String AnInvalidBook()
         {

@@ -9,12 +9,12 @@ namespace TusLibros.tests.app
     [TestClass]
     public class TestYourBooksApplication
     {
-        private ObjectProvider objectProvider;
+        private TestObjectProvider objectProvider;
 
         [TestInitialize]
         public void SetUp()
         {
-            objectProvider = new ObjectProvider();
+            objectProvider = new TestObjectProvider();
         }
 
         [TestMethod]

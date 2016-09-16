@@ -76,7 +76,7 @@
     <Compile Include="app\UsersSession.cs" />
     <Compile Include="clocks\IClock.cs" />
     <Compile Include="tests\persistance\TestSchemaGeneration.cs" />
-    <Compile Include="tests\support\ObjectProvider.cs" />
+    <Compile Include="tests\support\TestObjectProvider.cs" />
     <Compile Include="app\TusLibrosApp.cs" />
     <Compile Include="tests\TestCart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
