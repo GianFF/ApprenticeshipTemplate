@@ -1,6 +1,7 @@
 ﻿using System;
 using NHibernate;
 using NHibernate.Criterion;
+using TusLibros.clocks;
 using TusLibros.lib;
 using TusLibros.repositories;
 
@@ -8,11 +9,11 @@ namespace TusLibros.app
 {
     internal class PersistentYourBooksApplication : IYourBooksApplication
     {
-        public Clock Clock { get; set; }
+        public IClock Clock { get; set; }
 
         public PersistentYourBooksApplication()
         {
-            Clock = new Clock(); //TODO: Deberiamos pasarlo por parametro? o quizas una variable de entorno que devuelva el correcto...
+            Clock = new Clock();
         }
 
         public Cart CreateCart()

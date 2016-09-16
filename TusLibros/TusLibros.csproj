@@ -63,7 +63,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="app\IYourBooksApplication.cs" />
-    <Compile Include="app\NonPersistentYourBooksApplication.cs" />
+    <Compile Include="app\TransientPersistentYourBooksApplication.cs" />
+    <Compile Include="clocks\DevelopmentClock.cs" />
+    <Compile Include="clocks\IntegrationClock.cs" />
     <Compile Include="lib\exceptions\CannotCheckoutFor.cs" />
     <Compile Include="lib\Cart.cs" />
     <Compile Include="lib\Cashier.cs" />
@@ -72,7 +74,7 @@
     <Compile Include="lib\MerchantProcessor.cs" />
     <Compile Include="repositories\SessionManager.cs" />
     <Compile Include="app\UsersSession.cs" />
-    <Compile Include="lib\Clock.cs" />
+    <Compile Include="clocks\IClock.cs" />
     <Compile Include="tests\persistance\TestSchemaGeneration.cs" />
     <Compile Include="tests\support\ObjectProvider.cs" />
     <Compile Include="app\TusLibrosApp.cs" />

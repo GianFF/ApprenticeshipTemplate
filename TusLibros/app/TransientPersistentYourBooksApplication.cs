@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using TusLibros.clocks;
 using TusLibros.lib;
 
 namespace TusLibros.app
 {
-    internal class NonPersistentYourBooksApplication : IYourBooksApplication
+    internal class TransientPersistentYourBooksApplication : IYourBooksApplication
     {
-        public Clock Clock { get; set; }
+        public IClock Clock { get; set; }
         public List<UsersSession> UserSessions { get; set; }
 
-        public NonPersistentYourBooksApplication()
+        public TransientPersistentYourBooksApplication()
         {
             UserSessions = new List<UsersSession>();
             Clock = new Clock(); //TODO: Deberiamos pasarlo por parametro? o quizas una variable de entorno que devuelva el correcto...

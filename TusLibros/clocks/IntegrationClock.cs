@@ -1,20 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace TusLibros.lib
+namespace TusLibros.clocks
 {
-    public class Clock
+    class IntegrationClock : IClock
     {
         public DateTime ClockTime { get; set; }
 
-        public Clock()
+        public IntegrationClock()
         {
             ClockTime = DateTime.Now;
         }
 
         public void UpdateSomeMinutes(int minutes)
         {
-            ClockTime = DateTime.Now;
-            ClockTime = ClockTime.AddMinutes(minutes);
+            throw new NotImplementedException("What are you trying to do, hacker?");
         }
 
         public DateTime TimeNow()

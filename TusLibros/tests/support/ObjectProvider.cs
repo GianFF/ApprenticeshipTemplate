@@ -1,5 +1,6 @@
 ﻿using System;
 using TusLibros.app;
+using TusLibros.clocks;
 using TusLibros.lib;
 
 namespace TusLibros.tests.support {
@@ -75,7 +76,7 @@ namespace TusLibros.tests.support {
         public IYourBooksApplication YourBooksApplication()
         {
             //return new PersistentYourBooksApplication();
-            return new NonPersistentYourBooksApplication();
+            return new TransientPersistentYourBooksApplication();
         }
 
         public MerchantProcessor AnMerchantProcessor()
@@ -93,9 +94,9 @@ namespace TusLibros.tests.support {
             return "valid user";
         }
 
-        public Clock AClock()
+        public IClock AClock()
         {
-            return new Clock();
+            return new DevelopmentClock();
         }
     }
 }
