@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NHibernate;
 using TusLibros.lib;
 using TusLibros.repositories;
 
@@ -7,6 +8,8 @@ namespace TusLibros.facade
 {
     internal class FacadeYourBooks
     {
+        private SystemCart SystemCart;
+
         private UsersSessionRepository UsersSessionRepository;
         public Clock Clock;
         private List<UsersSession> UsersSessions;
@@ -15,13 +18,18 @@ namespace TusLibros.facade
         {
             Clock = new Clock();
             UsersSessions = new List<UsersSession>();
+
+            SystemCart = new SystemCart();
         }
 
         public Cart CreateCart()
         {
             Cart aCart = new Cart();
-            UsersSessions.Add(new UsersSession(aCart, Clock.TimeNow()));
-            // TODO: persistir sesion, que persiste el carrito
+            ISession session = SessionManager.OpenSession();
+            ITransaction transaction = session.BeginTransaction();
+            SystemCart.Add(aCart, session);
+            transaction.Commit();
+
             return aCart;
         }
 

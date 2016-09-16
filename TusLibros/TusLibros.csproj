@@ -62,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="repositories\SystemCart.cs" />
     <Compile Include="repositories\UsersSessionRepository.cs" />
     <Compile Include="lib\exceptions\CannotCheckoutFor.cs" />
     <Compile Include="lib\Cart.cs" />
