@@ -13,7 +13,7 @@ namespace TusLibros.app
 
         public PersistentYourBooksApplication()
         {
-            Clock = new Clock();
+            Clock = new IntegrationClock();
         }
 
         public Cart CreateCart()
@@ -30,7 +30,7 @@ namespace TusLibros.app
             return aCart;
         }
 
-        public void AddItem(string aBook, Guid aCartId)
+        public void AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId)
         {
             ISession session = SessionManager.OpenSession();
             ITransaction transaction = session.BeginTransaction();
@@ -42,7 +42,7 @@ namespace TusLibros.app
 
             userSession.VerifyCartExpired(Clock.TimeNow());
             Cart aCart = userSession.Cart;
-            aCart.AddItem(aBook); 
+            aCart.AddItemSomeTimes(aBook, quantity);
             session.Update(userSession, session);
 
             transaction.Commit();

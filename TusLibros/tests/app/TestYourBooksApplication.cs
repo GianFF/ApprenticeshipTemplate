@@ -32,7 +32,7 @@ namespace TusLibros.tests.app
             IYourBooksApplication application = objectProvider.YourBooksApplication();
             Cart aCart = application.CreateCart();
 
-            application.AddItem(objectProvider.ABook(), aCart.Id);
+            application.AddAQuantityOfAnItem(1, objectProvider.ABook(), aCart.Id);
 
             Assert.IsFalse(aCart.IsEmpty());
         }
@@ -45,7 +45,7 @@ namespace TusLibros.tests.app
 
             Cart aCart = application.CreateCart();
 
-            application.AddItem(objectProvider.ABook(), aCart.Id);
+            application.AddAQuantityOfAnItem(1, objectProvider.ABook(), aCart.Id);
 
             Assert.IsTrue(aCart.HasABook(aBook));
         }
@@ -57,12 +57,12 @@ namespace TusLibros.tests.app
             Cart aCart = application.CreateCart();
             string aBook = objectProvider.ABook();
 
-            application.AddItem(objectProvider.ABook(), aCart.Id);
+            application.AddAQuantityOfAnItem(1, objectProvider.ABook(), aCart.Id);
             application.Clock.UpdateSomeMinutes(30); // minutes
             
             try
             {
-                application.AddItem(aBook, aCart.Id);
+                application.AddAQuantityOfAnItem(1, aBook, aCart.Id);
                 Assert.Fail();
             }
             catch (TimeoutException e)
@@ -78,13 +78,13 @@ namespace TusLibros.tests.app
             Cart aCart = application.CreateCart();
             string aBook = objectProvider.ABook();
 
-            application.AddItem(objectProvider.ABook(), aCart.Id);
+            application.AddAQuantityOfAnItem(1, objectProvider.ABook(), aCart.Id);
             application.Clock.UpdateSomeMinutes(20); // minutes
 
-            application.AddItem(aBook, aCart.Id);
+            application.AddAQuantityOfAnItem(1, aBook, aCart.Id);
             application.Clock.UpdateSomeMinutes(12); // minutes
 
-            application.AddItem(aBook, aCart.Id);
+            application.AddAQuantityOfAnItem(1, aBook, aCart.Id);
 
             Assert.IsTrue(aCart.HasABook(aBook));
         }

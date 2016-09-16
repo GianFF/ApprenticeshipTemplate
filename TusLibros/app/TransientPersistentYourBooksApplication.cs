@@ -13,7 +13,7 @@ namespace TusLibros.app
         public TransientPersistentYourBooksApplication()
         {
             UserSessions = new List<UsersSession>();
-            Clock = new Clock(); //TODO: Deberiamos pasarlo por parametro? o quizas una variable de entorno que devuelva el correcto...
+            Clock = new DevelopmentClock();
         }
 
         public Cart CreateCart()
@@ -23,12 +23,12 @@ namespace TusLibros.app
             return aCart;
         }
 
-        public void AddItem(string aBook, Guid aCartId)
+        public void AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId)
         {
             UsersSession userSession = UserSessions.Find(session => session.Cart.Id == aCartId);
             userSession.VerifyCartExpired(Clock.TimeNow());
             Cart aCart = userSession.Cart;
-            aCart.AddItem(aBook);
+            aCart.AddItemSomeTimes(aBook, quantity);
         }
     }
 }
