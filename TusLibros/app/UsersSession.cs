@@ -1,7 +1,7 @@
 ﻿using System;
 using TusLibros.lib;
 
-namespace TusLibros.facade
+namespace TusLibros.app
 {
     internal class UsersSession
     {
@@ -15,7 +15,7 @@ namespace TusLibros.facade
             this.Date = date;
         }
 
-        public void AssertIsCartExpired(DateTime timeNow)
+        public void VerifyCartExpired(DateTime timeNow)
         {
             if ((timeNow.Subtract(Date)).TotalMinutes >= 30)
                 throw new TimeoutException("The cart has been expired");

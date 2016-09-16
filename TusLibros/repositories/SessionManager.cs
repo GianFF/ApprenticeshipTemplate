@@ -1,6 +1,6 @@
 ﻿using NHibernate;
 using NHibernate.Cfg;
-using TusLibros.facade;
+using TusLibros.app;
 using TusLibros.lib;
 
 namespace TusLibros.repositories

@@ -12,7 +12,6 @@ namespace TusLibros.lib
         protected Hashtable Catalog;
         protected MerchantProcessor AMerchantProcessor;
 
-        //protected List<string> Items = new List<string>();
         public Cashier(MerchantProcessor aMerchantProcessor)
         {
             SalesRecord = new List<Cart>();

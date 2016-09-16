@@ -1,8 +1,4 @@
-using NHibernate.Cfg;
-using NHibernate.Tool.hbm2ddl;
-using TusLibros.lib;
-
-namespace TusLibros
+namespace TusLibros.app
 {
     class TusLibrosApp
     {

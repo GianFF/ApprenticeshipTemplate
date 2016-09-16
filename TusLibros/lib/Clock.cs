@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Windows.Forms.VisualStyles;
 
-namespace TusLibros
+namespace TusLibros.lib
 {
     public class Clock
     {
@@ -9,18 +8,17 @@ namespace TusLibros
 
         public Clock()
         {
-            ClockTime = DateTime.Now; // TODO ver como mantener la fecha siempre actualizada
+            ClockTime = DateTime.Now;
         }
 
         public void UpdateSomeMinutes(int minutes)
         {
-            ClockTime = DateTime.Now; // TODO ver como mantener la fecha siempre actualizada
+            ClockTime = DateTime.Now;
             ClockTime = ClockTime.AddMinutes(minutes);
         }
 
         public DateTime TimeNow()
         {
-            ClockTime = DateTime.Now; // TODO ver como mantener la fecha siempre actualizada
             return ClockTime;
         }
     }

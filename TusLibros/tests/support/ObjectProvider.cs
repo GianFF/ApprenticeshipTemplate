@@ -1,5 +1,5 @@
 ﻿using System;
-using TusLibros.facade;
+using TusLibros.app;
 using TusLibros.lib;
 
 namespace TusLibros.tests.support {
@@ -72,9 +72,10 @@ namespace TusLibros.tests.support {
             return creditCard;
         }
 
-        public FacadeYourBooks AFacade()
+        public IYourBooksApplication YourBooksApplication()
         {
-            return new FacadeYourBooks();
+            //return new PersistentYourBooksApplication();
+            return new NonPersistentYourBooksApplication();
         }
 
         public MerchantProcessor AnMerchantProcessor()
