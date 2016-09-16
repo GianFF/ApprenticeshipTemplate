@@ -69,7 +69,24 @@ namespace TusLibros.tests.app
             {
                 Assert.AreEqual("The cart has been expired", e.Message);
             }
+        }
 
+        [TestMethod]
+        public void Test05CanAddABookAfter32MinutesWhenTheLastUsageOfTheCartWasBeforeHisExpiration()
+        {
+            IYourBooksApplication application = objectProvider.YourBooksApplication();
+            Cart aCart = application.CreateCart();
+            string aBook = objectProvider.ABook();
+
+            application.AddItem(objectProvider.ABook(), aCart.Id);
+            application.Clock.UpdateSomeMinutes(20); // minutes
+
+            application.AddItem(aBook, aCart.Id);
+            application.Clock.UpdateSomeMinutes(12); // minutes
+
+            application.AddItem(aBook, aCart.Id);
+
+            Assert.IsTrue(aCart.HasABook(aBook));
         }
     }
 }
