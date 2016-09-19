@@ -1,7 +1,7 @@
 ﻿using FluentNHibernate.Mapping;
-using TusLibros.model;
+using TusLibros.model.Entitys;
 
-namespace TusLibros.mappings
+namespace TusLibros.model.mappings
 {
     public class CartMap : ClassMap<Cart>
     {
@@ -10,7 +10,7 @@ namespace TusLibros.mappings
             Id(x => x.Id);
             //HasMany(x => x.Items);
             HasMany(x => x.Items)
-                .KeyColumn("PostID")
+                .KeyColumn("idCart")
                 .Table("Books").Element("nameBook");
         }
     }

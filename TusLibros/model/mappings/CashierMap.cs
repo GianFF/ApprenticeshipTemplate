@@ -1,7 +1,7 @@
 ﻿using FluentNHibernate.Mapping;
-using TusLibros.model;
+using TusLibros.model.Entitys;
 
-namespace TusLibros.mappings
+namespace TusLibros.model.mappings
 {
     public class CashierMap : ClassMap<Cashier>
     {

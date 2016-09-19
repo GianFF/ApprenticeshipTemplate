@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TusLibros.model;
+using TusLibros.model.Entitys;
 using TusLibros.tests.support;
 
 namespace TusLibros.tests

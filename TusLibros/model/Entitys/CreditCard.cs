@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TusLibros.model
+namespace TusLibros.model.Entitys
 {
     public class CreditCard
     {

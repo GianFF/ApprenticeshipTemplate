@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TusLibros.model.exceptions;
 
-namespace TusLibros.model
+namespace TusLibros.model.Entitys
 {
 
     public class Cart

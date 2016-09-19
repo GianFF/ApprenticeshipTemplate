@@ -69,21 +69,21 @@
     <Compile Include="app\TransientPersistentYourBooksApplication.cs" />
     <Compile Include="clocks\DevelopmentClock.cs" />
     <Compile Include="clocks\IntegrationClock.cs" />
-    <Compile Include="mappings\MerchantProcessorMap.cs" />
-    <Compile Include="mappings\CashierMap.cs" />
-    <Compile Include="mappings\CartMap.cs" />
-    <Compile Include="model\exceptions\CannotCheckoutFor.cs" />
-    <Compile Include="model\Cart.cs" />
-    <Compile Include="model\Cashier.cs" />
-    <Compile Include="model\CreditCard.cs" />
+    <Compile Include="model\mappings\MerchantProcessorMap.cs" />
+    <Compile Include="model\mappings\CashierMap.cs" />
+    <Compile Include="model\mappings\CartMap.cs" />
+    <Compile Include="model\Entitys\exceptions\CannotCheckoutFor.cs" />
+    <Compile Include="model\Entitys\Cart.cs" />
+    <Compile Include="model\Entitys\Cashier.cs" />
+    <Compile Include="model\Entitys\CreditCard.cs" />
     <Compile Include="app\PersistentYourBooksApplication.cs" />
-    <Compile Include="model\MerchantProcessor.cs" />
+    <Compile Include="model\Entitys\MerchantProcessor.cs" />
     <Compile Include="repositories\SessionManager.cs" />
     <Compile Include="app\UsersSession.cs" />
     <Compile Include="clocks\IClock.cs" />
     <Compile Include="tests\persistance\TestSchemaGeneration.cs" />
     <Compile Include="tests\support\TestObjectProvider.cs" />
-    <Compile Include="TusLibrosApp.cs" />
+    <Compile Include="model\TusLibrosApp.cs" />
     <Compile Include="tests\TestCart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="tests\TestCashier.cs" />
@@ -98,7 +98,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="mappings\UsersSession.hbm.xml" />
+    <EmbeddedResource Include="model\mappings\UsersSession.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

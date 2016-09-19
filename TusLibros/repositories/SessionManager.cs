@@ -1,11 +1,10 @@
-﻿using System;
-using FluentNHibernate.Automapping;
-using FluentNHibernate.Cfg;
+﻿using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
-using TusLibros.model;
+
+using TusLibros.model.Entitys;
 
 namespace TusLibros.repositories
 {
@@ -23,9 +22,8 @@ namespace TusLibros.repositories
 
             return Fluently.Configure()
                 .Database(MySQLConfiguration.Standard.ConnectionString(coneccion))
-                .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Cart>().AddFromAssemblyOf<Cashier>().AddFromAssemblyOf<MerchantProcessor>()
-                    .ExportTo(@"E:\Mappings"))
-                .ExposeConfiguration(BuildSchema)
+                .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Cart>())
+                //.ExposeConfiguration(BuildSchema)
                 .BuildSessionFactory();
         }
    

@@ -2,7 +2,7 @@
 using NHibernate;
 using NHibernate.Criterion;
 using TusLibros.clocks;
-using TusLibros.model;
+using TusLibros.model.Entitys;
 using TusLibros.repositories;
 
 /*using FluentNHibernate;

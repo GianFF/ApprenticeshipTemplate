@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TusLibros.clocks;
 using TusLibros.model;
+using TusLibros.model.Entitys;
 
 namespace TusLibros.app
 {

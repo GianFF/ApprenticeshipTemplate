@@ -2,6 +2,7 @@ using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TusLibros.app;
 using TusLibros.model;
+using TusLibros.model.Entitys;
 using TusLibros.tests.support;
 
 namespace TusLibros.tests.app

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace TusLibros.model.exceptions
+namespace TusLibros.model.Entitys.exceptions
 {
     [Serializable]
     internal class CannotCheckoutFor : Exception

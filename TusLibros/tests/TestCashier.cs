@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TusLibros.model;
-using TusLibros.model.exceptions;
+using TusLibros.model.Entitys;
+using TusLibros.model.Entitys.exceptions;
 using TusLibros.tests.support;
 
 namespace TusLibros.tests

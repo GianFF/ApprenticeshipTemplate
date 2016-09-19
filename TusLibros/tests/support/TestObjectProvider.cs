@@ -1,7 +1,7 @@
 ﻿using System;
 using TusLibros.app;
 using TusLibros.clocks;
-using TusLibros.model;
+using TusLibros.model.Entitys;
 
 namespace TusLibros.tests.support {
     class TestObjectProvider
