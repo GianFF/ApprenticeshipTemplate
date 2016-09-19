@@ -1,10 +1,12 @@
 ﻿using System;
 
-namespace TusLibros.lib
+namespace TusLibros.model
 {
     public class CreditCard
     {
-        public DateTime ExpirationDate;
+        public virtual Guid Id { get; protected set; }
+        public virtual DateTime ExpirationDate { get; protected set; }
+
         public CreditCard(DateTime aDate)
         {
             ExpirationDate = aDate;

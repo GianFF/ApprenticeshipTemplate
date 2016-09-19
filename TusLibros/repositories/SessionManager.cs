@@ -1,32 +1,38 @@
-﻿using NHibernate;
+﻿using System;
+using FluentNHibernate.Automapping;
+using FluentNHibernate.Cfg;
+using FluentNHibernate.Cfg.Db;
+using NHibernate;
 using NHibernate.Cfg;
-using TusLibros.app;
-using TusLibros.lib;
+using NHibernate.Tool.hbm2ddl;
+using TusLibros.model;
 
 namespace TusLibros.repositories
 {
     public static class SessionManager
     {
-        private static ISessionFactory sessionFactory;
-        private static ISessionFactory SessionFactory
-        {
-            get
-            {
-                if (sessionFactory == null)
-                {
-                    var configuration = new Configuration();
-                    configuration.Configure();
-                    configuration.AddAssembly(typeof(Cart).Assembly);
-                    configuration.AddAssembly(typeof(UsersSession).Assembly);
-                    sessionFactory = configuration.BuildSessionFactory();
-
-                }
-                return sessionFactory;
-            }
-        }
+      
         public static ISession OpenSession()
         {
-            return SessionFactory.OpenSession();
+            return null;//ISessionFactory.OpenSession();
         }
+        
+        public static ISessionFactory BuildSessionFactory()
+        {
+            var coneccion = "Server=localhost;Database=tuslibros;User ID=root;Password=root;";
+
+            return Fluently.Configure()
+                .Database(MySQLConfiguration.Standard.ConnectionString(coneccion))
+                .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Cart>().AddFromAssemblyOf<Cashier>().AddFromAssemblyOf<MerchantProcessor>()
+                    .ExportTo(@"E:\Mappings"))
+                .ExposeConfiguration(BuildSchema)
+                .BuildSessionFactory();
+        }
+   
+        private static void BuildSchema(Configuration config)
+        {            
+            new SchemaExport(config).Execute(false, true, false);
+        }
+
     }
 }

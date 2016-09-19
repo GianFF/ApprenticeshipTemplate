@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 
-namespace TusLibros.lib
+namespace TusLibros.model
 {
     public class MerchantProcessor
     {
-        protected Hashtable SuccessfulOperations;
+        public virtual Guid Id { get; protected set; }
+        public virtual Hashtable SuccessfulOperations { get; protected set; }
 
         public MerchantProcessor()
         {

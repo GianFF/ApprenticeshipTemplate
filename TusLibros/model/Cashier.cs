@@ -2,15 +2,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using TusLibros.lib.exceptions;
+using TusLibros.model.exceptions;
 
-namespace TusLibros.lib
+namespace TusLibros.model
 {
     public class Cashier
     {
-        protected List<Cart> SalesRecord;
-        protected Hashtable Catalog;
-        protected MerchantProcessor AMerchantProcessor;
+        public virtual Guid Id { get; protected set; }
+        public virtual IList<Cart> SalesRecord { get; set; }
+        public virtual Hashtable Catalog { get; set; }
+        public virtual MerchantProcessor AMerchantProcessor { get; set; }
 
         public Cashier(MerchantProcessor aMerchantProcessor)
         {

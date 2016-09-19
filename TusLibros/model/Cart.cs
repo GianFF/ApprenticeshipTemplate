@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TusLibros.model.exceptions;
 
-namespace TusLibros.lib
+namespace TusLibros.model
 {
 
     public class Cart
-
     {
         public virtual Guid Id { get; protected set; }
-        public virtual List<string> Items { get; set; }
+        public virtual IList<string> Items { get; set; }
 
         public Cart()
         {
@@ -46,10 +46,10 @@ namespace TusLibros.lib
 
         public virtual int QuantityOf(String aBook)
         {
-            return Items.Count(book => book == aBook );
+            return Items.Count(book => book == aBook);
         }
-        
-        public override bool Equals(System.Object otherCart)
+
+        public override bool Equals(Object otherCart)
         {
             if (otherCart == null)
             {
@@ -57,12 +57,17 @@ namespace TusLibros.lib
             }
 
             Cart aCart = otherCart as Cart;
-            if ((System.Object)aCart == null)
+            if ((Object) aCart == null)
             {
                 return false;
             }
-            
+
             return Items.Count == aCart.Items.Count;
+        }
+
+        public override int GetHashCode()
+        {
+            return 23;
         }
     }
 }

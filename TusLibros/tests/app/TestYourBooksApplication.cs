@@ -1,7 +1,7 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TusLibros.app;
-using TusLibros.lib;
+using TusLibros.model;
 using TusLibros.tests.support;
 
 namespace TusLibros.tests.app

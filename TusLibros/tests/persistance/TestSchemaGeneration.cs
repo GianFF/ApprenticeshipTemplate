@@ -1,21 +1,20 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
-using TusLibros.lib;
+using TusLibros.model;
+using TusLibros.repositories;
 
 namespace TusLibros.tests.persistance
 {
     [TestClass]
     class TestSchemaGeneration
     {
-        [TestMethod] 
+        [TestMethod]
         public void Test001CanGenerateSchema()
         {
-            var cfg = new Configuration();
-            cfg.Configure();
-            cfg.AddAssembly(typeof(Cart).Assembly);
-
-            new SchemaExport(cfg).Execute(false, true, false);
+            
+            
+            
         }
     }
 }

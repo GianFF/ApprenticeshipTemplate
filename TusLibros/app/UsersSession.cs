@@ -1,5 +1,5 @@
 ﻿using System;
-using TusLibros.lib;
+using TusLibros.model;
 
 namespace TusLibros.app
 {

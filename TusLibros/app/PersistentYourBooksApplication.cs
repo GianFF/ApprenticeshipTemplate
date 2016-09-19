@@ -2,8 +2,27 @@
 using NHibernate;
 using NHibernate.Criterion;
 using TusLibros.clocks;
-using TusLibros.lib;
+using TusLibros.model;
 using TusLibros.repositories;
+
+/*using FluentNHibernate;
+
+using NHibernate;
+
+using FluentNHibernate.Cfg;
+
+using FluentNHibernate.Cfg.Db;
+
+using FluentNHibernate.Automapping;
+
+using NHibernate.Cfg;
+
+using NHibernate.Tool.hbm2ddl;
+
+using NHibernate.Criterion;
+
+using SimpleOrmApplication.Model;*/
+
 
 namespace TusLibros.app
 {
@@ -20,12 +39,12 @@ namespace TusLibros.app
         {
             Cart aCart = new Cart();
 
-            ISession session = SessionManager.OpenSession();
-            ITransaction transaction = session.BeginTransaction();
+            //ISession session = SessionManager.OpenSession();
+            //ITransaction transaction = session.BeginTransaction();
 
-            session.Save(new UsersSession(aCart, Clock.TimeNow()), session);
+            //session.Save(new UsersSession(aCart, Clock.TimeNow()), session);
 
-            transaction.Commit();
+            //transaction.Commit();
 
             return aCart;
         }
