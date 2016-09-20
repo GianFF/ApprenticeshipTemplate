@@ -11,19 +11,11 @@ namespace TusLibros.model.entities
     {
         public virtual Guid Id { get; protected set; }
         public virtual IList<Cart> SalesRecord { get; set; }
-        public virtual Hashtable Catalog { get; set; }
         public virtual MerchantProcessor AMerchantProcessor { get; set; }
 
         public Cashier(MerchantProcessor aMerchantProcessor)
         {
             SalesRecord = new List<Cart>();
-            Catalog = new Hashtable();
-            
-            // TODO: pasar por parametro el catalogo?
-
-            Catalog.Add("nacidos de la bruma", 20);
-            Catalog.Add("nacidos de la bruma el imperio final", 30);
-
             AMerchantProcessor = aMerchantProcessor;
         }
 
