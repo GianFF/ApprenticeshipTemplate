@@ -48,7 +48,7 @@ namespace TusLibros.tests.app
 
             Cart aCart = application.CreateCart();
 
-            application.AddAQuantityOfAnItem(1, objectProvider.ABook(), aCart.Id);
+            application.AddAQuantityOfAnItem(1, aBook, aCart.Id);
 
             aCart = application.GetCart(aCart.Id);
 
@@ -62,7 +62,7 @@ namespace TusLibros.tests.app
             Cart aCart = application.CreateCart();
             string aBook = objectProvider.ABook();
 
-            application.AddAQuantityOfAnItem(1, objectProvider.ABook(), aCart.Id);
+            application.AddAQuantityOfAnItem(1, aBook, aCart.Id);
             application.Clock.UpdateSomeMinutes(30); // minutes
             
             try
@@ -83,7 +83,7 @@ namespace TusLibros.tests.app
             Cart aCart = application.CreateCart();
             string aBook = objectProvider.ABook();
 
-            application.AddAQuantityOfAnItem(1, objectProvider.ABook(), aCart.Id);
+            application.AddAQuantityOfAnItem(1, aBook, aCart.Id);
             application.Clock.UpdateSomeMinutes(20); // minutes
             aCart = application.GetCart(aCart.Id);
 
@@ -95,6 +95,46 @@ namespace TusLibros.tests.app
             aCart = application.GetCart(aCart.Id);
 
             Assert.IsTrue(aCart.HasABook(aBook));
+        }
+
+        [TestMethod]
+        public void Test06CanCheckoutACartWithOneBookWithASpecificCatalog()
+        {
+            IYourBooksApplication application = objectProvider.YourBooksApplication();
+            Cart aCart = application.CreateCart();
+
+            application.AddAQuantityOfAnItem(1, objectProvider.ABook(), aCart.Id);
+            
+            aCart = application.GetCart(aCart.Id);
+
+            Cashier cashier = objectProvider.ACashier(objectProvider.AnMerchantProcessor());
+
+            cashier.CheckoutFor(objectProvider.AValidCreditCard(), aCart, objectProvider.ACatalog());
+
+            Assert.IsTrue(cashier.IsRegistered(aCart));
+        }
+
+        [TestMethod]
+        public void Test07CanNotCheckoutACartWithAnInvalidBookWithASpecificCatalog()
+        {
+            IYourBooksApplication application = objectProvider.YourBooksApplication();
+            Cart aCart = application.CreateCart();
+
+            application.AddAQuantityOfAnItem(1, objectProvider.AnInvalidBook(), aCart.Id);
+
+            aCart = application.GetCart(aCart.Id);
+
+            Cashier cashier = objectProvider.ACashier(objectProvider.AnMerchantProcessor());
+            try
+            {
+                cashier.CheckoutFor(objectProvider.AValidCreditCard(), aCart, objectProvider.ACatalog());
+                Assert.Fail();
+            }
+            catch (ArgumentException e)
+            {
+                Assert.AreEqual("The cart has invalid books!", e.Message);
+                Assert.IsFalse(cashier.IsRegistered(aCart));
+            }
         }
     }
 }

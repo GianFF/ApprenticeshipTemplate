@@ -37,7 +37,7 @@ namespace TusLibros.tests
         {
             try
             {
-                cashier.PriceFor(cart);
+                cashier.PriceFor(cart, objectProvider.ACatalog());
                 Assert.Fail();
             }
             catch (CannotCheckoutFor e)
@@ -49,25 +49,25 @@ namespace TusLibros.tests
         [TestMethod]
         public void Test02WhitACartWithOneBookHisPriceForItIs20()
         {
-            Assert.AreEqual(20, cashier.PriceFor(aCartWithOneBook));                      
+            Assert.AreEqual(20, cashier.PriceFor(aCartWithOneBook, objectProvider.ACatalog()));                      
         }
 
         [TestMethod]
         public void Test03WhitACartWithtwoBookEqualsHisPriceForItIs40()
         {
-            Assert.AreEqual(40, cashier.PriceFor(aCartWithTwoBook));
+            Assert.AreEqual(40, cashier.PriceFor(aCartWithTwoBook, objectProvider.ACatalog()));
         }
 
         [TestMethod]
         public void Test04WhitACartWithtwoBookDiferentsHisPriceForItIs50()
         {
-            Assert.AreEqual(50, cashier.PriceFor(aCartWithTwoBookDiferents));
+            Assert.AreEqual(50, cashier.PriceFor(aCartWithTwoBookDiferents, objectProvider.ACatalog()));
         }
 
         [TestMethod]
         public void Test05WithACartWithOneBook()
         {
-            cashier.CheckoutFor(aclient, aCartWithOneBook);
+            cashier.CheckoutFor(aclient, aCartWithOneBook, objectProvider.ACatalog());
             TestAssertThatIsRegisteredTheSale(cashier, aCartWithOneBook);
             TestAssertTheLastOperationSuccesfullIsTheRight(cashier, 20);            
         }
@@ -86,7 +86,7 @@ namespace TusLibros.tests
         [TestMethod]
         public void Test06WithACartWithTwoBooksEquals()
         {
-            cashier.CheckoutFor(aclient, aCartWithTwoBook);
+            cashier.CheckoutFor(aclient, aCartWithTwoBook, objectProvider.ACatalog());
             TestAssertTheLastOperationSuccesfullIsTheRight(cashier, 40);
         }
 
@@ -95,7 +95,7 @@ namespace TusLibros.tests
         {
             try
             {
-                cashier.CheckoutFor(anInvalidClient, aCartWithOneBook);
+                cashier.CheckoutFor(anInvalidClient, aCartWithOneBook, objectProvider.ACatalog());
                 Assert.Fail();
             }
             catch (CannotCheckoutFor e)

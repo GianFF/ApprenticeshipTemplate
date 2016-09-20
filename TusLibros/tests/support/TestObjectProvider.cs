@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using TusLibros.app;
 using TusLibros.clocks;
 using TusLibros.model.entities;
@@ -97,6 +98,16 @@ namespace TusLibros.tests.support {
         public IClock AClock()
         {
             return new DevelopmentClock();
+        }
+
+        public Hashtable ACatalog()
+        {
+            var catalog = new Hashtable();
+
+            catalog.Add("nacidos de la bruma", 20);
+            catalog.Add("nacidos de la bruma el imperio final", 30);
+
+            return catalog;
         }
     }
 }

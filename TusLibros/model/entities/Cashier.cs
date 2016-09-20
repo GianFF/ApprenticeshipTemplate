@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using FluentNHibernate.MappingModel;
 using TusLibros.model.entities.exceptions;
 
 namespace TusLibros.model.entities
@@ -26,10 +27,10 @@ namespace TusLibros.model.entities
             AMerchantProcessor = aMerchantProcessor;
         }
 
-        public int PriceFor(Cart aCart)
+        public int PriceFor(Cart aCart, Hashtable aCatalog)
         {
             AssertThatTheCartIsNotEmpty(aCart);
-            IEnumerable<int> productPrices = aCart.Items.Select(aProduct => PriceForProduct(aProduct));
+            IEnumerable<int> productPrices = aCart.Items.Select(aProduct => (int) aCatalog[aProduct]);
             return SumPricesIn(productPrices);
         }
 
@@ -38,21 +39,27 @@ namespace TusLibros.model.entities
             return productPrices.Sum();
         }
 
-        protected int PriceForProduct(String aProduct)
-        {
-            return (int) Catalog[aProduct];
-        }
-
-        public void CheckoutFor(CreditCard aCreditCard, Cart aCart)
+        public void CheckoutFor(CreditCard aCreditCard, Cart aCart, Hashtable aCatalog)
         {
             VerifyIfTheCreditCardIsInvalid(aCreditCard);
-            AMerchantProcessor.RegisterTransaction(aCreditCard, PriceFor(aCart));
-            SalesRecord.Add((aCart));
+            VerifyIfTheCartHasValidBooks(aCart, aCatalog);
+            AMerchantProcessor.RegisterTransaction(aCreditCard, PriceFor(aCart, aCatalog));
+            SalesRecord.Add(aCart);
         }
 
         public bool IsRegistered(Cart aSale)
         {
             return SalesRecord.Contains(aSale);
+        }
+
+        private void VerifyIfTheCartHasValidBooks(Cart aCart, Hashtable aCatalog)
+        {
+            bool hasInvalidBook = aCart.Items.Any(book => !aCatalog.ContainsKey(book));
+
+            if (hasInvalidBook)
+            {
+                throw new ArgumentException("The cart has invalid books!");
+            }
         }
 
         private void VerifyIfTheCreditCardIsInvalid(CreditCard aCreditCard)
