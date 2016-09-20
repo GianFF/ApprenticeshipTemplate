@@ -26,10 +26,21 @@ namespace TusLibros.app
 
         public void AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId)
         {
-            UserSession userSession = UserSessions.Find(session => session.Cart.Id == aCartId);
+            UserSession userSession = UserSession(aCartId);
             userSession.VerifyCartExpired(Clock.TimeNow());
             Cart aCart = userSession.Cart;
             aCart.AddItemSomeTimes(aBook, quantity);
+        }
+
+        public Cart GetCart(Guid aCartId)
+        {
+            UserSession userSession = UserSession(aCartId);
+            return userSession.Cart;
+        }
+
+        private UserSession UserSession(Guid aCartId)
+        {
+            return UserSessions.Find(session => session.Cart.Id == aCartId);
         }
     }
 }

@@ -4,7 +4,7 @@ using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
 using TusLibros.model.entities;
 
-namespace TusLibros.repositories
+namespace TusLibros.db
 {
     public static class ConfigurationMappingDataBase
     {
@@ -13,7 +13,7 @@ namespace TusLibros.repositories
             return "Server=localhost;Database=tuslibros;User ID=root;Password=root;";
         }
 
-        public static FluentConfiguration ConfigurationDbMappingAndSchema()
+        public static FluentConfiguration ConfigureDbMappingAndSchema()
         {
             return Fluently.Configure()
                 .Database(MySQLConfiguration.Standard.ConnectionString(DataBaseConeccionString()))

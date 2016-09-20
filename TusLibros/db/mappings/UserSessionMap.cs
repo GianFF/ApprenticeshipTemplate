@@ -1,6 +1,7 @@
 ﻿using FluentNHibernate.Mapping;
+using TusLibros.model;
 
-namespace TusLibros.model.mappings
+namespace TusLibros.db.mappings
 {
     public class UserSessionMap : ClassMap<UserSession>
     {

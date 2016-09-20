@@ -35,6 +35,8 @@ namespace TusLibros.tests.app
 
             application.AddAQuantityOfAnItem(1, objectProvider.ABook(), aCart.Id);
 
+            aCart = application.GetCart(aCart.Id);
+
             Assert.IsFalse(aCart.IsEmpty());
         }
 

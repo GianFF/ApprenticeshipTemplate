@@ -9,6 +9,6 @@ namespace TusLibros.app
         IClock Clock { get; set; }
         Cart CreateCart();
         void AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId);
-
+        Cart GetCart(Guid aCartId);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using FluentNHibernate.Mapping;
 using TusLibros.model.entities;
 
-namespace TusLibros.model.mappings
+namespace TusLibros.db.mappings
 {
     public class CartMap : ClassMap<Cart>
     {

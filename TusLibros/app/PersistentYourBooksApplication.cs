@@ -2,9 +2,9 @@
 using NHibernate;
 using NHibernate.Criterion;
 using TusLibros.clocks;
+using TusLibros.db;
 using TusLibros.model;
 using TusLibros.model.entities;
-using TusLibros.repositories;
 
 namespace TusLibros.app
 {
@@ -21,12 +21,12 @@ namespace TusLibros.app
         {
             Cart aCart = new Cart();
 
-            //ISession session = SessionManager.OpenSession();
-            //ITransaction transaction = session.BeginTransaction();
+            ISession session = SessionManager.OpenSession();
+            ITransaction transaction = session.BeginTransaction();
 
-            //session.Save(new UserSession(aCart, Clock.TimeNow()), session);
+            session.SaveOrUpdate(new UserSession(aCart, Clock.TimeNow()));
 
-            //transaction.Commit();
+            transaction.Commit();
 
             return aCart;
         }
@@ -36,17 +36,23 @@ namespace TusLibros.app
             ISession session = SessionManager.OpenSession();
             ITransaction transaction = session.BeginTransaction();
 
-            UserSession userSession = session
-                .CreateCriteria(typeof(UserSession))
-                .Add(Restrictions.Eq("CartId", aCartId))
-                .UniqueResult<UserSession>();
+            UserSession userSession = session.QueryOver<UserSession>().Where(uS => uS.Cart.Id == aCartId).SingleOrDefault<UserSession>();
 
             userSession.VerifyCartExpired(Clock.TimeNow());
             Cart aCart = userSession.Cart;
             aCart.AddItemSomeTimes(aBook, quantity);
-            session.Update(userSession, session);
+            session.SaveOrUpdate(userSession);
 
             transaction.Commit();
+        }
+
+        public Cart GetCart(Guid aCartId)
+        {
+            ISession session = SessionManager.OpenSession();
+
+            Cart cart = session.Get<Cart>(aCartId);
+
+            return cart;
         }
     }
 }

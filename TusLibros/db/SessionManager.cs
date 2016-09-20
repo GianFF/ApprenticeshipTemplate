@@ -1,6 +1,6 @@
 ﻿using NHibernate;
 
-namespace TusLibros.repositories
+namespace TusLibros.db
 {
     public static class SessionManager
     {
@@ -13,7 +13,7 @@ namespace TusLibros.repositories
         
         private static ISessionFactory CreateSessionFactory()
         {
-            var configurationDbMappingAndSchema = ConfigurationMappingDataBase.ConfigurationDbMappingAndSchema();
+            var configurationDbMappingAndSchema = ConfigurationMappingDataBase.ConfigureDbMappingAndSchema();
 
             return configurationDbMappingAndSchema.BuildSessionFactory();
         }
