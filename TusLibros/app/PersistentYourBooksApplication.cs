@@ -2,27 +2,9 @@
 using NHibernate;
 using NHibernate.Criterion;
 using TusLibros.clocks;
-using TusLibros.model.Entitys;
+using TusLibros.model;
+using TusLibros.model.entities;
 using TusLibros.repositories;
-
-/*using FluentNHibernate;
-
-using NHibernate;
-
-using FluentNHibernate.Cfg;
-
-using FluentNHibernate.Cfg.Db;
-
-using FluentNHibernate.Automapping;
-
-using NHibernate.Cfg;
-
-using NHibernate.Tool.hbm2ddl;
-
-using NHibernate.Criterion;
-
-using SimpleOrmApplication.Model;*/
-
 
 namespace TusLibros.app
 {
@@ -42,7 +24,7 @@ namespace TusLibros.app
             //ISession session = SessionManager.OpenSession();
             //ITransaction transaction = session.BeginTransaction();
 
-            //session.Save(new UsersSession(aCart, Clock.TimeNow()), session);
+            //session.Save(new UserSession(aCart, Clock.TimeNow()), session);
 
             //transaction.Commit();
 
@@ -54,10 +36,10 @@ namespace TusLibros.app
             ISession session = SessionManager.OpenSession();
             ITransaction transaction = session.BeginTransaction();
 
-            UsersSession userSession = session
-                .CreateCriteria(typeof(UsersSession))
+            UserSession userSession = session
+                .CreateCriteria(typeof(UserSession))
                 .Add(Restrictions.Eq("CartId", aCartId))
-                .UniqueResult<UsersSession>();
+                .UniqueResult<UserSession>();
 
             userSession.VerifyCartExpired(Clock.TimeNow());
             Cart aCart = userSession.Cart;

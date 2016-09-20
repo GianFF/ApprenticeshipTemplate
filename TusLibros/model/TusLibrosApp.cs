@@ -1,5 +1,4 @@
-using System;
-using TusLibros.model.Entitys;
+using TusLibros.model.entities;
 using TusLibros.repositories;
 
 namespace TusLibros.model
@@ -9,9 +8,7 @@ namespace TusLibros.model
     {
         public static void Main(string[] args)
         {
-            var sessionFactory = SessionManager.BuildSessionFactory();
-
-            using (var session = sessionFactory.OpenSession())
+            using (var session = SessionManager.OpenSession())
             {
                 using (var transaction = session.BeginTransaction())
                 {
@@ -22,39 +19,14 @@ namespace TusLibros.model
                     var otroAuto = new Cart();
                     otroAuto.AddItem("3454");
                     otroAuto.AddItem("678");
-
-                    var merchant = new MerchantProcessor();
-                    var cashier = new Cashier(merchant);
-                    var creditC = new CreditCard(DateTime.Now);
-
-                    cashier.CheckoutFor(creditC,auto);
-                    cashier.CheckoutFor(creditC, otroAuto);
-
-                    session.SaveOrUpdate(auto);
-                    session.SaveOrUpdate(cashier);
-                    //session.SaveOrUpdate(otroAuto);
                     
+                    session.SaveOrUpdate(auto);
+                    session.SaveOrUpdate(otroAuto);
+
                     transaction.Commit();
-
+                    session.Close();
                 }
-
-                using (session.BeginTransaction())
-                {
-
-                    //Get post with id == 2
-                    int id_cart = 2;
-                    Cart p1 = session.Get<Cart>(id_cart);
-                    Console.WriteLine(p1.Id);
-                    foreach (var libro in p1.Items)
-                    {
-                        Console.WriteLine("  ,  " + libro);
-                    }
-                }
-
-                
             }
-
-            
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 using TusLibros.clocks;
-using TusLibros.model.Entitys;
+using TusLibros.model.entities;
 
 namespace TusLibros.app
 {

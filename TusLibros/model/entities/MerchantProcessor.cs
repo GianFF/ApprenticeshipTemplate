@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-namespace TusLibros.model.Entitys
+namespace TusLibros.model.entities
 {
     public class MerchantProcessor
     {

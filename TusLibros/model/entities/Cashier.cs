@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using TusLibros.model.Entitys.exceptions;
+using TusLibros.model.entities.exceptions;
 
-namespace TusLibros.model.Entitys
+namespace TusLibros.model.entities
 {
     public class Cashier
     {

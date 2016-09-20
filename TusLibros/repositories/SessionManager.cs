@@ -1,36 +1,33 @@
-﻿using FluentNHibernate.Cfg;
-using FluentNHibernate.Cfg.Db;
-using NHibernate;
-using NHibernate.Cfg;
-using NHibernate.Tool.hbm2ddl;
-
-using TusLibros.model.Entitys;
+﻿using NHibernate;
 
 namespace TusLibros.repositories
 {
     public static class SessionManager
     {
-      
+        private static ISessionFactory _sessionFactory;
+
         public static ISession OpenSession()
         {
-            return null;//ISessionFactory.OpenSession();
+            return SessionFactory.OpenSession();
         }
         
-        public static ISessionFactory BuildSessionFactory()
+        private static ISessionFactory CreateSessionFactory()
         {
-            var coneccion = "Server=localhost;Database=tuslibros;User ID=root;Password=root;";
+            var configurationDbMappingAndSchema = ConfigurationMappingDataBase.ConfigurationDbMappingAndSchema();
 
-            return Fluently.Configure()
-                .Database(MySQLConfiguration.Standard.ConnectionString(coneccion))
-                .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Cart>())
-                //.ExposeConfiguration(BuildSchema)
-                .BuildSessionFactory();
-        }
-   
-        private static void BuildSchema(Configuration config)
-        {            
-            new SchemaExport(config).Execute(false, true, false);
+            return configurationDbMappingAndSchema.BuildSessionFactory();
         }
 
+        private static ISessionFactory SessionFactory
+        {
+            get
+            {
+                if (_sessionFactory == null)
+                {
+                    _sessionFactory = CreateSessionFactory();
+                }
+                return _sessionFactory;
+            }
+        }
     }
 }

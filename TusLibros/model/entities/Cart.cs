@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TusLibros.model.Entitys
+namespace TusLibros.model.entities
 {
 
     public class Cart
