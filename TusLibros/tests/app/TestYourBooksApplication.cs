@@ -85,11 +85,14 @@ namespace TusLibros.tests.app
 
             application.AddAQuantityOfAnItem(1, objectProvider.ABook(), aCart.Id);
             application.Clock.UpdateSomeMinutes(20); // minutes
+            aCart = application.GetCart(aCart.Id);
 
             application.AddAQuantityOfAnItem(1, aBook, aCart.Id);
+            aCart = application.GetCart(aCart.Id);
             application.Clock.UpdateSomeMinutes(12); // minutes
 
             application.AddAQuantityOfAnItem(1, aBook, aCart.Id);
+            aCart = application.GetCart(aCart.Id);
 
             Assert.IsTrue(aCart.HasABook(aBook));
         }
