@@ -12,9 +12,9 @@ namespace TusLibros.app
     {
         public IClock Clock { get; set; }
 
-        public PersistentYourBooksApplication()
+        public PersistentYourBooksApplication(IClock clock)
         {
-            Clock = new IntegrationClock();
+            Clock = clock;
         }
 
         public Cart CreateCart()

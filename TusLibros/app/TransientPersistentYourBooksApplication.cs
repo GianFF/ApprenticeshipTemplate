@@ -11,10 +11,10 @@ namespace TusLibros.app
         public IClock Clock { get; set; }
         public List<UserSession> UserSessions { get; set; }
 
-        public TransientPersistentYourBooksApplication()
+        public TransientPersistentYourBooksApplication(IClock clock)
         {
             UserSessions = new List<UserSession>();
-            Clock = new DevelopmentClock();
+            Clock = clock;
         }
 
         public Cart CreateCart()
