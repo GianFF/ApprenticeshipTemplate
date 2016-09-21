@@ -113,8 +113,6 @@ namespace TusLibros.tests.app
             
             aCart = application.GetCart(aCart.Id);
 
-            Cashier cashier = objectProvider.ACashier(objectProvider.AnMerchantProcessor());
-            // CheckoutCart(Guid aCartId, CreditCard aCreditCard, Hashtable aCatalog, Hashtable aClient)
             Sale sale = application.CheckoutCart(aCart.Id, objectProvider.AValidCreditCard(), objectProvider.ACatalog(), objectProvider.AClient());
 
             Assert.IsTrue(application.IsRegistered(sale));
@@ -130,7 +128,6 @@ namespace TusLibros.tests.app
 
             aCart = application.GetCart(aCart.Id);
 
-            Cashier cashier = objectProvider.ACashier(objectProvider.AnMerchantProcessor());
             try
             {
                 application.CheckoutCart(aCart.Id, objectProvider.AValidCreditCard(), objectProvider.ACatalog(), objectProvider.AClient());
@@ -149,9 +146,21 @@ namespace TusLibros.tests.app
             IYourBooksApplication application = objectProvider.YourBooksApplication();
             Hashtable aClient = objectProvider.AClient();
             
-            var lista = new List<Sale>();
-
             Assert.IsTrue(application.PurchasesFor(aClient).IsEmpty());
+        }
+
+        [TestMethod]
+        public void Test09WhenAClientHasPurchasesThenHisPurchasesIsNotEmpty()
+        {
+            IYourBooksApplication application = objectProvider.YourBooksApplication();
+            Hashtable aClient = objectProvider.AClient();
+
+            Cart aCart = application.CreateCart();
+            application.AddAQuantityOfAnItem(1, objectProvider.ABook(), aCart.Id);
+            aCart = application.GetCart(aCart.Id);
+            application.CheckoutCart(aCart.Id, objectProvider.AValidCreditCard(), objectProvider.ACatalog(), objectProvider.AClient());
+
+            Assert.IsFalse(application.PurchasesFor(aClient).IsEmpty());
         }
     }
 }
