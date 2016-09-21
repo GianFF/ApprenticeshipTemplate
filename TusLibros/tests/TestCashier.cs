@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentNHibernate.Conventions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TusLibros.model.entities;
 using TusLibros.tests.support;
@@ -15,8 +16,8 @@ namespace TusLibros.tests
         protected Cart aCartWithTwoBook;
         protected Cart aCartWithTwoBookDiferents;
         protected MerchantProcessor merchantProcessor;
-        protected CreditCard aclient;
-        protected CreditCard anInvalidClient;
+        protected CreditCard ACreditCard;
+        protected CreditCard anInvalidCreditCard;
 
         [TestInitialize]
         public void SetUp()
@@ -28,8 +29,8 @@ namespace TusLibros.tests
             aCartWithOneBook = objectProvider.ACartWithOneBook();
             aCartWithTwoBook = objectProvider.ACartWithTwoBooks();
             aCartWithTwoBookDiferents = objectProvider.ACartWithTwoDiferentsBooks();
-            aclient = objectProvider.AValidCreditCard();
-            anInvalidClient = objectProvider.AnInvalidCreditCard();
+            ACreditCard = objectProvider.AValidCreditCard();
+            anInvalidCreditCard = objectProvider.AnInvalidCreditCard();
         }
         
         [TestMethod]
@@ -65,50 +66,17 @@ namespace TusLibros.tests
         }
 
         [TestMethod]
-        public void Test05WithACartWithOneBook()
-        {
-            cashier.CheckoutFor(aclient, aCartWithOneBook, objectProvider.ACatalog());
-            TestAssertThatIsRegisteredTheSale(cashier, aCartWithOneBook);
-            TestAssertTheLastOperationSuccesfullIsTheRight(cashier, 20);            
-        }
-
-        [TestMethod]
-        public void TestAssertThatIsRegisteredTheSale(Cashier aCashier, Cart aSale)
-        {
-            Assert.IsTrue(aCashier.IsRegistered(aSale));
-        }
-
-        private void TestAssertTheLastOperationSuccesfullIsTheRight(Cashier aCashier, int mountOfOperation)
-        {
-            Assert.AreEqual(mountOfOperation, merchantProcessor.LastSuccessfulOperationFor(aclient));
-        }
-
-        [TestMethod]
-        public void Test06WithACartWithTwoBooksEquals()
-        {
-            cashier.CheckoutFor(aclient, aCartWithTwoBook, objectProvider.ACatalog());
-            TestAssertTheLastOperationSuccesfullIsTheRight(cashier, 40);
-        }
-
-        [TestMethod]
         public void Test07WithAnInvalidCreditCard()
         {
             try
             {
-                cashier.CheckoutFor(anInvalidClient, aCartWithOneBook, objectProvider.ACatalog());
+                Sale sale = cashier.CheckoutFor(anInvalidCreditCard, aCartWithOneBook, objectProvider.ACatalog(), objectProvider.AClient());
                 Assert.Fail();
             }
             catch (ArgumentException e)
             {
                 Assert.AreEqual("The credit card is expired", e.Message);
-                TestAssertThatIsNotRegisteredTheSale(cashier, aCartWithOneBook);
             }
-        }
-
-        [TestMethod]
-        private void TestAssertThatIsNotRegisteredTheSale(Cashier aCashier , Cart aSale )
-        {
-            Assert.IsFalse(aCashier.IsRegistered(aSale));
         }
     }  
 }

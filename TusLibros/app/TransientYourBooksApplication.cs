@@ -1,19 +1,23 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TusLibros.clocks;
 using TusLibros.model;
 using TusLibros.model.entities;
 
 namespace TusLibros.app
 {
-    internal class TransientPersistentYourBooksApplication : IYourBooksApplication
+    internal class TransientYourBooksApplication : IYourBooksApplication
     {
         public IClock Clock { get; set; }
         public List<UserSession> UserSessions { get; set; }
+        public List<Sale> Sales { get; set; }
 
-        public TransientPersistentYourBooksApplication(IClock clock)
+        public TransientYourBooksApplication(IClock clock)
         {
             UserSessions = new List<UserSession>();
+            Sales = new List<Sale>();
             Clock = clock;
         }
 
@@ -36,6 +40,26 @@ namespace TusLibros.app
         {
             UserSession userSession = UserSession(aCartId);
             return userSession.Cart;
+        }
+
+        public List<Sale> PurchasesFor(Hashtable aClient)
+        {
+            return Sales.FindAll(sale => sale.ForClient(aClient));
+        }
+
+        public Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, Hashtable aCatalog, Hashtable aClient)
+        {
+            var aCart = GetCart(aCartId);
+            Cashier aCashier = new Cashier(new MerchantProcessor()); // TODO: extraer al constructor el merchantProcessor o pasarlo por parametro en el metodo?. 
+            Sale aSale = aCashier.CheckoutFor(aCreditCard, aCart, aCatalog, aClient);
+
+            Sales.Add(aSale);
+            return aSale;
+        }
+
+        public bool IsRegistered(Sale aSale)
+        {
+            return Sales.Contains(aSale);
         }
 
         private UserSession UserSession(Guid aCartId)

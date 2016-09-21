@@ -66,7 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="app\IYourBooksApplication.cs" />
-    <Compile Include="app\TransientPersistentYourBooksApplication.cs" />
+    <Compile Include="app\TransientYourBooksApplication.cs" />
     <Compile Include="clocks\DevelopmentClock.cs" />
     <Compile Include="clocks\IntegrationClock.cs" />
     <Compile Include="db\mappings\UserSessionMap.cs" />
@@ -78,6 +78,7 @@
     <Compile Include="model\entities\MerchantProcessor.cs" />
     <Compile Include="db\ConfigurationMappingDataBase.cs" />
     <Compile Include="db\SessionManager.cs" />
+    <Compile Include="model\entities\Sale.cs" />
     <Compile Include="model\UserSession.cs" />
     <Compile Include="clocks\IClock.cs" />
     <Compile Include="tests\support\TestObjectProvider.cs" />

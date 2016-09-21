@@ -62,22 +62,22 @@ namespace TusLibros.tests.support {
             TimeSpan diffBetweenTwoDates = now.Subtract(anyoneDate);
             DateTime lastDate = now.Subtract(diffBetweenTwoDates);
 
-            return new CreditCard(lastDate);        
+            return new CreditCard(lastDate, 123456);        
         }
 
         public CreditCard AValidCreditCard()
         {
             DateTime now = DateTime.Now;           
             DateTime dateOfExpiration = now.AddMonths(2);
-            CreditCard creditCard = new CreditCard(dateOfExpiration);
+            CreditCard creditCard = new CreditCard(dateOfExpiration, 123456);
 
             return creditCard;
         }
 
         public IYourBooksApplication YourBooksApplication()
         {
-            return new PersistentYourBooksApplication(AClock());
-            //return new TransientPersistentYourBooksApplication(AClock());
+           // return new PersistentYourBooksApplication(AClock());
+            return new TransientYourBooksApplication(AClock());
         }
 
         public MerchantProcessor AnMerchantProcessor()
@@ -108,6 +108,14 @@ namespace TusLibros.tests.support {
             catalog.Add("nacidos de la bruma el imperio final", 30);
 
             return catalog;
+        }
+
+        public Hashtable AClient()
+        {
+            // "id":"password"
+            var client = new Hashtable();
+            client.Add(1, "password");
+            return client;
         }
     }
 }

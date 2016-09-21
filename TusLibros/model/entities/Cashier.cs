@@ -2,18 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Util;
 
 namespace TusLibros.model.entities
 {
     public class Cashier
     {
         public virtual Guid Id { get; protected set; }
-        public virtual IList<Cart> SalesRecord { get; set; }
         public virtual MerchantProcessor AMerchantProcessor { get; set; }
 
         public Cashier(MerchantProcessor aMerchantProcessor)
         {
-            SalesRecord = new List<Cart>();
             AMerchantProcessor = aMerchantProcessor;
         }
 
@@ -29,17 +28,22 @@ namespace TusLibros.model.entities
             return productPrices.Sum();
         }
 
-        public void CheckoutFor(CreditCard aCreditCard, Cart aCart, Hashtable aCatalog)
+        public Sale CheckoutFor(CreditCard aCreditCard, Cart aCart, Hashtable aCatalog, Hashtable aClient)
         {
             VerifyIfTheCreditCardIsInvalid(aCreditCard);
             VerifyIfTheCartHasValidBooks(aCart, aCatalog);
             AMerchantProcessor.RegisterTransaction(aCreditCard, PriceFor(aCart, aCatalog));
-            SalesRecord.Add(aCart);
+
+            return new Sale(aCreditCard, CatalogSubset(aCart, aCatalog), aClient);
         }
 
-        public bool IsRegistered(Cart aSale)
+        private static Hashtable CatalogSubset(Cart aCart, Hashtable aCatalog)
         {
-            return SalesRecord.Contains(aSale);
+            var CatalogSubset = new Hashtable();
+
+            aCart.Items.ForEach(book => CatalogSubset.Add(book, aCatalog[book]));
+
+            return CatalogSubset;
         }
 
         private void VerifyIfTheCartHasValidBooks(Cart aCart, Hashtable aCatalog)

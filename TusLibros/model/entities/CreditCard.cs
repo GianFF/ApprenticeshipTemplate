@@ -4,17 +4,30 @@ namespace TusLibros.model.entities
 {
     public class CreditCard
     {
-        public virtual Guid Id { get; protected set; }
-        public virtual DateTime ExpirationDate { get; protected set; }
+        public DateTime ExpirationDate { get; protected set; }
+        public int CardNumber { get; set; }
 
-        public CreditCard(DateTime aDate)
+        public CreditCard(DateTime expirationDate, int cardNumber)
         {
-            ExpirationDate = aDate;
+            ExpirationDate = expirationDate;
+            CardNumber = cardNumber;
         }
 
         public bool IsExpired()
         {
             return ExpirationDate < DateTime.Now;
+        }
+
+        public override bool Equals(Object creditCard)
+        {
+            if (creditCard == null)
+            {
+                return false;
+            }
+
+            CreditCard aCreditCard = creditCard as CreditCard;
+
+            return CardNumber.Equals(aCreditCard.CardNumber);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using NHibernate.Util;
 
 namespace TusLibros.model.entities
 {
@@ -13,14 +14,9 @@ namespace TusLibros.model.entities
             SuccessfulOperations = new Hashtable();    
         }
 
-        public void RegisterTransaction(CreditCard aCreditCard, int priceFor)
+        public void RegisterTransaction(CreditCard aCreditCard, int anAmount)
         {
-            SuccessfulOperations.Add(aCreditCard,priceFor);
-        }
-
-        public int LastSuccessfulOperationFor(CreditCard aCreditCard)
-        {
-            return (int) SuccessfulOperations[aCreditCard];
+            SuccessfulOperations.Add(aCreditCard, anAmount);
         }
     }
 }

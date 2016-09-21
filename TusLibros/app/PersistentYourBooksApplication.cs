@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using NHibernate;
 using TusLibros.clocks;
 using TusLibros.db;
@@ -52,6 +54,21 @@ namespace TusLibros.app
             Cart cart = session.Get<Cart>(aCartId);
 
             return cart;
+        }
+
+        public List<Sale> PurchasesFor(Hashtable aClient)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, Hashtable aCatalog, Hashtable aClient)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsRegistered(Sale sale)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,8 +1,11 @@
 using System;
+using System.Collections;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TusLibros.app;
 using TusLibros.model.entities;
 using TusLibros.tests.support;
+using System.Collections.Generic;
+using FluentNHibernate.Conventions;
 
 namespace TusLibros.tests.app
 {
@@ -111,10 +114,10 @@ namespace TusLibros.tests.app
             aCart = application.GetCart(aCart.Id);
 
             Cashier cashier = objectProvider.ACashier(objectProvider.AnMerchantProcessor());
+            // CheckoutCart(Guid aCartId, CreditCard aCreditCard, Hashtable aCatalog, Hashtable aClient)
+            Sale sale = application.CheckoutCart(aCart.Id, objectProvider.AValidCreditCard(), objectProvider.ACatalog(), objectProvider.AClient());
 
-            cashier.CheckoutFor(objectProvider.AValidCreditCard(), aCart, objectProvider.ACatalog());
-
-            Assert.IsTrue(cashier.IsRegistered(aCart));
+            Assert.IsTrue(application.IsRegistered(sale));
         }
 
         [TestMethod]
@@ -130,21 +133,25 @@ namespace TusLibros.tests.app
             Cashier cashier = objectProvider.ACashier(objectProvider.AnMerchantProcessor());
             try
             {
-                cashier.CheckoutFor(objectProvider.AValidCreditCard(), aCart, objectProvider.ACatalog());
+                application.CheckoutCart(aCart.Id, objectProvider.AValidCreditCard(), objectProvider.ACatalog(), objectProvider.AClient());
                 Assert.Fail();
             }
             catch (ArgumentException e)
             {
                 Assert.AreEqual("The cart has invalid books!", e.Message);
-                Assert.IsFalse(cashier.IsRegistered(aCart));
             }
         }
 
 
         [TestMethod]
-        public void Test08()
+        public void Test08WhenAClientHasNoPurchasesThenHisListOfPurchasesIsEmpty()
         {
+            IYourBooksApplication application = objectProvider.YourBooksApplication();
+            Hashtable aClient = objectProvider.AClient();
+            
+            var lista = new List<Sale>();
 
+            Assert.IsTrue(application.PurchasesFor(aClient).IsEmpty());
         }
     }
 }
