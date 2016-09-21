@@ -1,7 +1,6 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TusLibros.app;
-using TusLibros.model;
 using TusLibros.model.entities;
 using TusLibros.tests.support;
 
@@ -61,18 +60,22 @@ namespace TusLibros.tests.app
             IYourBooksApplication application = objectProvider.YourBooksApplication();
             Cart aCart = application.CreateCart();
             string aBook = objectProvider.ABook();
+            string otherBook = objectProvider.OtherBook();
 
             application.AddAQuantityOfAnItem(1, aBook, aCart.Id);
             application.Clock.UpdateSomeMinutes(30); // minutes
             
             try
             {
-                application.AddAQuantityOfAnItem(1, aBook, aCart.Id);
+                application.AddAQuantityOfAnItem(1, otherBook, aCart.Id);
                 Assert.Fail();
             }
             catch (TimeoutException e)
             {
                 Assert.AreEqual("The cart has been expired", e.Message);
+
+                aCart = application.GetCart(aCart.Id);
+                Assert.IsFalse(aCart.HasABook(otherBook));
             }
         }
 
@@ -135,6 +138,13 @@ namespace TusLibros.tests.app
                 Assert.AreEqual("The cart has invalid books!", e.Message);
                 Assert.IsFalse(cashier.IsRegistered(aCart));
             }
+        }
+
+
+        [TestMethod]
+        public void Test08()
+        {
+
         }
     }
 }

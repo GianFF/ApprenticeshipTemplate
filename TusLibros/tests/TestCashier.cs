@@ -1,6 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TusLibros.model.entities;
-using TusLibros.model.entities.exceptions;
 using TusLibros.tests.support;
 
 namespace TusLibros.tests
@@ -40,7 +40,7 @@ namespace TusLibros.tests
                 cashier.PriceFor(cart, objectProvider.ACatalog());
                 Assert.Fail();
             }
-            catch (CannotCheckoutFor e)
+            catch (ArgumentException e)
             {
                 Assert.AreEqual("The cart cannot be empty for checkout", e.Message);
             }
@@ -98,7 +98,7 @@ namespace TusLibros.tests
                 cashier.CheckoutFor(anInvalidClient, aCartWithOneBook, objectProvider.ACatalog());
                 Assert.Fail();
             }
-            catch (CannotCheckoutFor e)
+            catch (ArgumentException e)
             {
                 Assert.AreEqual("The credit card is expired", e.Message);
                 TestAssertThatIsNotRegisteredTheSale(cashier, aCartWithOneBook);

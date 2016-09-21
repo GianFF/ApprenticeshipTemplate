@@ -63,10 +63,5 @@ namespace TusLibros.model.entities
 
             return Items.Count == aCart.Items.Count;
         }
-
-        public override int GetHashCode()
-        {
-            return 23;
-        }
     }
 }

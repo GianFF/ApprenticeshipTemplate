@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using FluentNHibernate.MappingModel;
-using TusLibros.model.entities.exceptions;
 
 namespace TusLibros.model.entities
 {
@@ -58,7 +56,7 @@ namespace TusLibros.model.entities
         {
             if (aCreditCard.IsExpired())
             {
-                throw new CannotCheckoutFor("The credit card is expired");//Ver esto
+                throw new ArgumentException("The credit card is expired");
             }
         }
 
@@ -66,7 +64,7 @@ namespace TusLibros.model.entities
         {
             if (aCart.IsEmpty())
             {
-                throw new CannotCheckoutFor("The cart cannot be empty for checkout");//Ver esto
+                throw new ArgumentException("The cart cannot be empty for checkout");
             }
         }
     }   

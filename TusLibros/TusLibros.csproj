@@ -71,7 +71,6 @@
     <Compile Include="clocks\IntegrationClock.cs" />
     <Compile Include="db\mappings\UserSessionMap.cs" />
     <Compile Include="db\mappings\CartMap.cs" />
-    <Compile Include="model\entities\exceptions\CannotCheckoutFor.cs" />
     <Compile Include="model\entities\Cart.cs" />
     <Compile Include="model\entities\Cashier.cs" />
     <Compile Include="model\entities\CreditCard.cs" />

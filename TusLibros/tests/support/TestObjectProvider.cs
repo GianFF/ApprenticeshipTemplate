@@ -76,8 +76,8 @@ namespace TusLibros.tests.support {
 
         public IYourBooksApplication YourBooksApplication()
         {
-            return new PersistentYourBooksApplication(new DevelopmentClock());
-            //return new TransientPersistentYourBooksApplication(new DevelopmentClock());
+            return new PersistentYourBooksApplication(AClock());
+            //return new TransientPersistentYourBooksApplication(AClock());
         }
 
         public MerchantProcessor AnMerchantProcessor()

@@ -13,8 +13,7 @@ namespace TusLibros.clocks
 
         public void UpdateSomeMinutes(int minutes)
         {
-            ClockTime = DateTime.Now;
-            ClockTime = ClockTime.AddMinutes(minutes);
+            ClockTime = DateTime.Now.AddMinutes(minutes);
         }
 
         public DateTime TimeNow()
