@@ -30,14 +30,14 @@ namespace TusLibros.tests
         [TestMethod]
         public void Test02WhenAddBooksToTheCartThisNotIsEmpty()
         {
-            cart.AddItem(aBook);
+            cart.AddItemSomeTimes(aBook,1);
             Assert.IsFalse(cart.IsEmpty());
         }
 
         [TestMethod]
         public void Test03WhitOneBookHasOnlyTheBookThatAdd()
         {
-            cart.AddItem(aBook);
+            cart.AddItemSomeTimes(aBook,1);
             Assert.IsTrue(cart.HasABook(aBook));
         }
 
@@ -52,7 +52,7 @@ namespace TusLibros.tests
         [TestMethod]
         public void Test05WhenConsultForABookThatIsNotAddedReturnsFalse()
         {
-            cart.AddItem(aBook);
+            cart.AddItemSomeTimes(aBook,1);
             Assert.IsTrue(cart.HasABook(aBook));
             Assert.IsFalse(cart.HasABook(otherBook));
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,11 +19,6 @@ namespace TusLibros.model.entities
         public virtual int TotalItems()
         {
             return Items.Count;
-        }
-
-        public virtual void AddItem(string aBook)
-        {
-            Items.Add(aBook);
         }
 
         public virtual void AddItemSomeTimes(string aBook, int aNumber) //TODO: revisar esto mejor
@@ -48,6 +44,14 @@ namespace TusLibros.model.entities
             return Items.Count(book => book == aBook);
         }
 
+        public virtual Hashtable ListBooksWithOccurrences()
+        {
+            var listBooksWithOccurrences = new Hashtable();
+            var differentBooks = Items.Distinct().ToList();
+            differentBooks.ForEach(book => listBooksWithOccurrences.Add(book, QuantityOf(book)));
+            return listBooksWithOccurrences;
+        }
+        
         public override bool Equals(Object otherCart)
         {
             Cart aCart = otherCart as Cart;

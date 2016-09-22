@@ -13,12 +13,12 @@ namespace TusLibros.model
                 using (var transaction = session.BeginTransaction())
                 {
                     var auto = new Cart();
-                    auto.AddItem("abc");
-                    auto.AddItem("dfg");
+                    auto.AddItemSomeTimes("abc",1);
+                    auto.AddItemSomeTimes("dfg",1);
 
                     var otroAuto = new Cart();
-                    otroAuto.AddItem("3454");
-                    otroAuto.AddItem("678");
+                    otroAuto.AddItemSomeTimes("3454",1);
+                    otroAuto.AddItemSomeTimes("678",1);
                     
                     session.SaveOrUpdate(auto);
                     session.SaveOrUpdate(otroAuto);

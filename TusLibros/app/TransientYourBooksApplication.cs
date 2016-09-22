@@ -72,9 +72,13 @@ namespace TusLibros.app
         public Hashtable ListCart(Guid aCartId)
         {
             var aCart = GetCart(aCartId);
-            var listCart = new Hashtable();
-            aCart.Items.ForEach(book => listCart.Add(book, aCart.QuantityOf(book)));
-            return  listCart;
+            return  aCart.ListBooksWithOccurrences();
+        }
+
+        public bool ContainsThisQuantityOfBook(Guid aCartId, string aBook, int quantityOfBook)
+        {
+            return (int)ListCart(aCartId)[aBook] == quantityOfBook;
+            
         }
 
         private UserSession UserSession(Guid aCartId)

@@ -81,5 +81,10 @@ namespace TusLibros.app
         {
             throw new NotImplementedException();
         }
+
+        public bool ContainsThisQuantityOfBook(Guid aCartId, string aBook, int quantity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

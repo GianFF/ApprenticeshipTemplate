@@ -180,6 +180,18 @@ namespace TusLibros.tests
 
             Assert.IsFalse(application.ListCart(aCart.Id).Count == 0);
         }
+
+        [TestMethod]
+        public void Test13WhenAddAQuantityTimesABookToCartAndGetListCartThereAreTheBookWithThisQuantity()
+        {
+            IYourBooksApplication application = objectProvider.YourBooksApplication();
+
+            Cart aCart = application.CreateCart();
+            String aBook = objectProvider.ABook();
+            aCart = application.AddAQuantityOfAnItem(4, aBook, aCart.Id);
+
+            Assert.IsTrue(application.ContainsThisQuantityOfBook(aCart.Id, aBook, 4));
+        }
         /* Recurso: /listCart
  Parámetros: 
  cartId: Id del carrito creado con /createCart

@@ -30,7 +30,7 @@ namespace TusLibros.tests.support {
         public Cart ACartWithOneBook()
         {
             Cart cart = this.EmptyCart();
-            cart.AddItem(this.ABook());
+            cart.AddItemSomeTimes(this.ABook(),1);
             return cart;
         }
 
@@ -49,8 +49,8 @@ namespace TusLibros.tests.support {
         public Cart ACartWithTwoDiferentsBooks()
         {
             Cart cart = new Cart();
-            cart.AddItem(this.ABook());
-            cart.AddItem(this.OtherBook());
+            cart.AddItemSomeTimes(this.ABook(),1);
+            cart.AddItemSomeTimes(this.OtherBook(),1);
             return cart;
         }
 

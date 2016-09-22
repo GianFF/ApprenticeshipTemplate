@@ -17,5 +17,6 @@ namespace TusLibros.app
         bool IsRegistered(Sale sale);
         bool PurchasesContainsFor(Sale aSale, Client aClient);
         Hashtable ListCart(Guid aCartId);
+        bool ContainsThisQuantityOfBook(Guid aCartId, string aBook, int quantity);
     }
 }
