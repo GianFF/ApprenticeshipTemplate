@@ -86,5 +86,10 @@ namespace TusLibros.app
         {
             throw new NotImplementedException();
         }
+
+        public bool CanHandle(string environment)
+        {
+            return environment == GlobalConfiguration.GlobalProductionEnvironment;
+        }
     }
 }

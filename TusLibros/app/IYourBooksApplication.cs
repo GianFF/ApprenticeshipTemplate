@@ -18,5 +18,6 @@ namespace TusLibros.app
         bool PurchasesContainsFor(Sale aSale, Client aClient);
         Hashtable ListCart(Guid aCartId);
         bool ContainsThisQuantityOfBook(Guid aCartId, string aBook, int quantity);
+        bool CanHandle(String environment);
     }
 }

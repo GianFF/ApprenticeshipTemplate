@@ -81,6 +81,11 @@ namespace TusLibros.app
             
         }
 
+        public bool CanHandle(string environment)
+        {
+            return environment == GlobalConfiguration.GlobalDevelopmentEnvironment;
+        }
+
         private UserSession UserSession(Guid aCartId)
         {
             return UserSessions.Find(session => session.Cart.Id == aCartId);

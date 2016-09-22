@@ -76,8 +76,7 @@ namespace TusLibros.tests.support {
 
         public IYourBooksApplication YourBooksApplication()
         {
-           // return new PersistentYourBooksApplication(AClock());
-            return new TransientYourBooksApplication(AClock());
+            return EnvironmentApplication.GetEnvironment();
         }
 
         public MerchantProcessor AnMerchantProcessor()
@@ -93,11 +92,6 @@ namespace TusLibros.tests.support {
         public String AValidUser()
         {
             return "valid user";
-        }
-
-        public IClock AClock()
-        {
-            return new DevelopmentClock();
         }
 
         public Hashtable ACatalog()
