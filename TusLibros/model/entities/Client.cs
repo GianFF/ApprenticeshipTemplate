@@ -9,15 +9,13 @@ namespace TusLibros.model.entities
     public class Client
     {
         public virtual Guid Id { get; protected set; }
-        public virtual CreditCard CreditCard { get; protected set; }
 
         public virtual String UserName { get; protected set; }
 
         public virtual String Password { get; protected set; }
 
-        public Client(CreditCard aCreditCard, String anUserNAme, String aPassword)
-        {
-            CreditCard = aCreditCard;
+        public Client(String anUserNAme, String aPassword)
+        {         
             UserName = anUserNAme;
             Password = aPassword;
         }

@@ -32,20 +32,27 @@ namespace TusLibros.app
             return aCart;
         }
 
-        public Cart AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId)
+        public Cart AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId)//TODO: NO OLVIDAR AGREGAR LOS TRY CATCH
         {
             ISession session = SessionManager.OpenSession();
             ITransaction transaction = session.BeginTransaction();
 
-            UserSession userSession = session.QueryOver<UserSession>().Where(uS => uS.Cart.Id == aCartId).SingleOrDefault<UserSession>();
-
-            userSession.VerifyCartExpired(Clock.TimeNow());
+            var userSession = GetAndVerifyUserSessionExpired(aCartId, session);
             Cart aCart = userSession.Cart;
             aCart.AddItemSomeTimes(aBook, quantity);
             session.SaveOrUpdate(userSession);
 
             transaction.Commit();
             return aCart;
+        }
+
+        private UserSession GetAndVerifyUserSessionExpired(Guid aCartId, ISession session)
+        {
+            UserSession userSession =
+                session.QueryOver<UserSession>().Where(uS => uS.Cart.Id == aCartId).SingleOrDefault<UserSession>();
+
+            userSession.VerifyCartExpired(Clock.TimeNow());
+            return userSession;
         }
 
         public Cart GetCart(Guid aCartId)
@@ -64,7 +71,18 @@ namespace TusLibros.app
 
         public Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, Hashtable aCatalog, Client aClient)
         {
-            throw new NotImplementedException();
+            ISession session = SessionManager.OpenSession();
+            ITransaction transaction = session.BeginTransaction();
+            var userSession = GetAndVerifyUserSessionExpired(aCartId, session);
+            var aCart = userSession.Cart;
+            
+            Cashier aCashier = new Cashier(GlobalConfiguration.MerchantProcessor);
+            Sale aSale = aCashier.CheckoutFor(aCreditCard, aCart, aCatalog, aClient);
+            session.SaveOrUpdate(aSale); 
+            session.Delete(userSession);
+            
+            transaction.Commit();
+            return aSale;
         }
 
         public bool IsRegistered(Sale sale)
