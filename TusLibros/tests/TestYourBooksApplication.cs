@@ -169,6 +169,17 @@ namespace TusLibros.tests
 
             Assert.IsTrue(application.ListCart(aCart.Id).Count == 0);
         }
+
+        [TestMethod]
+        public void Test12WhenAddBookToCartAndGetListCartThenIsNotEmpty()
+        {
+            IYourBooksApplication application = objectProvider.YourBooksApplication();
+
+            Cart aCart = application.CreateCart();
+            aCart = application.AddAQuantityOfAnItem(1, objectProvider.ABook(), aCart.Id);
+
+            Assert.IsFalse(application.ListCart(aCart.Id).Count == 0);
+        }
         /* Recurso: /listCart
  Parámetros: 
  cartId: Id del carrito creado con /createCart
