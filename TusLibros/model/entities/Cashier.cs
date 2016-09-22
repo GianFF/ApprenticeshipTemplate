@@ -28,7 +28,7 @@ namespace TusLibros.model.entities
             return productPrices.Sum();
         }
 
-        public Sale CheckoutFor(CreditCard aCreditCard, Cart aCart, Hashtable aCatalog, Hashtable aClient)
+        public Sale CheckoutFor(CreditCard aCreditCard, Cart aCart, Hashtable aCatalog, Client aClient)
         {
             VerifyIfTheCreditCardIsInvalid(aCreditCard);
             VerifyIfTheCartHasValidBooks(aCart, aCatalog);

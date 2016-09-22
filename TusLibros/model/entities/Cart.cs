@@ -25,7 +25,7 @@ namespace TusLibros.model.entities
             Items.Add(aBook);
         }
 
-        public virtual void AddItemSomeTimes(string aBook, int aNumber)
+        public virtual void AddItemSomeTimes(string aBook, int aNumber) //TODO: revisar esto mejor
         {
             for (int i = 0; i < aNumber; i++)
             {
@@ -50,11 +50,6 @@ namespace TusLibros.model.entities
 
         public override bool Equals(Object otherCart)
         {
-            if (otherCart == null)
-            {
-                return false;
-            }
-
             Cart aCart = otherCart as Cart;
             if ((Object) aCart == null)
             {
@@ -62,6 +57,11 @@ namespace TusLibros.model.entities
             }
 
             return Items.Count == aCart.Items.Count;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }

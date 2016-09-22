@@ -4,7 +4,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TusLibros.app;
 using TusLibros.model.entities;
 using TusLibros.tests.support;
-using System.Collections.Generic;
 using FluentNHibernate.Conventions;
 
 namespace TusLibros.tests.app
@@ -34,10 +33,7 @@ namespace TusLibros.tests.app
         {
             IYourBooksApplication application = objectProvider.YourBooksApplication();
             Cart aCart = application.CreateCart();
-
-            application.AddAQuantityOfAnItem(1, objectProvider.ABook(), aCart.Id);
-
-            aCart = application.GetCart(aCart.Id);
+            aCart = application.AddAQuantityOfAnItem(1, objectProvider.ABook(), aCart.Id);
 
             Assert.IsFalse(aCart.IsEmpty());
         }
@@ -49,10 +45,7 @@ namespace TusLibros.tests.app
             string aBook = objectProvider.ABook();
 
             Cart aCart = application.CreateCart();
-
-            application.AddAQuantityOfAnItem(1, aBook, aCart.Id);
-
-            aCart = application.GetCart(aCart.Id);
+            aCart = application.AddAQuantityOfAnItem(1, aBook, aCart.Id);
 
             Assert.IsTrue(aCart.HasABook(aBook));
         }
@@ -89,16 +82,13 @@ namespace TusLibros.tests.app
             Cart aCart = application.CreateCart();
             string aBook = objectProvider.ABook();
 
-            application.AddAQuantityOfAnItem(1, aBook, aCart.Id);
             application.Clock.UpdateSomeMinutes(20); // minutes
-            aCart = application.GetCart(aCart.Id);
-
-            application.AddAQuantityOfAnItem(1, aBook, aCart.Id);
-            aCart = application.GetCart(aCart.Id);
+            aCart = application.AddAQuantityOfAnItem(1, aBook, aCart.Id);
+            
+            aCart = application.AddAQuantityOfAnItem(1, aBook, aCart.Id);
             application.Clock.UpdateSomeMinutes(12); // minutes
-
-            application.AddAQuantityOfAnItem(1, aBook, aCart.Id);
-            aCart = application.GetCart(aCart.Id);
+            
+            aCart = application.AddAQuantityOfAnItem(1, aBook, aCart.Id);
 
             Assert.IsTrue(aCart.HasABook(aBook));
         }
@@ -108,10 +98,8 @@ namespace TusLibros.tests.app
         {
             IYourBooksApplication application = objectProvider.YourBooksApplication();
             Cart aCart = application.CreateCart();
-
-            application.AddAQuantityOfAnItem(1, objectProvider.ABook(), aCart.Id);
             
-            aCart = application.GetCart(aCart.Id);
+            aCart = application.AddAQuantityOfAnItem(1, objectProvider.ABook(), aCart.Id);
 
             Sale sale = application.CheckoutCart(aCart.Id, objectProvider.AValidCreditCard(), objectProvider.ACatalog(), objectProvider.AClient());
 
@@ -124,9 +112,7 @@ namespace TusLibros.tests.app
             IYourBooksApplication application = objectProvider.YourBooksApplication();
             Cart aCart = application.CreateCart();
 
-            application.AddAQuantityOfAnItem(1, objectProvider.AnInvalidBook(), aCart.Id);
-
-            aCart = application.GetCart(aCart.Id);
+            aCart = application.AddAQuantityOfAnItem(1, objectProvider.AnInvalidBook(), aCart.Id);
 
             try
             {
@@ -144,7 +130,7 @@ namespace TusLibros.tests.app
         public void Test08WhenAClientHasNoPurchasesThenHisListOfPurchasesIsEmpty()
         {
             IYourBooksApplication application = objectProvider.YourBooksApplication();
-            Hashtable aClient = objectProvider.AClient();
+            Client aClient = objectProvider.AClient();
             
             Assert.IsTrue(application.PurchasesFor(aClient).IsEmpty());
         }
@@ -153,11 +139,10 @@ namespace TusLibros.tests.app
         public void Test09WhenAClientHasPurchasesThenHisPurchasesIsNotEmpty()
         {
             IYourBooksApplication application = objectProvider.YourBooksApplication();
-            Hashtable aClient = objectProvider.AClient();
+            Client aClient = objectProvider.AClient();
 
             Cart aCart = application.CreateCart();
-            application.AddAQuantityOfAnItem(1, objectProvider.ABook(), aCart.Id);
-            aCart = application.GetCart(aCart.Id);
+            aCart = application.AddAQuantityOfAnItem(1, objectProvider.ABook(), aCart.Id);
             application.CheckoutCart(aCart.Id, objectProvider.AValidCreditCard(), objectProvider.ACatalog(), objectProvider.AClient());
 
             Assert.IsFalse(application.PurchasesFor(aClient).IsEmpty());

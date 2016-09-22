@@ -73,6 +73,7 @@
     <Compile Include="db\mappings\CartMap.cs" />
     <Compile Include="model\entities\Cart.cs" />
     <Compile Include="model\entities\Cashier.cs" />
+    <Compile Include="model\entities\Client.cs" />
     <Compile Include="model\entities\CreditCard.cs" />
     <Compile Include="app\PersistentYourBooksApplication.cs" />
     <Compile Include="model\entities\MerchantProcessor.cs" />
