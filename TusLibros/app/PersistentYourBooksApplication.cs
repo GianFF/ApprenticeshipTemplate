@@ -32,7 +32,7 @@ namespace TusLibros.app
             return aCart;
         }
 
-        public void AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId)
+        public Cart AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId)
         {
             ISession session = SessionManager.OpenSession();
             ITransaction transaction = session.BeginTransaction();
@@ -45,6 +45,7 @@ namespace TusLibros.app
             session.SaveOrUpdate(userSession);
 
             transaction.Commit();
+            return aCart;
         }
 
         public Cart GetCart(Guid aCartId)
@@ -56,12 +57,12 @@ namespace TusLibros.app
             return cart;
         }
 
-        public List<Sale> PurchasesFor(Hashtable aClient)
+        public List<Sale> PurchasesFor(Client aClient)
         {
             throw new NotImplementedException();
         }
 
-        public Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, Hashtable aCatalog, Hashtable aClient)
+        public Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, Hashtable aCatalog, Client aClient)
         {
             throw new NotImplementedException();
         }

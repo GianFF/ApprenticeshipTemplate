@@ -110,11 +110,9 @@ namespace TusLibros.tests.support {
             return catalog;
         }
 
-        public Hashtable AClient()
+        public Client AClient()
         {
-            // "id":"password"
-            var client = new Hashtable();
-            client.Add(1, "password");
+            var client = new Client(AValidCreditCard(), "carlitos", "123");
             return client;
         }
     }

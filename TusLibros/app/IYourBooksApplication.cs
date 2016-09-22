@@ -10,10 +10,10 @@ namespace TusLibros.app
     {
         IClock Clock { get; set; }
         Cart CreateCart();
-        void AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId);
+        Cart AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId);
         Cart GetCart(Guid aCartId);
-        List<Sale> PurchasesFor(Hashtable aClient);
-        Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, Hashtable aCatalog, Hashtable aClient);
+        List<Sale> PurchasesFor(Client aClient);
+        Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, Hashtable aCatalog, Client aClient);
         bool IsRegistered(Sale sale);
     }
 }

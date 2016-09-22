@@ -7,20 +7,22 @@ namespace TusLibros.model.entities
     {
         //TODO: la venta no tiene una fecha?
         public virtual Guid Id { get; protected set; }
-        public Hashtable Client { get; set; }
-        private CreditCard CreditCard;
-        private Hashtable CatalogSubset;
+        public Client Client { get; set; }
 
-        public Sale(CreditCard aCreditCard, Hashtable catalogSubset, Hashtable aClient)
+        private CreditCard CreditCard;
+
+        private Hashtable BooksAndPrices;
+
+        public Sale(CreditCard aCreditCard, Hashtable booksAndPrices, Client aClient)
         {
             CreditCard = aCreditCard;
-            CatalogSubset = catalogSubset;
+            BooksAndPrices = booksAndPrices;
             Client = aClient;
         }
 
-        public bool ForClient(Hashtable aClient)
+        public bool ForClient(Client aClient)
         {
-            return Client == aClient;
+            return Client.Equals(aClient);
         }
 
         public bool Equals(Sale sale)

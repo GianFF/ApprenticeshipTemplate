@@ -28,12 +28,13 @@ namespace TusLibros.app
             return aCart;
         }
 
-        public void AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId)
+        public Cart AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId)
         {
             UserSession userSession = UserSession(aCartId);
             userSession.VerifyCartExpired(Clock.TimeNow());
             Cart aCart = userSession.Cart;
             aCart.AddItemSomeTimes(aBook, quantity);
+            return aCart;
         }
 
         public Cart GetCart(Guid aCartId)
@@ -42,12 +43,12 @@ namespace TusLibros.app
             return userSession.Cart;
         }
 
-        public List<Sale> PurchasesFor(Hashtable aClient)
+        public List<Sale> PurchasesFor(Client aClient)
         {
             return Sales.FindAll(sale => sale.ForClient(aClient));
         }
 
-        public Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, Hashtable aCatalog, Hashtable aClient)
+        public Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, Hashtable aCatalog, Client aClient)
         {
             var aCart = GetCart(aCartId);
             Cashier aCashier = new Cashier(new MerchantProcessor()); // TODO: extraer al constructor el merchantProcessor o pasarlo por parametro en el metodo?. 
