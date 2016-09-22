@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Util;
 using TusLibros.clocks;
 using TusLibros.model;
 using TusLibros.model.entities;
@@ -66,6 +67,14 @@ namespace TusLibros.app
         public bool PurchasesContainsFor(Sale aSale, Client aClient)
         {
             return PurchasesFor(aClient).Contains(aSale);
+        }
+
+        public Hashtable ListCart(Guid aCartId)
+        {
+            var aCart = GetCart(aCartId);
+            var listCart = new Hashtable();
+            aCart.Items.ForEach(book => listCart.Add(book, aCart.QuantityOf(book)));
+            return  listCart;
         }
 
         private UserSession UserSession(Guid aCartId)

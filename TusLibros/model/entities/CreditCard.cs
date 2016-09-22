@@ -29,5 +29,10 @@ namespace TusLibros.model.entities
 
             return CardNumber.Equals(aCreditCard.CardNumber);
         }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

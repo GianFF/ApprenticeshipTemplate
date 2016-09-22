@@ -76,5 +76,10 @@ namespace TusLibros.app
         {
             throw new NotImplementedException();
         }
+
+        public Hashtable ListCart(Guid aCartId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

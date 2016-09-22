@@ -159,7 +159,22 @@ namespace TusLibros.tests
 
             Assert.IsTrue(application.PurchasesContainsFor(aSale, aClient));
         }
-        
-        
+
+        [TestMethod]
+        public void Test11WhenGetListCartOfAnEmptyCartThenIsEmpty()
+        {
+            IYourBooksApplication application = objectProvider.YourBooksApplication();
+            
+            Cart aCart = application.CreateCart();
+
+            Assert.IsTrue(application.ListCart(aCart.Id).Count == 0);
+        }
+        /* Recurso: /listCart
+ Parámetros: 
+ cartId: Id del carrito creado con /createCart
+ Output:
+ En caso de éxito: 0|ISBN_1|QUANTITY_1|ISBN_2|QUANTITY_2|....|ISBN_N|QUANTITY_N
+ En caso de error:  1|DESCRIPCION_DE_ERROR¨*/
+
     }
 }

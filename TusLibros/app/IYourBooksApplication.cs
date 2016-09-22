@@ -16,5 +16,6 @@ namespace TusLibros.app
         Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, Hashtable aCatalog, Client aClient);
         bool IsRegistered(Sale sale);
         bool PurchasesContainsFor(Sale aSale, Client aClient);
+        Hashtable ListCart(Guid aCartId);
     }
 }
