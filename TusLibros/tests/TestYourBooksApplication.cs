@@ -1,12 +1,11 @@
 using System;
-using System.Collections;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TusLibros.app;
 using TusLibros.model.entities;
 using TusLibros.tests.support;
 using FluentNHibernate.Conventions;
 
-namespace TusLibros.tests.app
+namespace TusLibros.tests
 {
     [TestClass]
     public class TestYourBooksApplication
@@ -147,5 +146,20 @@ namespace TusLibros.tests.app
 
             Assert.IsFalse(application.PurchasesFor(aClient).IsEmpty());
         }
+
+        [TestMethod]
+        public void Test10WhenAClientBuyABookHisPurchasesIsRegistered()
+        {
+            IYourBooksApplication application = objectProvider.YourBooksApplication();
+            Client aClient = objectProvider.AClient();
+
+            Cart aCart = application.CreateCart();
+            aCart = application.AddAQuantityOfAnItem(1, objectProvider.ABook(), aCart.Id);
+            Sale aSale = application.CheckoutCart(aCart.Id, objectProvider.AValidCreditCard(), objectProvider.ACatalog(), objectProvider.AClient());
+
+            Assert.IsTrue(application.PurchasesContainsFor(aSale, aClient));
+        }
+        
+        
     }
 }

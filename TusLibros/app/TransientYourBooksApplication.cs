@@ -63,6 +63,11 @@ namespace TusLibros.app
             return Sales.Contains(aSale);
         }
 
+        public bool PurchasesContainsFor(Sale aSale, Client aClient)
+        {
+            return PurchasesFor(aClient).Contains(aSale);
+        }
+
         private UserSession UserSession(Guid aCartId)
         {
             return UserSessions.Find(session => session.Cart.Id == aCartId);

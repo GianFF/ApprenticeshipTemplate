@@ -15,5 +15,6 @@ namespace TusLibros.app
         List<Sale> PurchasesFor(Client aClient);
         Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, Hashtable aCatalog, Client aClient);
         bool IsRegistered(Sale sale);
+        bool PurchasesContainsFor(Sale aSale, Client aClient);
     }
 }

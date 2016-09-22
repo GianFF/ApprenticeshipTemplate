@@ -71,5 +71,10 @@ namespace TusLibros.app
         {
             throw new NotImplementedException();
         }
+
+        public bool PurchasesContainsFor(Sale aSale, Client aClient)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
