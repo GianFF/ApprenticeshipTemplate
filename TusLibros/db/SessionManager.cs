@@ -14,7 +14,7 @@ namespace TusLibros.db
         private static ISessionFactory CreateSessionFactory()
         {
             var configurationDbMappingAndSchema = ConfigurationMappingDataBase.ConfigureDbMappingAndSchema();
-
+            
             return configurationDbMappingAndSchema.BuildSessionFactory();
         }
 

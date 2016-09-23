@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using NHibernate;
 using TusLibros.clocks;
 using TusLibros.db;
@@ -24,7 +25,7 @@ namespace TusLibros.app
 
             ISession session = SessionManager.OpenSession();
             ITransaction transaction = session.BeginTransaction();
-            Client aClient = GetClient(clientId, password);
+            Client aClient = GetClient(clientId, password, session);
             session.SaveOrUpdate(new UserSession(aCart, Clock.TimeNow(), aClient));
 
             transaction.Commit();
@@ -32,16 +33,18 @@ namespace TusLibros.app
             return aCart;
         }
 
-        private Client GetClient(Guid clientId, string password)
-        { 
-            ISession session = SessionManager.OpenSession();
-            
-            Client aClient = session.QueryOver<Client>().Where(each => each.Id == clientId && each.Password == password).SingleOrDefault<Client>();
-            
+        private Client GetClient(Guid clientId, string password, ISession session)
+        {
+            Client aClient =
+                session.QueryOver<Client>()
+                    .Where(client => client.Id == clientId && client.Password == password)
+                    .SingleOrDefault<Client>();
+
             return aClient;
         }
 
-        public Cart AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId)//TODO: NO OLVIDAR AGREGAR LOS TRY CATCH
+        public Cart AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId)
+            //TODO: NO OLVIDAR AGREGAR LOS TRY CATCH
         {
             ISession session = SessionManager.OpenSession();
             ITransaction transaction = session.BeginTransaction();
@@ -57,7 +60,8 @@ namespace TusLibros.app
 
         private UserSession GetAndVerifyUserSessionExpired(Guid aCartId, ISession session)
         {
-            UserSession userSession = session.QueryOver<UserSession>().Where(uS => uS.Cart.Id == aCartId).SingleOrDefault<UserSession>();
+            UserSession userSession =
+                session.QueryOver<UserSession>().Where(uS => uS.Cart.Id == aCartId).SingleOrDefault<UserSession>();
 
             userSession.VerifyCartExpired(Clock.TimeNow());
             return userSession;
@@ -74,7 +78,12 @@ namespace TusLibros.app
 
         public List<Sale> PurchasesFor(Client aClient)
         {
-            throw new NotImplementedException();
+            ISession session = SessionManager.OpenSession();
+
+            List<Sale> sales =
+                session.QueryOver<Sale>().Where(sale => sale.Client.Id == aClient.Id).List<Sale>().ToList();
+
+            return sales;
         }
 
         public Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, IDictionary aCatalog)
@@ -85,19 +94,23 @@ namespace TusLibros.app
             var userSession = GetAndVerifyUserSessionExpired(aCartId, session);
             var aCart = userSession.Cart;
             var aClient = userSession.Client;
-            
+
             Cashier aCashier = new Cashier(GlobalConfiguration.MerchantProcessor);
             Sale aSale = aCashier.CheckoutFor(aCreditCard, aCart, aCatalog, aClient);
-            session.SaveOrUpdate(aSale); 
+            session.SaveOrUpdate(aSale);
             session.Delete(userSession);
-            
+
             transaction.Commit();
             return aSale;
         }
 
         public bool IsRegistered(Sale sale)
         {
-            throw new NotImplementedException();
+            ISession session = SessionManager.OpenSession();
+
+            Sale aSale = session.Get<Sale>(sale.Id);
+
+            return aSale != null;
         }
 
         public bool PurchasesContainsFor(Sale aSale, Client aClient)
@@ -124,11 +137,14 @@ namespace TusLibros.app
         {
             ISession session = SessionManager.OpenSession();
 
-            Client aClient = session.QueryOver<Client>().Where(each => each.UserName == userName && each.Password == password).SingleOrDefault<Client>();
+            Client aClient =
+                session.QueryOver<Client>()
+                    .Where(each => each.UserName == userName && each.Password == password)
+                    .SingleOrDefault<Client>();
 
-            if(aClient == null)
+            if (aClient == null)
                 throw new ArgumentException("Invalid user or password");
-            
+
             return aClient;
         }
 
@@ -142,6 +158,46 @@ namespace TusLibros.app
             session.SaveOrUpdate(aClient);
 
             transaction.Commit();
+        }
+
+        public void DeleteUser(string userName, string password)
+        {
+            ISession session = SessionManager.OpenSession();
+            ITransaction transaction = session.BeginTransaction();
+
+            VerifyExistUserName(userName, session);
+
+            Client aClient = session.QueryOver<Client>().Where(each => each.UserName == userName && each.Password == password).SingleOrDefault<Client>(); //TODO Query repetida
+
+            /* Chanchada para salir del paso: */
+            try
+            {
+                UserSession userSession = session.QueryOver<UserSession>().Where(uS => uS.Client.Id == aClient.Id).SingleOrDefault<UserSession>();
+                session.Delete(userSession);
+            }
+            catch (Exception)
+            {
+                /* puto! */
+            }
+            try
+            {
+                Sale sale = session.QueryOver<Sale>().Where(s => s.Client.Id == aClient.Id).SingleOrDefault<Sale>();
+                session.Delete(sale);
+            }
+            catch (Exception)
+            {
+                /* puto! */
+            }
+
+            session.Delete(aClient);
+            transaction.Commit();
+        }
+
+        private void VerifyExistUserName(string userName, ISession session)
+        {
+            Client aClient = session.QueryOver<Client>().Where(each => each.UserName == userName).SingleOrDefault<Client>();
+            if (aClient == null)
+                throw new ArgumentException("Inexistent user");
         }
 
         private void VerifyNotExistUserName(string userName, ISession session)
