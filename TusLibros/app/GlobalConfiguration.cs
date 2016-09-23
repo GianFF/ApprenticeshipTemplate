@@ -11,5 +11,17 @@ namespace TusLibros.app
 
         public static IClock GlobalClock = new DevelopmentClock();
         public static MerchantProcessor MerchantProcessor = new MerchantProcessor();
+
+
+        public const string ServerDataBaseGlobal = "localhost";
+        public const string DataBaseGlobal = "tuslibros";
+        public const string UserDataBaseGlobal = "root";
+        public const string PasswordDataBaseGlobal = "root";
+
+        public const string ConnectionDataBaseString =
+            "Server=" + ServerDataBaseGlobal + ";" +
+            "Database=" + DataBaseGlobal + ";" +
+            "User ID=" + UserDataBaseGlobal + ";" +
+            "Password=" + PasswordDataBaseGlobal + ";";
     }
 }

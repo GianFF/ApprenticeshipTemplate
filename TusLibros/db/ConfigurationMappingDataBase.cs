@@ -2,6 +2,7 @@
 using FluentNHibernate.Cfg.Db;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
+using TusLibros.app;
 using TusLibros.model.entities;
 
 namespace TusLibros.db
@@ -10,7 +11,7 @@ namespace TusLibros.db
     {
         public static string DataBaseConeccionString()
         {
-            return "Server=localhost;Database=tuslibros;User ID=root;Password=root;";
+            return GlobalConfiguration.ConnectionDataBaseString;
         }
 
         public static FluentConfiguration ConfigureDbMappingAndSchema()

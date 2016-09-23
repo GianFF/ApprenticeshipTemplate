@@ -106,7 +106,7 @@ namespace TusLibros.tests.support {
 
         public Client AClient()
         {
-            var client = new Client(AValidCreditCard(), "carlitos", "123");
+            var client = new Client("carlitos", "123");
             return client;
         }
     }

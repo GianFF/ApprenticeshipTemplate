@@ -71,6 +71,7 @@
     <Compile Include="app\TransientYourBooksApplication.cs" />
     <Compile Include="clocks\DevelopmentClock.cs" />
     <Compile Include="clocks\IntegrationClock.cs" />
+    <Compile Include="db\mappings\SaleMap.cs" />
     <Compile Include="db\mappings\UserSessionMap.cs" />
     <Compile Include="db\mappings\CartMap.cs" />
     <Compile Include="model\entities\Cart.cs" />

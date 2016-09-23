@@ -3,7 +3,7 @@ using TusLibros.model.entities;
 
 namespace TusLibros.db.mappings
 {
-    public class SaleMap : ClassMap<Sale>
+    /*public class SaleMap : ClassMap<Sale>
     {
         public SaleMap()
         {
@@ -11,5 +11,5 @@ namespace TusLibros.db.mappings
             References(s => s.Client);
             References(s => s.Client).Cascade.All();
         }
-    }
+    }*/
 }
