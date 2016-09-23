@@ -95,7 +95,7 @@ namespace TusLibros.app
 
         public bool CanHandle(string environment)
         {
-            return environment == GlobalConfiguration.GlobalDevelopmentEnvironment;
+            return environment == GlobalConfiguration.DevelopmentEnvironment;
         }
 
         public Client Login(string userName, string password)

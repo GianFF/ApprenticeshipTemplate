@@ -20,6 +20,16 @@ namespace TusLibros.tests
         }
 
         [TestMethod]
+        public void Test00CanRegisterAndLoginAnUSer()
+        {
+            IYourBooksApplication application = objectProvider.YourBooksApplication();
+            application.RegisterClient("marcos", "123");
+            Client aClient = application.Login("marcos", "123");
+            
+            Assert.IsTrue(aClient.UserName == "marcos" && aClient.Password == "123");
+        }
+
+        [TestMethod]
         public void Test01CanGetAnEmptyCart()
         {
             IYourBooksApplication application = objectProvider.YourBooksApplication();

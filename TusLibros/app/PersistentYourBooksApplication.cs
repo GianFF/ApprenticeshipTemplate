@@ -117,17 +117,38 @@ namespace TusLibros.app
 
         public bool CanHandle(string environment)
         {
-            return environment == GlobalConfiguration.GlobalProductionEnvironment;
+            return environment == GlobalConfiguration.ProductionEnvironment;
         }
 
         public Client Login(string userName, string password)
         {
-            throw new NotImplementedException();
+            ISession session = SessionManager.OpenSession();
+
+            Client aClient = session.QueryOver<Client>().Where(each => each.UserName == userName && each.Password == password).SingleOrDefault<Client>();
+
+            if(aClient == null)
+                throw new ArgumentException("Invalid user or password");
+            
+            return aClient;
         }
 
         public void RegisterClient(string userName, string password)
         {
-            throw new NotImplementedException();
+            ISession session = SessionManager.OpenSession();
+            ITransaction transaction = session.BeginTransaction();
+
+            VerifyNotExistUserName(userName, session);
+            Client aClient = new Client(userName, password);
+            session.SaveOrUpdate(aClient);
+
+            transaction.Commit();
+        }
+
+        private void VerifyNotExistUserName(string userName, ISession session)
+        {
+            Client aClient = session.QueryOver<Client>().Where(each => each.UserName == userName).SingleOrDefault<Client>();
+            if (aClient != null)
+                throw new ArgumentException("User already registered");
         }
     }
 }
