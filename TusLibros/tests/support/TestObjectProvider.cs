@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using TusLibros.app;
 using TusLibros.clocks;
 using TusLibros.model.entities;
@@ -94,9 +95,9 @@ namespace TusLibros.tests.support {
             return "valid user";
         }
 
-        public Hashtable ACatalog()
+        public IDictionary ACatalog()
         {
-            var catalog = new Hashtable();
+            var catalog = new Dictionary<string,int>();
 
             catalog.Add("nacidos de la bruma", 20);
             catalog.Add("nacidos de la bruma el imperio final", 30);

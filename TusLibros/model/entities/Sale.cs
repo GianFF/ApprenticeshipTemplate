@@ -8,15 +8,15 @@ namespace TusLibros.model.entities
         //TODO: la venta no tiene una fecha?
         public virtual Guid Id { get; protected set; }
         public virtual Client Client { get; set; }
-        public virtual CreditCard CreditCard { get; protected set; }
-        public virtual Hashtable BooksAndPrices { get; protected set; }
+        public virtual CreditCard CreditCard { get; set; }
+        public virtual IDictionary BooksAndPrices { get; set; }
 
         public Sale()
         {
             
         }
 
-        public Sale(CreditCard aCreditCard, Hashtable booksAndPrices, Client aClient)
+        public Sale(CreditCard aCreditCard, IDictionary booksAndPrices, Client aClient)
         {
             CreditCard = aCreditCard;
             BooksAndPrices = booksAndPrices;

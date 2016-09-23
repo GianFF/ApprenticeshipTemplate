@@ -69,7 +69,7 @@ namespace TusLibros.app
             throw new NotImplementedException();
         }
 
-        public Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, Hashtable aCatalog, Client aClient)
+        public Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, IDictionary aCatalog, Client aClient)
         {
             ISession session = SessionManager.OpenSession();
             ITransaction transaction = session.BeginTransaction();
@@ -95,7 +95,7 @@ namespace TusLibros.app
             throw new NotImplementedException();
         }
 
-        public Hashtable ListCart(Guid aCartId)
+        public IDictionary ListCart(Guid aCartId)
         {
             throw new NotImplementedException();
         }

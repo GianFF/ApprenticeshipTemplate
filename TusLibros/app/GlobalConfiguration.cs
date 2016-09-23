@@ -5,7 +5,7 @@ namespace TusLibros.app
 {
     public static class GlobalConfiguration
     {
-        public const string Environment = GlobalProductionEnvironment;
+        public const string Environment = GlobalDevelopmentEnvironment;
         public const string GlobalDevelopmentEnvironment = "Development";
         public const string GlobalProductionEnvironment = "Production";
 

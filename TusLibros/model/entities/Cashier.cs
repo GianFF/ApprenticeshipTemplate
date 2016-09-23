@@ -16,7 +16,7 @@ namespace TusLibros.model.entities
             AMerchantProcessor = aMerchantProcessor;
         }
 
-        public int PriceFor(Cart aCart, Hashtable aCatalog)
+        public int PriceFor(Cart aCart, IDictionary aCatalog)
         {
             AssertThatTheCartIsNotEmpty(aCart);
             IEnumerable<int> productPrices = aCart.Items.Select(aProduct => (int) aCatalog[aProduct]);
@@ -28,7 +28,7 @@ namespace TusLibros.model.entities
             return productPrices.Sum();
         }
 
-        public Sale CheckoutFor(CreditCard aCreditCard, Cart aCart, Hashtable aCatalog, Client aClient)
+        public Sale CheckoutFor(CreditCard aCreditCard, Cart aCart, IDictionary aCatalog, Client aClient)
         {
             VerifyIfTheCreditCardIsInvalid(aCreditCard);
             VerifyIfTheCartHasValidBooks(aCart, aCatalog);
@@ -37,18 +37,18 @@ namespace TusLibros.model.entities
             return new Sale(aCreditCard, CatalogSubset(aCart, aCatalog), aClient);
         }
 
-        private static Hashtable CatalogSubset(Cart aCart, Hashtable aCatalog)
+        private static IDictionary CatalogSubset(Cart aCart, IDictionary aCatalog)
         {
-            var CatalogSubset = new Hashtable();
+            var CatalogSubset = new Dictionary<string,int>();
 
-            aCart.Items.ForEach(book => CatalogSubset.Add(book, aCatalog[book]));
+            aCart.Items.ForEach(book => CatalogSubset.Add(book, (int)aCatalog[book]));
 
             return CatalogSubset;
         }
 
-        private void VerifyIfTheCartHasValidBooks(Cart aCart, Hashtable aCatalog)
+        private void VerifyIfTheCartHasValidBooks(Cart aCart, IDictionary aCatalog)
         {
-            bool hasInvalidBook = aCart.Items.Any(book => !aCatalog.ContainsKey(book));
+            bool hasInvalidBook = aCart.Items.Any(book => !aCatalog.Contains(book));
 
             if (hasInvalidBook)
             {

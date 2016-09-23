@@ -49,7 +49,7 @@ namespace TusLibros.app
             return Sales.FindAll(sale => sale.ForClient(aClient));
         }
 
-        public Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, Hashtable aCatalog, Client aClient)
+        public Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, IDictionary aCatalog, Client aClient)
         {
             var aCart = GetCart(aCartId);
             Cashier aCashier = new Cashier(new MerchantProcessor()); // TODO: extraer al constructor el merchantProcessor o pasarlo por parametro en el metodo?. 
@@ -69,7 +69,7 @@ namespace TusLibros.app
             return PurchasesFor(aClient).Contains(aSale);
         }
 
-        public Hashtable ListCart(Guid aCartId)
+        public IDictionary ListCart(Guid aCartId)
         {
             var aCart = GetCart(aCartId);
             return  aCart.ListBooksWithOccurrences();

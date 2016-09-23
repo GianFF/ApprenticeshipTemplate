@@ -44,9 +44,9 @@ namespace TusLibros.model.entities
             return Items.Count(book => book == aBook);
         }
 
-        public virtual Hashtable ListBooksWithOccurrences()
+        public virtual IDictionary ListBooksWithOccurrences()
         {
-            var listBooksWithOccurrences = new Hashtable();
+            var listBooksWithOccurrences = new Dictionary<string,int>();
             var differentBooks = Items.Distinct().ToList();
             differentBooks.ForEach(book => listBooksWithOccurrences.Add(book, QuantityOf(book)));
             return listBooksWithOccurrences;
