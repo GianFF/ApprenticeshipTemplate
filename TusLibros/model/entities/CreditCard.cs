@@ -4,8 +4,11 @@ namespace TusLibros.model.entities
 {
     public class CreditCard
     {
-        public DateTime ExpirationDate { get; protected set; }
-        public int CardNumber { get; set; }
+        public virtual Guid Id { get; protected set; }
+        public virtual DateTime ExpirationDate { get; protected set; }
+        public virtual int CardNumber { get; protected set; }
+
+        public CreditCard() { }
 
         public CreditCard(DateTime expirationDate, int cardNumber)
         {
@@ -13,7 +16,7 @@ namespace TusLibros.model.entities
             CardNumber = cardNumber;
         }
 
-        public bool IsExpired()
+        public virtual bool IsExpired()
         {
             return ExpirationDate < DateTime.Now;
         }

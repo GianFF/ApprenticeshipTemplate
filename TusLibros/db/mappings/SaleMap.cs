@@ -8,35 +8,8 @@ namespace TusLibros.db.mappings
         public SaleMap()
         {
             Id(x => x.Id);
-            //References(s => s.Client);
-            //References(s => s.CreditCard);
-            //HasMany<string,int>(x => x.BooksAndPrices).AsMap();
-
-            
-
+            References(s => s.Client).Cascade.All(); //TODO: no va el cascade All. Sacarlo cuando se registren usuarios al crear carritos.
+            References(s => s.CreditCard).Cascade.All();
         }
     }
 }
-
-
-/*
- 
- public class Customer : Entity
-{        
-    public IDictionary<string, Book> FavouriteBooks { get; set; }
-}
-
-public class Book : Entity
-{
-    public string Name { get; set; }
-}
-And then the map:
-
-HasManyToMany<Book>(x => x.FavouriteBooks)
-            .Table("FavouriteBooks")                
-            .ParentKeyColumn("CustomerID")
-            .ChildKeyColumn("BookID")
-            .AsMap<string>("Nickname")                
-            .Cascade.All();
-Resulting xml:
-     */

@@ -18,18 +18,27 @@ namespace TusLibros.app
             Clock = clock;
         }
 
-        public Cart CreateCart()
+        public Cart CreateCart(Guid clientId, String password)
         {
             Cart aCart = new Cart();
 
             ISession session = SessionManager.OpenSession();
             ITransaction transaction = session.BeginTransaction();
-
-            session.SaveOrUpdate(new UserSession(aCart, Clock.TimeNow()));
+            Client aClient = GetClient(clientId, password);
+            session.SaveOrUpdate(new UserSession(aCart, Clock.TimeNow(), aClient));
 
             transaction.Commit();
 
             return aCart;
+        }
+
+        private Client GetClient(Guid clientId, string password)
+        { 
+            ISession session = SessionManager.OpenSession();
+            
+            Client aClient = session.QueryOver<Client>().Where(each => each.Id == clientId && each.Password == password).SingleOrDefault<Client>();
+            
+            return aClient;
         }
 
         public Cart AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId)//TODO: NO OLVIDAR AGREGAR LOS TRY CATCH
@@ -48,8 +57,7 @@ namespace TusLibros.app
 
         private UserSession GetAndVerifyUserSessionExpired(Guid aCartId, ISession session)
         {
-            UserSession userSession =
-                session.QueryOver<UserSession>().Where(uS => uS.Cart.Id == aCartId).SingleOrDefault<UserSession>();
+            UserSession userSession = session.QueryOver<UserSession>().Where(uS => uS.Cart.Id == aCartId).SingleOrDefault<UserSession>();
 
             userSession.VerifyCartExpired(Clock.TimeNow());
             return userSession;
@@ -69,12 +77,14 @@ namespace TusLibros.app
             throw new NotImplementedException();
         }
 
-        public Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, IDictionary aCatalog, Client aClient)
+        public Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, IDictionary aCatalog)
         {
             ISession session = SessionManager.OpenSession();
             ITransaction transaction = session.BeginTransaction();
+
             var userSession = GetAndVerifyUserSessionExpired(aCartId, session);
             var aCart = userSession.Cart;
+            var aClient = userSession.Client;
             
             Cashier aCashier = new Cashier(GlobalConfiguration.MerchantProcessor);
             Sale aSale = aCashier.CheckoutFor(aCreditCard, aCart, aCatalog, aClient);
@@ -108,6 +118,16 @@ namespace TusLibros.app
         public bool CanHandle(string environment)
         {
             return environment == GlobalConfiguration.GlobalProductionEnvironment;
+        }
+
+        public Client Login(string userName, string password)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RegisterClient(string userName, string password)
+        {
+            throw new NotImplementedException();
         }
     }
 }

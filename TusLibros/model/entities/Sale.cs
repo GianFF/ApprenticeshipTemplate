@@ -11,10 +11,7 @@ namespace TusLibros.model.entities
         public virtual CreditCard CreditCard { get; set; }
         public virtual IDictionary BooksAndPrices { get; set; }
 
-        public Sale()
-        {
-            
-        }
+        public Sale() { }
 
         public Sale(CreditCard aCreditCard, IDictionary booksAndPrices, Client aClient)
         {
@@ -23,12 +20,12 @@ namespace TusLibros.model.entities
             Client = aClient;
         }
 
-        public bool ForClient(Client aClient)
+        public virtual bool ForClient(Client aClient)
         {
             return Client.Equals(aClient);
         }
 
-        public bool Equals(Sale sale)
+        public virtual bool Equals(Sale sale)
         {
             return this.CreditCard == sale.CreditCard; // TODO: && fecha && mas cosas
         }

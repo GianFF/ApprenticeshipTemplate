@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TusLibros.model.entities
 {
@@ -10,9 +6,12 @@ namespace TusLibros.model.entities
     {
         public virtual Guid Id { get; protected set; }
 
-        public virtual String UserName { get; protected set; }
+        public virtual String UserName { get; set; }
 
-        public virtual String Password { get; protected set; }
+        public virtual String Password { get; set; }
+
+
+        public Client() { }
 
         public Client(String anUserNAme, String aPassword)
         {         
