@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using static TusLibros.app.GlobalConfiguration;
+using static TusLibros.app.environment.DevelopmentEnvironment;
 
 namespace TusLibros.model.entities
 {

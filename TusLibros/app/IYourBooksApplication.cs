@@ -18,7 +18,6 @@ namespace TusLibros.app
         bool PurchasesContainsASaleForAClient(Sale aSale, Client aClient);
         IDictionary ListCart(Guid aCartId);
         bool ContainsThisQuantityOfBook(Guid aCartId, string aBook, int quantity);
-        bool CanHandle(String environment);
         Client Login(string userName, string password);
         void RegisterClient(string userName, string password);
         void DeleteUser(string userName, string password);

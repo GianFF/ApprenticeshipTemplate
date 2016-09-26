@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using FluentNHibernate.Conventions;
-using NHibernate.Util;
 using TusLibros.clocks;
 using TusLibros.model;
 using TusLibros.model.entities;
@@ -16,13 +13,15 @@ namespace TusLibros.app
         public List<UserSession> UserSessions { get; set; }
         public List<Sale> Sales { get; set; }
         public List<Client> Clients { get; set; }
+        public MerchantProcessor MerchantProcessor { get; }
 
-        public TransientYourBooksApplication(IClock clock)
+        public TransientYourBooksApplication(IClock clock, MerchantProcessor merchantProcessor)
         {
             UserSessions = new List<UserSession>();
             Sales = new List<Sale>();
             Clients = new List<Client>();
             Clock = clock;
+            MerchantProcessor = merchantProcessor;
         }
 
         public Cart CreateCart(Guid clientId, String password)
@@ -53,7 +52,7 @@ namespace TusLibros.app
             var aCart = GetCart(aCartId);
             Cashier aCashier = new Cashier();
             Client aClient = UserSession(aCartId).Client;
-            Sale aSale = aCashier.CheckoutFor(aCreditCard, aCart, aCatalog, aClient);
+            Sale aSale = aCashier.CheckoutFor(aCreditCard, aCart, aCatalog, aClient, MerchantProcessor);
 
             Sales.Add(aSale);
             return aSale;
@@ -119,11 +118,6 @@ namespace TusLibros.app
         {
             Client aClient = Clients.Find(client => client.Id == clientId && client.Password == password);
             return aClient;
-        }
-
-        public bool CanHandle(string environment)
-        {
-            return environment == GlobalConfiguration.DevelopmentEnvironment;
         }
     }
 }

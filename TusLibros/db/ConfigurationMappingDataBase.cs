@@ -3,6 +3,7 @@ using FluentNHibernate.Cfg.Db;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
 using TusLibros.app;
+using TusLibros.app.environment;
 using TusLibros.model.entities;
 
 namespace TusLibros.db
@@ -11,7 +12,7 @@ namespace TusLibros.db
     {
         public static string DataBaseConeccionString()
         {
-            return GlobalConfiguration.ConnectionDataBaseString;
+            return new PersitentDataBaseStrategy().ConnectionDataBaseString; // TODO: esto es raro
         }
 
         public static FluentConfiguration ConfigureDbMappingAndSchema()

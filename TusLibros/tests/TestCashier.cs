@@ -68,7 +68,7 @@ namespace TusLibros.tests
         {
             try
             {
-                Sale sale = cashier.CheckoutFor(anInvalidCreditCard, aCartWithOneBook, objectProvider.ACatalog(), objectProvider.AClient());
+                Sale sale = cashier.CheckoutFor(anInvalidCreditCard, aCartWithOneBook, objectProvider.ACatalog(), objectProvider.AClient(), objectProvider.AnMerchantProcessor());
                 Assert.Fail();
             }
             catch (ArgumentException e)

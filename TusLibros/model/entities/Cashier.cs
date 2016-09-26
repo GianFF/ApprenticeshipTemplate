@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Util;
 using TusLibros.app;
+using TusLibros.app.environment;
 
 namespace TusLibros.model.entities
 {
@@ -27,11 +28,11 @@ namespace TusLibros.model.entities
             return productPrices.Sum();
         }
 
-        public Sale CheckoutFor(CreditCard aCreditCard, Cart aCart, IDictionary aCatalog, Client aClient)
+        public Sale CheckoutFor(CreditCard aCreditCard, Cart aCart, IDictionary aCatalog, Client aClient, MerchantProcessor merchantProcessor)
         {
             VerifyIfTheCreditCardIsInvalid(aCreditCard);
             VerifyIfTheCartHasValidBooks(aCart, aCatalog);
-            GlobalConfiguration.MerchantProcessor.RegisterTransaction(aCreditCard, PriceFor(aCart, aCatalog));
+            merchantProcessor.RegisterTransaction(aCreditCard, PriceFor(aCart, aCatalog));
 
             return new Sale(aCreditCard, CatalogSubset(aCart, aCatalog), aClient, DateTime.Now);
         }

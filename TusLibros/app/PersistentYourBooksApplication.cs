@@ -13,10 +13,13 @@ namespace TusLibros.app
     internal class PersistentYourBooksApplication : IYourBooksApplication
     {
         public IClock Clock { get; set; }
+        public MerchantProcessor MerchantProcessor { get; }
 
-        public PersistentYourBooksApplication(IClock clock)
+
+        public PersistentYourBooksApplication(IClock clock, MerchantProcessor merchantProcessor)
         {
             Clock = clock;
+            MerchantProcessor = merchantProcessor;
         }
 
         public Cart CreateCart(Guid clientId, String password)
@@ -68,7 +71,7 @@ namespace TusLibros.app
             var aClient = userSession.Client;
 
             Cashier aCashier = new Cashier();
-            Sale aSale = aCashier.CheckoutFor(aCreditCard, aCart, aCatalog, aClient);
+            Sale aSale = aCashier.CheckoutFor(aCreditCard, aCart, aCatalog, aClient, MerchantProcessor);
             session.SaveOrUpdate(aSale);
             session.Delete(userSession);
 
@@ -236,9 +239,5 @@ namespace TusLibros.app
             return sales;
         }
 
-        public bool CanHandle(string environment)
-        {
-            return environment == GlobalConfiguration.ProductionEnvironment;
-        }
     }
 }
