@@ -1,4 +1,5 @@
-﻿using TusLibros.clocks;
+﻿using System;
+using TusLibros.clocks;
 using TusLibros.model.entities;
 
 namespace TusLibros.app
@@ -23,5 +24,12 @@ namespace TusLibros.app
             "Database=" + DataBaseGlobal + ";" +
             "User ID=" + UserDataBaseGlobal + ";" +
             "Password=" + PasswordDataBaseGlobal + ";";
+
+        //TODO: mover a donde corresponda.
+        public static void RepeatAction(int repeatCount, Action action)
+        {
+            for (int i = 0; i < repeatCount; i++)
+                action();
+        }
     }
 }

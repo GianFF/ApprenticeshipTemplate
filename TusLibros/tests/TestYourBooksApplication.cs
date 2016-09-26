@@ -33,7 +33,7 @@ namespace TusLibros.tests
             application.RegisterClient("marcos", "123");
             Client aClient = application.Login("marcos", "123");
 
-            Assert.IsTrue(aClient.UserName == "marcos" && aClient.Password == "123");
+            Assert.IsTrue(aClient.SameUserNameAndPassword("marcos","123"));
         }
 
         [TestMethod]
@@ -125,12 +125,10 @@ namespace TusLibros.tests
             Cart aCart = application.CreateCart(aClient.Id, aClient.Password);
             string aBook = objectProvider.ABook();
 
-            application.Clock.UpdateSomeMinutes(20); // minutes
+            application.Clock.UpdateSomeMinutes(20); // 20 minutes
             aCart = application.AddAQuantityOfAnItem(1, aBook, aCart.Id);
             
-            aCart = application.AddAQuantityOfAnItem(1, aBook, aCart.Id);
-            application.Clock.UpdateSomeMinutes(12); // minutes
-            
+            application.Clock.UpdateSomeMinutes(12); // 12 minutes
             aCart = application.AddAQuantityOfAnItem(1, aBook, aCart.Id);
 
             Assert.IsTrue(aCart.HasABook(aBook));

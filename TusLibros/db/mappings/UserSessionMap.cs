@@ -10,7 +10,7 @@ namespace TusLibros.db.mappings
             Id(u => u.Id);
             References(u => u.Cart).Cascade.All();
             References(u => u.Client);
-            Map(u => u.Date);
+            Map(u => u.LastActionDateTime);
         }
     }
 }

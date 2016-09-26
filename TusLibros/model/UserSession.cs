@@ -7,22 +7,27 @@ namespace TusLibros.model
     {
         public virtual Guid Id { get; protected set; }
         public virtual Cart Cart { get; set; }
-        public virtual DateTime Date { get; set; }
+        public virtual DateTime LastActionDateTime { get; set; }
         public virtual Client Client { get; set; }
 
         public UserSession(){}
 
-        public UserSession(Cart cart, DateTime date, Client client)
+        public UserSession(Cart cart, DateTime lastActionDateTime, Client client)
         {
             this.Cart = cart;
-            this.Date = date;
+            this.LastActionDateTime = lastActionDateTime;
             this.Client = client;
         }
 
         public virtual void VerifyCartExpired(DateTime timeNow)
         {
-            if ((timeNow.Subtract(Date)).TotalMinutes >= 30)
+            if ((timeNow.Subtract(LastActionDateTime)).TotalMinutes >= 30)
                 throw new TimeoutException("The cart has been expired");
+        }
+
+        public virtual void UpdateLastActionTime(DateTime lastActionDateTime)
+        {
+            LastActionDateTime = lastActionDateTime;
         }
     }
 }

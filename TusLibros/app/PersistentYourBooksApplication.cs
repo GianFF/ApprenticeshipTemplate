@@ -52,6 +52,7 @@ namespace TusLibros.app
             var userSession = GetAndVerifyUserSessionExpired(aCartId, session);
             Cart aCart = userSession.Cart;
             aCart.AddItemSomeTimes(aBook, quantity);
+            userSession.UpdateLastActionTime(Clock.TimeNow());
             session.SaveOrUpdate(userSession);
 
             transaction.Commit();
@@ -95,7 +96,7 @@ namespace TusLibros.app
             var aCart = userSession.Cart;
             var aClient = userSession.Client;
 
-            Cashier aCashier = new Cashier(GlobalConfiguration.MerchantProcessor);
+            Cashier aCashier = new Cashier();
             Sale aSale = aCashier.CheckoutFor(aCreditCard, aCart, aCatalog, aClient);
             session.SaveOrUpdate(aSale);
             session.Delete(userSession);
@@ -165,7 +166,7 @@ namespace TusLibros.app
             transaction.Commit();
         }
 
-        public void DeleteUser(string userName, string password)
+        public void DeleteUser(string userName, string password) //TODO mirarlo
         {
             ISession session = SessionManager.OpenSession();
             ITransaction transaction = session.BeginTransaction();

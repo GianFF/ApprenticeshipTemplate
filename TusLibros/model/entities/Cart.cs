@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using static TusLibros.app.GlobalConfiguration;
 
 namespace TusLibros.model.entities
 {
@@ -21,12 +22,9 @@ namespace TusLibros.model.entities
             return Items.Count;
         }
 
-        public virtual void AddItemSomeTimes(string aBook, int aNumber) //TODO: revisar esto mejor
+        public virtual void AddItemSomeTimes(string aBook, int aNumber)
         {
-            for (int i = 0; i < aNumber; i++)
-            {
-                Items.Add(aBook);
-            }
+            RepeatAction(aNumber, () => { Items.Add(aBook); });
         }
 
         public virtual bool HasABook(string aBook)

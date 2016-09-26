@@ -17,7 +17,6 @@ namespace TusLibros.app
         public List<Sale> Sales { get; set; }
         public List<Client> Clients { get; set; }
 
-
         public TransientYourBooksApplication(IClock clock)
         {
             UserSessions = new List<UserSession>();
@@ -46,6 +45,7 @@ namespace TusLibros.app
             userSession.VerifyCartExpired(Clock.TimeNow());
             Cart aCart = userSession.Cart;
             aCart.AddItemSomeTimes(aBook, quantity);
+            userSession.UpdateLastActionTime(Clock.TimeNow());
             return aCart;
         }
 
@@ -63,7 +63,7 @@ namespace TusLibros.app
         public Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, IDictionary aCatalog)
         {
             var aCart = GetCart(aCartId);
-            Cashier aCashier = new Cashier(new MerchantProcessor()); // TODO: extraer al constructor el merchantProcessor o pasarlo por parametro en el metodo?. 
+            Cashier aCashier = new Cashier();
             Client aClient = UserSession(aCartId).Client;
             Sale aSale = aCashier.CheckoutFor(aCreditCard, aCart, aCatalog, aClient);
 
@@ -99,7 +99,7 @@ namespace TusLibros.app
 
         public Client Login(string userName, string password)
         {
-            return Clients.Find(client => client.UserName == userName && client.Password == password); //TODO: hacerlo expresivo y extrac methdos y todo
+            return Clients.Find(client => client.SameUserNameAndPassword(userName, password));
         }
 
         public void RegisterClient(string userName, string password)
@@ -111,8 +111,8 @@ namespace TusLibros.app
 
         private void VerifyNotExistUserName(string userName)
         {
-            Client aClient = Clients.Find(client => client.UserName == userName); //TODO: se puede refactorear por algo mejor?
-            if (aClient != null)
+            bool existsUserName = Clients.Exists(client => client.SameUserName(userName));
+            if (existsUserName)
                 throw new ArgumentException("User already registered");
         }
 

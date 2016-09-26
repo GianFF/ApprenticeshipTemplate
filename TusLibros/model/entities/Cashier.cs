@@ -3,17 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Util;
+using TusLibros.app;
 
 namespace TusLibros.model.entities
 {
     public class Cashier
     {
         public virtual Guid Id { get; protected set; }
-        public virtual MerchantProcessor AMerchantProcessor { get; set; }
 
-        public Cashier(MerchantProcessor aMerchantProcessor)
+        public Cashier()
         {
-            AMerchantProcessor = aMerchantProcessor;
         }
 
         public int PriceFor(Cart aCart, IDictionary aCatalog)
@@ -32,9 +31,9 @@ namespace TusLibros.model.entities
         {
             VerifyIfTheCreditCardIsInvalid(aCreditCard);
             VerifyIfTheCartHasValidBooks(aCart, aCatalog);
-            AMerchantProcessor.RegisterTransaction(aCreditCard, PriceFor(aCart, aCatalog));
+            GlobalConfiguration.MerchantProcessor.RegisterTransaction(aCreditCard, PriceFor(aCart, aCatalog));
 
-            return new Sale(aCreditCard, CatalogSubset(aCart, aCatalog), aClient);
+            return new Sale(aCreditCard, CatalogSubset(aCart, aCatalog), aClient, DateTime.Now);
         }
 
         private static IDictionary CatalogSubset(Cart aCart, IDictionary aCatalog)

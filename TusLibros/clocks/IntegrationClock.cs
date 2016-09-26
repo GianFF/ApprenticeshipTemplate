@@ -22,6 +22,7 @@ namespace TusLibros.clocks
 
         public DateTime TimeNow()
         {
+            ClockTime = DateTime.Now;
             return ClockTime;
         }
     }

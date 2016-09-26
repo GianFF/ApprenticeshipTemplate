@@ -10,7 +10,6 @@ namespace TusLibros.model.entities
 
         public virtual String Password { get; set; }
 
-
         public Client() { }
 
         public Client(String anUserNAme, String aPassword)
@@ -19,20 +18,14 @@ namespace TusLibros.model.entities
             Password = aPassword;
         }
 
-        public override bool Equals(Object otherClient)
+        public virtual bool SameUserName(string userName)
         {
-            Client aClient = otherClient as Client;
-            if ((Object)aClient == null)
-            {
-                return false;
-            }
-
-            return UserName == aClient.UserName && Password == aClient.Password;
+            return UserName == userName;
         }
 
-        public override int GetHashCode()
+        public virtual bool SameUserNameAndPassword(string userName, string password)
         {
-            return base.GetHashCode();
+            return SameUserName(userName) && Password == password;
         }
     }
 }
