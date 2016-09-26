@@ -15,7 +15,7 @@ namespace TusLibros.app
         List<Sale> PurchasesFor(Client aClient);
         Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, IDictionary aCatalog);
         bool IsRegistered(Sale sale);
-        bool PurchasesContainsFor(Sale aSale, Client aClient);
+        bool PurchasesContainsASaleForAClient(Sale aSale, Client aClient);
         IDictionary ListCart(Guid aCartId);
         bool ContainsThisQuantityOfBook(Guid aCartId, string aBook, int quantity);
         bool CanHandle(String environment);

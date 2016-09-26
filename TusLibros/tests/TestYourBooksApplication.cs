@@ -200,7 +200,7 @@ namespace TusLibros.tests
         }
 
         [TestMethod]
-        public void Test10WhenAClientBuyABookHisPurchasesIsRegistered()
+        public void Test10WhenAClientBuyABookHisPurchasesHasRegisteredThatSale()
         {
             IYourBooksApplication application = objectProvider.YourBooksApplication();
             application.RegisterClient("marcos", "123");
@@ -209,7 +209,7 @@ namespace TusLibros.tests
             aCart = application.AddAQuantityOfAnItem(1, objectProvider.ABook(), aCart.Id);
             Sale aSale = application.CheckoutCart(aCart.Id, objectProvider.AValidCreditCard(), objectProvider.ACatalog());
 
-            Assert.IsTrue(application.PurchasesContainsFor(aSale, aClient));
+            Assert.IsTrue(application.PurchasesContainsASaleForAClient(aSale, aClient));
         }
 
         [TestMethod]

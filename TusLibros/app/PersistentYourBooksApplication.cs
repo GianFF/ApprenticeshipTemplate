@@ -113,19 +113,24 @@ namespace TusLibros.app
             return aSale != null;
         }
 
-        public bool PurchasesContainsFor(Sale aSale, Client aClient)
+        public bool PurchasesContainsASaleForAClient(Sale aSale, Client aClient)
         {
-            throw new NotImplementedException();
+            ISession session = SessionManager.OpenSession();
+
+            Sale sale = session.QueryOver<Sale>().Where(saleBd => (saleBd.Id == aSale.Id) && (saleBd.Client.Id == aClient.Id)).List<Sale>().ToList().SingleOrDefault();
+
+            return sale != null;
         }
 
         public IDictionary ListCart(Guid aCartId)
         {
-            throw new NotImplementedException();
+            Cart cart = GetCart(aCartId);
+            return cart.ListBooksWithOccurrences();
         }
 
         public bool ContainsThisQuantityOfBook(Guid aCartId, string aBook, int quantity)
         {
-            throw new NotImplementedException();
+            return (int)ListCart(aCartId)[aBook] == quantity;
         }
 
         public bool CanHandle(string environment)
@@ -186,7 +191,7 @@ namespace TusLibros.app
             }
             catch (Exception)
             {
-                /* puto! */
+ 
             }
 
             session.Delete(aClient);

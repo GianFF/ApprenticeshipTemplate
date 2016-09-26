@@ -76,7 +76,7 @@ namespace TusLibros.app
             return Sales.Contains(aSale);
         }
 
-        public bool PurchasesContainsFor(Sale aSale, Client aClient)
+        public bool PurchasesContainsASaleForAClient(Sale aSale, Client aClient)
         {
             return PurchasesFor(aClient).Contains(aSale);
         }
@@ -90,7 +90,6 @@ namespace TusLibros.app
         public bool ContainsThisQuantityOfBook(Guid aCartId, string aBook, int quantityOfBook)
         {
             return (int)ListCart(aCartId)[aBook] == quantityOfBook;
-            
         }
 
         public bool CanHandle(string environment)
@@ -105,8 +104,16 @@ namespace TusLibros.app
 
         public void RegisterClient(string userName, string password)
         {
+            VerifyNotExistUserName(userName);
             Client aClient = new Client(userName,password);
             Clients.Add(aClient);
+        }
+
+        private void VerifyNotExistUserName(string userName)
+        {
+            Client aClient = Clients.Find(client => client.UserName == userName); //TODO: se puede refactorear por algo mejor?
+            if (aClient != null)
+                throw new ArgumentException("User already registered");
         }
 
         public void DeleteUser(string userName, string password)
