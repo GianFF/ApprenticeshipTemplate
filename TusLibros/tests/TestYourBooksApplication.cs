@@ -146,7 +146,7 @@ namespace TusLibros.tests
 
             Sale sale = application.CheckoutCart(aCart.Id, objectProvider.AValidCreditCard(), objectProvider.ACatalog());
 
-            Assert.IsTrue(application.IsRegistered(sale));
+            Assert.IsTrue(application.IsSaleRegistered(sale));
         }
 
         [TestMethod]

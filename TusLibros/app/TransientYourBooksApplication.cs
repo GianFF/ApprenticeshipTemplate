@@ -32,13 +32,7 @@ namespace TusLibros.app
             UserSessions.Add(new UserSession(aCart, Clock.TimeNow(), aClient));
             return aCart;
         }
-
-        private Client GetClient(Guid clientId, string password)
-        {
-            Client aClient = Clients.Find(client => client.Id == clientId && client.Password == password);
-            return aClient;
-        }
-
+        
         public Cart AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId)
         {
             UserSession userSession = UserSession(aCartId);
@@ -47,13 +41,7 @@ namespace TusLibros.app
             aCart.AddItemSomeTimes(aBook, quantity);
             userSession.UpdateLastActionTime(Clock.TimeNow());
             return aCart;
-        }
-
-        public Cart GetCart(Guid aCartId)
-        {
-            UserSession userSession = UserSession(aCartId);
-            return userSession.Cart;
-        }
+        }        
 
         public List<Sale> PurchasesFor(Client aClient)
         {
@@ -71,11 +59,10 @@ namespace TusLibros.app
             return aSale;
         }
 
-        public bool IsRegistered(Sale aSale)
+        public bool IsSaleRegistered(Sale aSale)
         {
             return Sales.Contains(aSale);
         }
-
         public bool PurchasesContainsASaleForAClient(Sale aSale, Client aClient)
         {
             return PurchasesFor(aClient).Contains(aSale);
@@ -90,11 +77,6 @@ namespace TusLibros.app
         public bool ContainsThisQuantityOfBook(Guid aCartId, string aBook, int quantityOfBook)
         {
             return (int)ListCart(aCartId)[aBook] == quantityOfBook;
-        }
-
-        public bool CanHandle(string environment)
-        {
-            return environment == GlobalConfiguration.DevelopmentEnvironment;
         }
 
         public Client Login(string userName, string password)
@@ -125,6 +107,23 @@ namespace TusLibros.app
         private UserSession UserSession(Guid aCartId)
         {
             return UserSessions.Find(session => session.Cart.Id == aCartId);
+        }
+
+        public Cart GetCart(Guid aCartId)
+        {
+            UserSession userSession = UserSession(aCartId);
+            return userSession.Cart;
+        }
+
+        private Client GetClient(Guid clientId, string password)
+        {
+            Client aClient = Clients.Find(client => client.Id == clientId && client.Password == password);
+            return aClient;
+        }
+
+        public bool CanHandle(string environment)
+        {
+            return environment == GlobalConfiguration.DevelopmentEnvironment;
         }
     }
 }
