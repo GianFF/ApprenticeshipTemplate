@@ -8,7 +8,6 @@ namespace TusLibros.app
         public const string Environment = ProductionEnvironment;
         public const string DevelopmentEnvironment = "Development";
         public const string ProductionEnvironment = "Production";
-
         public static IClock GlobalClock = new DevelopmentClock();
         public static MerchantProcessor MerchantProcessor = new MerchantProcessor();
 
