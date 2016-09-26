@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="app\environment\DevelopmentEnvironment.cs" />
     <Compile Include="app\environment\IPersistentStrategy.cs" />
+    <Compile Include="app\GlobalConfiguration.cs" />
     <Compile Include="app\IYourBooksApplication.cs" />
     <Compile Include="app\TransientYourBooksApplication.cs" />
     <Compile Include="clocks\DevelopmentClock.cs" />

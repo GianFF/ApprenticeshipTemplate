@@ -36,8 +36,7 @@ namespace TusLibros.app
             return aCart;
         }       
 
-        public Cart AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId)
-            //TODO: NO OLVIDAR AGREGAR LOS TRY CATCH
+        public Cart AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId) // TODO: NO OLVIDAR AGREGAR LOS TRY CATCH
         {
             ISession session = SessionManager.OpenSession();
             ITransaction transaction = session.BeginTransaction();

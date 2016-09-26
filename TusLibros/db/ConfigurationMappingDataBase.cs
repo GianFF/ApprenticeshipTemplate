@@ -12,7 +12,7 @@ namespace TusLibros.db
     {
         public static string DataBaseConeccionString()
         {
-            return new PersitentDataBaseStrategy().ConnectionDataBaseString; // TODO: esto es raro
+            return GlobalConfiguration.ConnectionDataBaseString;
         }
 
         public static FluentConfiguration ConfigureDbMappingAndSchema()

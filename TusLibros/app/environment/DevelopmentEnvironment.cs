@@ -21,13 +21,5 @@ namespace TusLibros.app.environment
         {
             return PersistentStrategy.GetApplication(this);
         }
-
-        /*********************************************************************/
-        //TODO: mover a donde corresponda. Porqe no sabemos donde puede ir.
-        public static void RepeatAction(int repeatCount, Action action)
-        {
-            for (int i = 0; i < repeatCount; i++)
-                action();
-        }
     }
 }
