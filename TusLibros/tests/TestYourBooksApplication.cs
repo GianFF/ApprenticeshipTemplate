@@ -4,6 +4,7 @@ using TusLibros.app;
 using TusLibros.model.entities;
 using TusLibros.tests.support;
 using FluentNHibernate.Conventions;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace TusLibros.tests
 {
@@ -16,7 +17,13 @@ namespace TusLibros.tests
         public void SetUp()
         {
             objectProvider = new TestObjectProvider();
-            
+        }
+
+        [TestCleanup]
+        public void TearDown()
+        {
+            IYourBooksApplication application = objectProvider.YourBooksApplication();
+            application.DeleteUser("marcos", "123");
         }
 
         [TestMethod]
@@ -25,8 +32,24 @@ namespace TusLibros.tests
             IYourBooksApplication application = objectProvider.YourBooksApplication();
             application.RegisterClient("marcos", "123");
             Client aClient = application.Login("marcos", "123");
-            
+
             Assert.IsTrue(aClient.UserName == "marcos" && aClient.Password == "123");
+        }
+
+        [TestMethod]
+        public void Test000CanNotRegisterADuplicatedUser()
+        {
+            IYourBooksApplication application = objectProvider.YourBooksApplication();
+            application.RegisterClient("marcos", "123");
+            try
+            {
+                application.RegisterClient("marcos", "123");
+                Assert.Fail();
+            }
+            catch (ArgumentException e)
+            {
+                Assert.AreEqual("User already registered", e.Message);
+            }
         }
 
         [TestMethod]
@@ -164,9 +187,12 @@ namespace TusLibros.tests
         public void Test09WhenAClientHasPurchasesThenHisPurchasesIsNotEmpty()
         {
             IYourBooksApplication application = objectProvider.YourBooksApplication();
+
             application.RegisterClient("marcos", "123");
             Client aClient = application.Login("marcos", "123");
+
             Cart aCart = application.CreateCart(aClient.Id, aClient.Password);
+
             aCart = application.AddAQuantityOfAnItem(1, objectProvider.ABook(), aCart.Id);
             application.CheckoutCart(aCart.Id, objectProvider.AValidCreditCard(), objectProvider.ACatalog());
 

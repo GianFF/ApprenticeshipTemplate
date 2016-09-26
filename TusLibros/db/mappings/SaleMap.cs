@@ -7,8 +7,8 @@ namespace TusLibros.db.mappings
     {
         public SaleMap()
         {
-            Id(x => x.Id);
-            References(s => s.Client).Cascade.All(); //TODO: no va el cascade All. Sacarlo cuando se registren usuarios al crear carritos.
+            Id(s => s.Id);
+            References(s => s.Client);
             References(s => s.CreditCard).Cascade.All();
         }
     }

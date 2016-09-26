@@ -21,5 +21,6 @@ namespace TusLibros.app
         bool CanHandle(String environment);
         Client Login(string userName, string password);
         void RegisterClient(string userName, string password);
+        void DeleteUser(string userName, string password);
     }
 }

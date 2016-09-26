@@ -109,6 +109,12 @@ namespace TusLibros.app
             Clients.Add(aClient);
         }
 
+        public void DeleteUser(string userName, string password)
+        {
+            Client aClient = Clients.Find(client => client.UserName == userName && client.Password == password);
+            Clients.Remove(aClient);
+        }
+
         private UserSession UserSession(Guid aCartId)
         {
             return UserSessions.Find(session => session.Cart.Id == aCartId);
