@@ -49,21 +49,5 @@ namespace TusLibros.model.entities
             differentBooks.ForEach(book => listBooksWithOccurrences.Add(book, QuantityOf(book)));
             return listBooksWithOccurrences;
         }
-        
-        public override bool Equals(Object otherCart)
-        {
-            Cart aCart = otherCart as Cart;
-            if ((Object) aCart == null)
-            {
-                return false;
-            }
-
-            return Items.Count == aCart.Items.Count;
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
     }
 }
