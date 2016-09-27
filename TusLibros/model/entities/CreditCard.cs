@@ -20,22 +20,5 @@ namespace TusLibros.model.entities
         {
             return ExpirationDate < DateTime.Now;
         }
-
-        public override bool Equals(Object creditCard)
-        {
-            if (creditCard == null)
-            {
-                return false;
-            }
-
-            CreditCard aCreditCard = creditCard as CreditCard;
-
-            return CardNumber.Equals(aCreditCard.CardNumber);
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
     }
 }
