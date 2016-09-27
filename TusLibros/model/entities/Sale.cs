@@ -5,16 +5,17 @@ namespace TusLibros.model.entities
 {
     public class Sale
     {
-        //TODO: la venta no tiene una fecha?
         public virtual Guid Id { get; protected set; }
+        public virtual DateTime Date { get; set; }
         public virtual Client Client { get; set; }
         public virtual CreditCard CreditCard { get; set; }
         public virtual IDictionary BooksAndPrices { get; set; }
 
         public Sale() { }
 
-        public Sale(CreditCard aCreditCard, IDictionary booksAndPrices, Client aClient)
+        public Sale(CreditCard aCreditCard, IDictionary booksAndPrices, Client aClient, DateTime aDate)
         {
+            Date = aDate;
             CreditCard = aCreditCard;
             BooksAndPrices = booksAndPrices;
             Client = aClient;
@@ -22,22 +23,7 @@ namespace TusLibros.model.entities
 
         public virtual bool ForClient(Client aClient)
         {
-            return Client.Equals(aClient);
-        }
-
-        public virtual bool Equals(Sale sale)
-        {
-            return this.CreditCard == sale.CreditCard; // TODO: && fecha && mas cosas
-        }
-
-        public override int GetHashCode()
-        {
-            return Id.GetHashCode();
-        }
-
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as Sale);
+            return Client.SameUserNameAndPassword(aClient.UserName, aClient.Password);
         }
     }
 }

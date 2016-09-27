@@ -65,7 +65,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="app\EnvironmentApplication.cs" />
+    <Compile Include="app\environment\DevelopmentEnvironment.cs" />
+    <Compile Include="app\environment\IPersistentStrategy.cs" />
     <Compile Include="app\GlobalConfiguration.cs" />
     <Compile Include="app\IYourBooksApplication.cs" />
     <Compile Include="app\TransientYourBooksApplication.cs" />
@@ -87,8 +88,10 @@
     <Compile Include="model\entities\Sale.cs" />
     <Compile Include="model\UserSession.cs" />
     <Compile Include="clocks\IClock.cs" />
+    <Compile Include="app\environment\PersitentDataBaseStrategy.cs" />
     <Compile Include="tests\support\TestObjectProvider.cs" />
     <Compile Include="model\TusLibrosApp.cs" />
+    <Compile Include="app\environment\TransientDataBaseStrategy.cs" />
     <Compile Include="tests\TestCart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="tests\TestCashier.cs" />

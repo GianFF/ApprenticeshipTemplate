@@ -13,10 +13,13 @@ namespace TusLibros.app
     internal class PersistentYourBooksApplication : IYourBooksApplication
     {
         public IClock Clock { get; set; }
+        public MerchantProcessor MerchantProcessor { get; }
 
-        public PersistentYourBooksApplication(IClock clock)
+
+        public PersistentYourBooksApplication(IClock clock, MerchantProcessor merchantProcessor)
         {
             Clock = clock;
+            MerchantProcessor = merchantProcessor;
         }
 
         public Cart CreateCart(Guid clientId, String password)
@@ -31,6 +34,164 @@ namespace TusLibros.app
             transaction.Commit();
 
             return aCart;
+        }       
+
+        public Cart AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId) // TODO: NO OLVIDAR AGREGAR LOS TRY CATCH
+        {
+            ISession session = SessionManager.OpenSession();
+            ITransaction transaction = session.BeginTransaction();
+
+            var userSession = GetAndVerifyUserSessionExpired(aCartId, session);
+            Cart aCart = userSession.Cart;
+            aCart.AddItemSomeTimes(aBook, quantity);
+            userSession.UpdateLastActionTime(Clock.TimeNow());
+            session.SaveOrUpdate(userSession);
+
+            transaction.Commit();
+            return aCart;
+        }
+
+        public List<Sale> PurchasesFor(Client aClient)
+        {
+            ISession session = SessionManager.OpenSession();
+
+            var sales = GetSalesByClientId(aClient, session);
+
+            return sales;
+        }
+
+        public Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, IDictionary aCatalog)
+        {
+            ISession session = SessionManager.OpenSession();
+            ITransaction transaction = session.BeginTransaction();
+
+            var userSession = GetAndVerifyUserSessionExpired(aCartId, session);
+            var aCart = userSession.Cart;
+            var aClient = userSession.Client;
+
+            Cashier aCashier = new Cashier();
+            Sale aSale = aCashier.CheckoutFor(aCreditCard, aCart, aCatalog, aClient, MerchantProcessor);
+            session.SaveOrUpdate(aSale);
+            session.Delete(userSession);
+
+            transaction.Commit();
+            return aSale;
+        }
+
+        public IDictionary ListCart(Guid aCartId)
+        {
+            Cart cart = GetCart(aCartId);
+            return cart.ListBooksWithOccurrences();
+        }
+
+        public Client Login(string userName, string password)
+        {
+            ISession session = SessionManager.OpenSession();
+
+            var aClient = GetClientByUserNameAndPassword(userName, password, session);
+
+            if (aClient == null)
+                throw new ArgumentException("Invalid user or password");
+
+            return aClient;
+        }
+
+        public void RegisterClient(string userName, string password)
+        {
+            ISession session = SessionManager.OpenSession();
+            ITransaction transaction = session.BeginTransaction();
+
+            VerifyNotExistUserName(userName, session);
+            Client aClient = new Client(userName, password);
+            session.SaveOrUpdate(aClient);
+
+            transaction.Commit();
+        }
+
+        public bool IsSaleRegistered(Sale sale)
+        {
+            ISession session = SessionManager.OpenSession();
+
+            Sale aSale = session.Get<Sale>(sale.Id);
+
+            return aSale != null;
+        }
+
+        public bool PurchasesContainsASaleForAClient(Sale aSale, Client aClient)
+        {
+            ISession session = SessionManager.OpenSession();
+
+            Sale sale = session.QueryOver<Sale>().Where(saleBd => (saleBd.Id == aSale.Id) && (saleBd.Client.Id == aClient.Id)).SingleOrDefault();
+
+            return sale != null;
+        }
+
+        public bool ContainsThisQuantityOfBook(Guid aCartId, string aBook, int quantity)
+        {
+            return (int)ListCart(aCartId)[aBook] == quantity;
+        }
+
+        private void VerifyExistUserName(string userName, ISession session)
+        {
+            Client aClient = session.QueryOver<Client>().Where(each => each.UserName == userName).SingleOrDefault<Client>();
+            if (aClient == null)
+                throw new ArgumentException("Inexistent user");
+        }
+
+        private void VerifyNotExistUserName(string userName, ISession session)
+        {
+            Client aClient = session.QueryOver<Client>().Where(each => each.UserName == userName).SingleOrDefault<Client>();
+            if (aClient != null)
+                throw new ArgumentException("User already registered");
+        }
+
+        public void DeleteUser(string userName, string password) 
+        {
+            ISession session = SessionManager.OpenSession();
+            ITransaction transaction = session.BeginTransaction();
+
+            VerifyExistUserName(userName, session);
+
+            var aClient = GetClientByUserNameAndPassword(userName, password, session);
+
+            try
+            {
+                DeleteUserSession(session, aClient);
+            }
+            catch (Exception)
+            {
+                /* Do nothing */
+            }
+            try
+            {
+                DeleteSalesByClientId(session, aClient);
+            }
+            catch (Exception)
+            {
+                /* Do nothing */
+            }
+
+            session.Delete(aClient);
+            transaction.Commit();
+        }
+
+        private static void DeleteSalesByClientId(ISession session, Client aClient)
+        {
+            var sales = GetSalesByClientId(aClient, session);
+            sales.ForEach(aSale => session.Delete(aSale));
+        }
+
+        private static void DeleteUserSession(ISession session, Client aClient)
+        {
+            var userSession = GetUserSessionByClientId(session, aClient);
+            session.Delete(userSession);
+        }
+
+        private static UserSession GetUserSessionByClientId(ISession session, Client aClient)
+        {
+            UserSession userSession =
+                session.QueryOver<UserSession>().Where(uS => uS.Client.Id == aClient.Id).SingleOrDefault<UserSession>();
+            return userSession;
         }
 
         private Client GetClient(Guid clientId, string password, ISession session)
@@ -41,21 +202,6 @@ namespace TusLibros.app
                     .SingleOrDefault<Client>();
 
             return aClient;
-        }
-
-        public Cart AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId)
-            //TODO: NO OLVIDAR AGREGAR LOS TRY CATCH
-        {
-            ISession session = SessionManager.OpenSession();
-            ITransaction transaction = session.BeginTransaction();
-
-            var userSession = GetAndVerifyUserSessionExpired(aCartId, session);
-            Cart aCart = userSession.Cart;
-            aCart.AddItemSomeTimes(aBook, quantity);
-            session.SaveOrUpdate(userSession);
-
-            transaction.Commit();
-            return aCart;
         }
 
         private UserSession GetAndVerifyUserSessionExpired(Guid aCartId, ISession session)
@@ -76,135 +222,21 @@ namespace TusLibros.app
             return cart;
         }
 
-        public List<Sale> PurchasesFor(Client aClient)
+        private static Client GetClientByUserNameAndPassword(string userName, string password, ISession session)
         {
-            ISession session = SessionManager.OpenSession();
-
-            List<Sale> sales =
-                session.QueryOver<Sale>().Where(sale => sale.Client.Id == aClient.Id).List<Sale>().ToList();
-
-            return sales;
-        }
-
-        public Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, IDictionary aCatalog)
-        {
-            ISession session = SessionManager.OpenSession();
-            ITransaction transaction = session.BeginTransaction();
-
-            var userSession = GetAndVerifyUserSessionExpired(aCartId, session);
-            var aCart = userSession.Cart;
-            var aClient = userSession.Client;
-
-            Cashier aCashier = new Cashier(GlobalConfiguration.MerchantProcessor);
-            Sale aSale = aCashier.CheckoutFor(aCreditCard, aCart, aCatalog, aClient);
-            session.SaveOrUpdate(aSale);
-            session.Delete(userSession);
-
-            transaction.Commit();
-            return aSale;
-        }
-
-        public bool IsRegistered(Sale sale)
-        {
-            ISession session = SessionManager.OpenSession();
-
-            Sale aSale = session.Get<Sale>(sale.Id);
-
-            return aSale != null;
-        }
-
-        public bool PurchasesContainsFor(Sale aSale, Client aClient)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IDictionary ListCart(Guid aCartId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool ContainsThisQuantityOfBook(Guid aCartId, string aBook, int quantity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool CanHandle(string environment)
-        {
-            return environment == GlobalConfiguration.ProductionEnvironment;
-        }
-
-        public Client Login(string userName, string password)
-        {
-            ISession session = SessionManager.OpenSession();
-
             Client aClient =
                 session.QueryOver<Client>()
                     .Where(each => each.UserName == userName && each.Password == password)
                     .SingleOrDefault<Client>();
-
-            if (aClient == null)
-                throw new ArgumentException("Invalid user or password");
-
             return aClient;
         }
 
-        public void RegisterClient(string userName, string password)
+        private static List<Sale> GetSalesByClientId(Client aClient, ISession session)
         {
-            ISession session = SessionManager.OpenSession();
-            ITransaction transaction = session.BeginTransaction();
-
-            VerifyNotExistUserName(userName, session);
-            Client aClient = new Client(userName, password);
-            session.SaveOrUpdate(aClient);
-
-            transaction.Commit();
+            List<Sale> sales =
+                session.QueryOver<Sale>().Where(sale => sale.Client.Id == aClient.Id).List<Sale>().ToList();
+            return sales;
         }
 
-        public void DeleteUser(string userName, string password)
-        {
-            ISession session = SessionManager.OpenSession();
-            ITransaction transaction = session.BeginTransaction();
-
-            VerifyExistUserName(userName, session);
-
-            Client aClient = session.QueryOver<Client>().Where(each => each.UserName == userName && each.Password == password).SingleOrDefault<Client>(); //TODO Query repetida
-
-            /* Chanchada para salir del paso: */
-            try
-            {
-                UserSession userSession = session.QueryOver<UserSession>().Where(uS => uS.Client.Id == aClient.Id).SingleOrDefault<UserSession>();
-                session.Delete(userSession);
-            }
-            catch (Exception)
-            {
-                /* puto! */
-            }
-            try
-            {
-                Sale sale = session.QueryOver<Sale>().Where(s => s.Client.Id == aClient.Id).SingleOrDefault<Sale>();
-                session.Delete(sale);
-            }
-            catch (Exception)
-            {
-                /* puto! */
-            }
-
-            session.Delete(aClient);
-            transaction.Commit();
-        }
-
-        private void VerifyExistUserName(string userName, ISession session)
-        {
-            Client aClient = session.QueryOver<Client>().Where(each => each.UserName == userName).SingleOrDefault<Client>();
-            if (aClient == null)
-                throw new ArgumentException("Inexistent user");
-        }
-
-        private void VerifyNotExistUserName(string userName, ISession session)
-        {
-            Client aClient = session.QueryOver<Client>().Where(each => each.UserName == userName).SingleOrDefault<Client>();
-            if (aClient != null)
-                throw new ArgumentException("User already registered");
-        }
     }
 }

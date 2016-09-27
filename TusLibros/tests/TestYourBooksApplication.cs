@@ -33,7 +33,7 @@ namespace TusLibros.tests
             application.RegisterClient("marcos", "123");
             Client aClient = application.Login("marcos", "123");
 
-            Assert.IsTrue(aClient.UserName == "marcos" && aClient.Password == "123");
+            Assert.IsTrue(aClient.SameUserNameAndPassword("marcos","123"));
         }
 
         [TestMethod]
@@ -125,12 +125,10 @@ namespace TusLibros.tests
             Cart aCart = application.CreateCart(aClient.Id, aClient.Password);
             string aBook = objectProvider.ABook();
 
-            application.Clock.UpdateSomeMinutes(20); // minutes
+            application.Clock.UpdateSomeMinutes(20); // 20 minutes
             aCart = application.AddAQuantityOfAnItem(1, aBook, aCart.Id);
             
-            aCart = application.AddAQuantityOfAnItem(1, aBook, aCart.Id);
-            application.Clock.UpdateSomeMinutes(12); // minutes
-            
+            application.Clock.UpdateSomeMinutes(12); // 12 minutes
             aCart = application.AddAQuantityOfAnItem(1, aBook, aCart.Id);
 
             Assert.IsTrue(aCart.HasABook(aBook));
@@ -148,7 +146,7 @@ namespace TusLibros.tests
 
             Sale sale = application.CheckoutCart(aCart.Id, objectProvider.AValidCreditCard(), objectProvider.ACatalog());
 
-            Assert.IsTrue(application.IsRegistered(sale));
+            Assert.IsTrue(application.IsSaleRegistered(sale));
         }
 
         [TestMethod]
@@ -200,7 +198,7 @@ namespace TusLibros.tests
         }
 
         [TestMethod]
-        public void Test10WhenAClientBuyABookHisPurchasesIsRegistered()
+        public void Test10WhenAClientBuyABookHisPurchasesHasRegisteredThatSale()
         {
             IYourBooksApplication application = objectProvider.YourBooksApplication();
             application.RegisterClient("marcos", "123");
@@ -209,7 +207,7 @@ namespace TusLibros.tests
             aCart = application.AddAQuantityOfAnItem(1, objectProvider.ABook(), aCart.Id);
             Sale aSale = application.CheckoutCart(aCart.Id, objectProvider.AValidCreditCard(), objectProvider.ACatalog());
 
-            Assert.IsTrue(application.PurchasesContainsFor(aSale, aClient));
+            Assert.IsTrue(application.PurchasesContainsASaleForAClient(aSale, aClient));
         }
 
         [TestMethod]

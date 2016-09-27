@@ -15,7 +15,6 @@ namespace TusLibros.tests
         protected Cart aCartWithOneBook;
         protected Cart aCartWithTwoBook;
         protected Cart aCartWithTwoBookDiferents;
-        protected MerchantProcessor merchantProcessor;
         protected CreditCard ACreditCard;
         protected CreditCard anInvalidCreditCard;
 
@@ -23,8 +22,7 @@ namespace TusLibros.tests
         public void SetUp()
         {
             objectProvider = new TestObjectProvider();
-            merchantProcessor = objectProvider.AnMerchantProcessor();
-            cashier = objectProvider.ACashier(merchantProcessor);
+            cashier = objectProvider.ACashier();
             cart = objectProvider.EmptyCart();
             aCartWithOneBook = objectProvider.ACartWithOneBook();
             aCartWithTwoBook = objectProvider.ACartWithTwoBooks();
@@ -70,7 +68,7 @@ namespace TusLibros.tests
         {
             try
             {
-                Sale sale = cashier.CheckoutFor(anInvalidCreditCard, aCartWithOneBook, objectProvider.ACatalog(), objectProvider.AClient());
+                Sale sale = cashier.CheckoutFor(anInvalidCreditCard, aCartWithOneBook, objectProvider.ACatalog(), objectProvider.AClient(), objectProvider.AnMerchantProcessor());
                 Assert.Fail();
             }
             catch (ArgumentException e)

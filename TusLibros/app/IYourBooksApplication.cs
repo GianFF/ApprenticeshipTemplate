@@ -14,11 +14,10 @@ namespace TusLibros.app
         Cart GetCart(Guid aCartId);
         List<Sale> PurchasesFor(Client aClient);
         Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, IDictionary aCatalog);
-        bool IsRegistered(Sale sale);
-        bool PurchasesContainsFor(Sale aSale, Client aClient);
+        bool IsSaleRegistered(Sale sale);
+        bool PurchasesContainsASaleForAClient(Sale aSale, Client aClient);
         IDictionary ListCart(Guid aCartId);
         bool ContainsThisQuantityOfBook(Guid aCartId, string aBook, int quantity);
-        bool CanHandle(String environment);
         Client Login(string userName, string password);
         void RegisterClient(string userName, string password);
         void DeleteUser(string userName, string password);

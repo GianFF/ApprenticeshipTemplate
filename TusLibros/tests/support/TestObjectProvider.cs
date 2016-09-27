@@ -2,11 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using TusLibros.app;
-using TusLibros.clocks;
+using TusLibros.app.environment;
 using TusLibros.model.entities;
 
 namespace TusLibros.tests.support {
-    class TestObjectProvider
+    public class TestObjectProvider
     {
         public String AnInvalidBook()
         {
@@ -42,9 +42,9 @@ namespace TusLibros.tests.support {
             return cart;
         }
 
-        public Cashier ACashier(MerchantProcessor aMerchantProcessor)
+        public Cashier ACashier()
         {
-            return new Cashier(aMerchantProcessor);
+            return new Cashier();
         }
 
         public Cart ACartWithTwoDiferentsBooks()
@@ -75,9 +75,11 @@ namespace TusLibros.tests.support {
             return creditCard;
         }
 
-        public IYourBooksApplication YourBooksApplication()
+        public IYourBooksApplication YourBooksApplication() //TODO: ver si hay alguna manera de correr los tests en los dos ambientes.
         {
-            return EnvironmentApplication.GetEnvironment();
+            //DevelopmentEnvironment enviroment = new DevelopmentEnvironment(new TransientDataBaseStrategy());
+            DevelopmentEnvironment enviroment = new DevelopmentEnvironment(new PersitentDataBaseStrategy());
+            return enviroment.GetApplication();
         }
 
         public MerchantProcessor AnMerchantProcessor()
