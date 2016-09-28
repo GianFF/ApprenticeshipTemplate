@@ -1,4 +1,5 @@
 ﻿using System;
+using TusLibros.app;
 using TusLibros.model.entities;
 
 namespace TusLibros.model
@@ -6,19 +7,19 @@ namespace TusLibros.model
     public class UserSession
     {
         public virtual Guid Id { get; protected set; }
+        public virtual Guid CartId { get; protected set; }
         public virtual Cart Cart { get; set; }
         public virtual DateTime LastActionDateTime { get; set; }
         public virtual Client Client { get; set; }
 
         public UserSession(){}
 
-        public UserSession(Cart cart, DateTime lastActionDateTime, Client client)
+        public UserSession(DateTime lastActionDateTime, Client client)
         {
-            this.Cart = cart;
+            this.Cart = new Cart();
             this.LastActionDateTime = lastActionDateTime;
             this.Client = client;
-            //generar id
-            //this.CartId = 1;
+            this.CartId = GlobalConfiguration.GeneratorId();
         }
 
         public virtual void VerifyCartExpired(DateTime timeNow)
@@ -30,6 +31,12 @@ namespace TusLibros.model
         public virtual void UpdateLastActionTime(DateTime lastActionDateTime)
         {
             LastActionDateTime = lastActionDateTime;
+        }
+
+        public void AddQuantityOfAnItem(string aBook, int quantity)
+        {
+            Cart.AddItemSomeTimes(aBook,quantity);
+            UpdateLastActionTime(DateTime.Now);
         }
     }
 }

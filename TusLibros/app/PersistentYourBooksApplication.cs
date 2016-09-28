@@ -21,33 +21,32 @@ namespace TusLibros.app
             MerchantProcessor = merchantProcessor;
         }
 
-        public Cart CreateCart(Guid clientId, String password)
+        public Guid CreateCart(Guid clientId, String password)
         {
             Cart aCart = new Cart();
 
             ISession session = SessionManager.OpenSession();
             ITransaction transaction = session.BeginTransaction();
+
             Client aClient = GetClient(clientId, password, session);
-            session.SaveOrUpdate(new UserSession(aCart, Clock.TimeNow(), aClient));
+            UserSession userSession = new UserSession(Clock.TimeNow(), aClient);
+            session.SaveOrUpdate(userSession);
 
             transaction.Commit();
 
-            return aCart;
+            return userSession.CartId; //por el momento manejo esto como GUID porque no se ocurre otra cosa.
         }       
 
-        public Cart AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId) // TODO: NO OLVIDAR AGREGAR LOS TRY CATCH
+        public void AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId) // TODO: NO OLVIDAR AGREGAR LOS TRY CATCH
         {
             ISession session = SessionManager.OpenSession();
             ITransaction transaction = session.BeginTransaction();
 
             var userSession = GetAndVerifyUserSessionExpired(aCartId, session);
-            Cart aCart = userSession.Cart;
-            aCart.AddItemSomeTimes(aBook, quantity);
-            userSession.UpdateLastActionTime(Clock.TimeNow());
+            userSession.AddQuantityOfAnItem(aBook,quantity);            
             session.SaveOrUpdate(userSession);
 
             transaction.Commit();
-            return aCart;
         }
 
         public List<Sale> PurchasesFor(Client aClient)

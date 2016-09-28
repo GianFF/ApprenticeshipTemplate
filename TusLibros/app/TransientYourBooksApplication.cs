@@ -24,27 +24,31 @@ namespace TusLibros.app
             MerchantProcessor = merchantProcessor;
         }
 
-        public Cart CreateCart(Guid clientId, String password)
+        public Guid CreateCart(Guid clientId, String password)
         {
-            Cart aCart = new Cart();
             Client aClient = GetClient(clientId, password);
-            UserSessions.Add(new UserSession(aCart, Clock.TimeNow(), aClient));
-            return aCart; 
+            UserSession userSession = new UserSession(Clock.TimeNow(), aClient);
+            UserSessions.Add(userSession);
+            return userSession.CartId; 
         }
         
-        public Cart AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId)
+        public void AddAQuantityOfAnItem(Guid aCartId, string aBook, int quantity)
         {
             UserSession userSession = UserSession(aCartId);
             userSession.VerifyCartExpired(Clock.TimeNow());
-            Cart aCart = userSession.Cart;
-            aCart.AddItemSomeTimes(aBook, quantity);
-            userSession.UpdateLastActionTime(Clock.TimeNow());
-            return aCart;
-        }        
 
-        public List<Sale> PurchasesFor(Client aClient)
+            userSession.AddQuantityOfAnItem(aBook, quantity);
+            UserSessions.Add(userSession); 
+            //ACA lo mismo, obtengo el carrito y le agrego los libros? o le digo a la usersession que agregue una cantidad y el delega en el carrito??
+        }
+
+        public IDictionary ListCart(Guid aCartId)
         {
-            return Sales.FindAll(sale => sale.ForClient(aClient));
+            var aCart = GetCart(aCartId);
+            return aCart.ListBooksWithOccurrences();
+
+            //Que diferencia hay entre que yo obtenga el user session, la usersession le envio el mensaje listCart, 
+            //para que el dentro le pida a su carrito que le liste los lbros con sus ocurrencias......
         }
 
         public Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, IDictionary aCatalog)
@@ -58,6 +62,11 @@ namespace TusLibros.app
             return aSale;
         }
 
+        public List<Sale> PurchasesFor(Client aClient)
+        {
+            return Sales.FindAll(sale => sale.ForClient(aClient));
+        }
+
         public bool IsSaleRegistered(Sale aSale)
         {
             return Sales.Contains(aSale);
@@ -65,13 +74,7 @@ namespace TusLibros.app
         public bool PurchasesContainsASaleForAClient(Sale aSale, Client aClient)
         {
             return PurchasesFor(aClient).Contains(aSale);
-        }
-
-        public IDictionary ListCart(Guid aCartId)
-        {
-            var aCart = GetCart(aCartId);
-            return  aCart.ListBooksWithOccurrences();
-        }
+        }     
 
         public bool ContainsThisQuantityOfBook(Guid aCartId, string aBook, int quantityOfBook)
         {
@@ -105,7 +108,7 @@ namespace TusLibros.app
 
         private UserSession UserSession(Guid aCartId)
         {
-            return UserSessions.Find(session => session.Cart.Id == aCartId);
+            return UserSessions.Find(session => session.CartId == aCartId);
         }
 
         public Cart GetCart(Guid aCartId)

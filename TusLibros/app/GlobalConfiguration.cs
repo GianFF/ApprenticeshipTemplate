@@ -14,5 +14,10 @@ namespace TusLibros.app
             "Database=" + DataBaseGlobal + ";" +
             "User ID=" + UserDataBaseGlobal + ";" +
             "Password=" + PasswordDataBaseGlobal + ";";
+
+        public static Guid GeneratorId()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

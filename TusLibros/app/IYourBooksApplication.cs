@@ -9,8 +9,8 @@ namespace TusLibros.app
     public interface IYourBooksApplication
     {
         IClock Clock { get; set; }
-        Cart CreateCart(Guid clientId, String password);
-        Cart AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId);
+        Guid CreateCart(Guid clientId, String password);
+        void AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId);
         Cart GetCart(Guid aCartId);
         List<Sale> PurchasesFor(Client aClient);
         Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, IDictionary aCatalog);
