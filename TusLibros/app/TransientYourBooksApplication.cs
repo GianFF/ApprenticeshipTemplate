@@ -29,7 +29,7 @@ namespace TusLibros.app
             Cart aCart = new Cart();
             Client aClient = GetClient(clientId, password);
             UserSessions.Add(new UserSession(aCart, Clock.TimeNow(), aClient));
-            return aCart;
+            return aCart; 
         }
         
         public Cart AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId)

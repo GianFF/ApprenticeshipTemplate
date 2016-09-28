@@ -17,6 +17,8 @@ namespace TusLibros.model
             this.Cart = cart;
             this.LastActionDateTime = lastActionDateTime;
             this.Client = client;
+            //generar id
+            //this.CartId = 1;
         }
 
         public virtual void VerifyCartExpired(DateTime timeNow)

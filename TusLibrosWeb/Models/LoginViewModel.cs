@@ -14,14 +14,5 @@ namespace TusLibrosWeb.Models
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
-
-        private static DevelopmentEnvironment Environment = new DevelopmentEnvironment(new PersitentDataBaseStrategy());
-        private static IYourBooksApplication Application = Environment.GetApplication();
-
-        public void Log()
-        {
-            Application.RegisterClient("qwe", "123");
-
-        }
     }
 }

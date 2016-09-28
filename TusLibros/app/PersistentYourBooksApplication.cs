@@ -15,7 +15,6 @@ namespace TusLibros.app
         public IClock Clock { get; set; }
         public MerchantProcessor MerchantProcessor { get; }
 
-
         public PersistentYourBooksApplication(IClock clock, MerchantProcessor merchantProcessor)
         {
             Clock = clock;
