@@ -30,7 +30,7 @@ namespace TusLibros.model.entities
             return Client.SameUserNameAndPassword(aClient.UserName, aClient.Password);
         }
 
-        public IDictionary BooksAndQuantitys()
+        public virtual IDictionary BooksAndQuantitys()
         {
             var booksAndQuantitys = new Dictionary<string, int>();
             SaleDetails.ForEach(aSaleDetail => booksAndQuantitys.Add(aSaleDetail.Book, aSaleDetail.Quantity));
@@ -38,12 +38,12 @@ namespace TusLibros.model.entities
         }
 
 
-        public int Total()
+        public virtual int Total()
         {
             return SaleDetails.Sum(aSaleDetail => aSaleDetail.Price);
         }
 
-        public void AddBooksWithOcurrencies(Dictionary<string, int> listBooksWithOccurrences)
+        public virtual void AddBooksWithOcurrencies(Dictionary<string, int> listBooksWithOccurrences)
         {
             SaleDetails.ForEach(aDetail => aDetail.AddBookWithOcurrencie(listBooksWithOccurrences));
         }

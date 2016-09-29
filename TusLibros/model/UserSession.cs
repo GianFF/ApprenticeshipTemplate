@@ -36,18 +36,18 @@ namespace TusLibros.model
             LastActionDateTime = lastActionDateTime;
         }
 
-        public void AddQuantityOfAnItem(string aBook, int quantity, IClock aClock)
+        public virtual void AddQuantityOfAnItem(string aBook, int quantity, IClock aClock)
         {
             Cart.AddItemSomeTimes(aBook,quantity);
             UpdateLastActionTime(aClock.TimeNow());
         }
 
-        public IDictionary<string,int> ListCart()
+        public virtual IDictionary<string,int> ListCart()
         {
             return Cart.Items;
         }
 
-        public Sale CheckoutCartWith(CreditCard aCreditCard, MerchantProcessor merchantProcessor, IDictionary<string, int> aCatalog)
+        public virtual Sale CheckoutCartWith(CreditCard aCreditCard, MerchantProcessor merchantProcessor, IDictionary<string, int> aCatalog)
         {
             Cashier aCashier = new Cashier();
             Sale aSale = aCashier.CheckoutFor(aCreditCard, Cart, aCatalog, Client, merchantProcessor);

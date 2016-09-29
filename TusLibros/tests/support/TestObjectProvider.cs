@@ -77,8 +77,8 @@ namespace TusLibros.tests.support {
 
         public IYourBooksApplication YourBooksApplication() //TODO: ver si hay alguna manera de correr los tests en los dos ambientes.
         {
-            DevelopmentEnvironment enviroment = new DevelopmentEnvironment(new TransientDataBaseStrategy());
-            //DevelopmentEnvironment enviroment = new DevelopmentEnvironment(new PersitentDataBaseStrategy());
+            //DevelopmentEnvironment enviroment = new DevelopmentEnvironment(new TransientDataBaseStrategy());
+            DevelopmentEnvironment enviroment = new DevelopmentEnvironment(new PersitentDataBaseStrategy());
             return enviroment.GetApplication();
         }
 

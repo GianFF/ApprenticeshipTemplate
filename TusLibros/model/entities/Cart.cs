@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using FluentNHibernate.Conventions;
@@ -48,7 +47,7 @@ namespace TusLibros.model.entities
             return Items[aBook];
         }
 
-        public List<SaleDetail> CreateSaleDetailWith(IDictionary<string, int> aCatalog)
+        public virtual List<SaleDetail> CreateSaleDetailWith(IDictionary<string, int> aCatalog)
         {
             var details = new List<SaleDetail>();
             
@@ -58,12 +57,12 @@ namespace TusLibros.model.entities
 
         }
 
-        public bool VerifyIfContainsInvalidBooks(IDictionary<string, int> aCatalog)
+        public virtual bool VerifyIfContainsInvalidBooks(IDictionary<string, int> aCatalog)
         {
             return Items.Keys.Any(aBook => !aCatalog.ContainsKey(aBook));
         }
 
-        public IList<int> MapItemsToPrices(IDictionary<string,int> aCatalog)
+        public virtual IList<int> MapItemsToPrices(IDictionary<string,int> aCatalog)
         {
             IList<int> lista = new List<int>();
             Items.Keys.ForEach(aBook => lista.Add(aCatalog[aBook] * Items[aBook]));
