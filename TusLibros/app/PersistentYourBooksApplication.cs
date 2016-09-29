@@ -79,7 +79,7 @@ namespace TusLibros.app
         public IDictionary ListCart(Guid aCartId)
         {
             Cart cart = GetCart(aCartId);
-            return cart.ListBooksWithOccurrences();
+            return cart.Items;
         }
 
         public Client Login(string userName, string password)

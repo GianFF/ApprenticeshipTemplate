@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using static TusLibros.model.TusLibrosApp;
+using FluentNHibernate.Conventions;
+using NHibernate.Util;
 
 namespace TusLibros.model.entities
 {
@@ -10,11 +10,11 @@ namespace TusLibros.model.entities
     public class Cart
     {
         public virtual Guid Id { get; protected set; }
-        public virtual IList<string> Items { get; set; }
+        public virtual IDictionary<string, int> Items { get; set; }
 
         public Cart()
         {
-            Items = new List<string>();
+            Items = new Dictionary<string, int>();
         }
 
         public virtual int TotalItems()
@@ -24,30 +24,37 @@ namespace TusLibros.model.entities
 
         public virtual void AddItemSomeTimes(string aBook, int aNumber)
         {
-            RepeatAction(aNumber, () => { Items.Add(aBook); });
+            if (HasABook(aBook))
+            {
+                Items[aBook] += aNumber;
+                return;
+            }
+            Items.Add(aBook,aNumber);
         }
 
         public virtual bool HasABook(string aBook)
         {
-            return Items.Contains(aBook);
+            return Items.ContainsKey(aBook);
         }
 
         public virtual bool IsEmpty()
         {
-            return !Items.Any();
+            return Items.IsEmpty();
         }
 
         public virtual int QuantityOf(String aBook)
         {
-            return Items.Count(book => book == aBook);
+            return Items[aBook];
         }
 
-        public virtual IDictionary ListBooksWithOccurrences()
+        public List<SaleDetail> CreateSaleDetailWith(IDictionary aCatalog)
         {
-            var listBooksWithOccurrences = new Dictionary<string,int>();
-            var differentBooks = Items.Distinct().ToList();
-            differentBooks.ForEach(book => listBooksWithOccurrences.Add(book, QuantityOf(book)));
-            return listBooksWithOccurrences;
+            var details = new List<SaleDetail>();
+            
+            var books = Items.Keys;
+            books.ForEach(aBook => details.Add(new SaleDetail(aBook, QuantityOf(aBook), (int) aCatalog[aBook])));//TODO: revisar el casteo, pero fijarse el tema de la DB
+            return details;
+
         }
     }
 }

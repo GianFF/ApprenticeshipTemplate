@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using NHibernate.Cfg.XmlHbmBinding;
 using TusLibros.clocks;
 using TusLibros.model;
 using TusLibros.model.entities;
@@ -34,37 +36,49 @@ namespace TusLibros.app
         
         public void AddAQuantityOfAnItem(Guid aCartId, string aBook, int quantity)
         {
-            UserSession userSession = UserSession(aCartId);
+            UserSession userSession = FindUserSessionByCartId(aCartId);
             userSession.VerifyCartExpired(Clock.TimeNow());
 
             userSession.AddQuantityOfAnItem(aBook, quantity);
             UserSessions.Add(userSession); 
-            //ACA lo mismo, obtengo el carrito y le agrego los libros? o le digo a la usersession que agregue una cantidad y el delega en el carrito??
         }
 
         public IDictionary ListCart(Guid aCartId)
         {
-            var aCart = GetCart(aCartId);
-            return aCart.ListBooksWithOccurrences();
-
-            //Que diferencia hay entre que yo obtenga el user session, la usersession le envio el mensaje listCart, 
-            //para que el dentro le pida a su carrito que le liste los lbros con sus ocurrencias......
+            UserSession userSession = FindUserSessionByCartId(aCartId);
+            return userSession.ListCart();
         }
 
-        public Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, IDictionary aCatalog)
+        public Guid CheckoutCart(Guid aCartId, CreditCard aCreditCard, IDictionary aCatalog) //TODO: sacar el catalogo de acá.
         {
-            var aCart = GetCart(aCartId);
-            Cashier aCashier = new Cashier();
-            Client aClient = UserSession(aCartId).Client;
-            Sale aSale = aCashier.CheckoutFor(aCreditCard, aCart, aCatalog, aClient, MerchantProcessor);
-
+            UserSession userSession = FindUserSessionByCartId(aCartId);
+            Sale aSale = userSession.CheckoutCartWith(aCreditCard, MerchantProcessor, aCatalog);
             Sales.Add(aSale);
-            return aSale;
+
+            return aSale.TransactionId;
         }
 
-        public List<Sale> PurchasesFor(Client aClient)
+        public Tuple<IDictionary, int> PurchasesFor(Client aClient)
         {
-            return Sales.FindAll(sale => sale.ForClient(aClient));
+            List<Sale> sales = Sales.FindAll(sale => sale.ForClient(aClient));
+
+            Tuple<IDictionary, int> detailsPurchases = Tuple.Create(BooksAndQuantities(sales), TotalAmountFor(sales));
+
+            return detailsPurchases;
+        }
+
+        private IDictionary BooksAndQuantities(List<Sale> sales)
+        {
+            var listBooksWithOccurrences = new Dictionary<string, int>();
+
+            sales.ForEach(aSale => aSale.AddBooksWithOcurrencies(listBooksWithOccurrences));
+
+            return listBooksWithOccurrences;
+        }
+
+        private int TotalAmountFor(List<Sale> sales)
+        {
+            return sales.Sum(aSale => aSale.Total());
         }
 
         public bool IsSaleRegistered(Sale aSale)
@@ -106,14 +120,14 @@ namespace TusLibros.app
             Clients.Remove(aClient);
         }
 
-        private UserSession UserSession(Guid aCartId)
+        private UserSession FindUserSessionByCartId(Guid aCartId)
         {
             return UserSessions.Find(session => session.CartId == aCartId);
         }
 
         public Cart GetCart(Guid aCartId)
         {
-            UserSession userSession = UserSession(aCartId);
+            UserSession userSession = FindUserSessionByCartId(aCartId);
             return userSession.Cart;
         }
 

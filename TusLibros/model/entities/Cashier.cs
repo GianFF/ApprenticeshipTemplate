@@ -34,16 +34,12 @@ namespace TusLibros.model.entities
             VerifyIfTheCartHasValidBooks(aCart, aCatalog);
             merchantProcessor.RegisterTransaction(aCreditCard, PriceFor(aCart, aCatalog));
 
-            return new Sale(aCreditCard, CatalogSubset(aCart, aCatalog), aClient, DateTime.Now);
+            return new Sale(aCreditCard, CreateSaleDetail(aCart, aCatalog), aClient, DateTime.Now);
         }
 
-        private static IDictionary CatalogSubset(Cart aCart, IDictionary aCatalog)
+        private List<SaleDetail> CreateSaleDetail(Cart aCart, IDictionary aCatalog) //TODO: preguntar a quien le corresponde "armar" el detalle.
         {
-            var CatalogSubset = new Dictionary<string,int>();
-
-            aCart.Items.ForEach(book => CatalogSubset.Add(book, (int)aCatalog[book]));
-
-            return CatalogSubset;
+            return aCart.CreateSaleDetailWith(aCatalog);
         }
 
         private void VerifyIfTheCartHasValidBooks(Cart aCart, IDictionary aCatalog)

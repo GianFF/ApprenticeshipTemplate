@@ -9,6 +9,7 @@ namespace TusLibros.db.mappings
         {
             Id(s => s.Id);
             Map(s => s.Date);
+            Map(s => s.TransactionId);
             References(s => s.Client);
             References(s => s.CreditCard).Cascade.All();
         }

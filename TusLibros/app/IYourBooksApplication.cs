@@ -8,18 +8,20 @@ namespace TusLibros.app
 {
     public interface IYourBooksApplication
     {
-        IClock Clock { get; set; }
         Guid CreateCart(Guid clientId, String password);
         void AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId);
+        IDictionary ListCart(Guid aCartId);
+        Guid CheckoutCart(Guid aCartId, CreditCard aCreditCard, IDictionary aCatalog);
+        Tuple<IDictionary, int> PurchasesFor(Client aClient);
+
+        Guid Login(string userName, string password);
+        void RegisterClient(string userName, string password);
+
+        IClock Clock { get; set; }
         Cart GetCart(Guid aCartId);
-        List<Sale> PurchasesFor(Client aClient);
-        Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, IDictionary aCatalog);
         bool IsSaleRegistered(Sale sale);
         bool PurchasesContainsASaleForAClient(Sale aSale, Client aClient);
-        IDictionary ListCart(Guid aCartId);
-        bool ContainsThisQuantityOfBook(Guid aCartId, string aBook, int quantity);
-        Client Login(string userName, string password);
-        void RegisterClient(string userName, string password);
+        bool ContainsThisQuantityOfBook(Guid aCartId, string aBook, int quantity);       
         void DeleteUser(string userName, string password);
     }
 }

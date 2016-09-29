@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using TusLibros.app;
 using TusLibros.model.entities;
 
@@ -37,6 +39,18 @@ namespace TusLibros.model
         {
             Cart.AddItemSomeTimes(aBook,quantity);
             UpdateLastActionTime(DateTime.Now);
+        }
+
+        public IDictionary<string,int> ListCart()
+        {
+            return Cart.Items;
+        }
+
+        public Sale CheckoutCartWith(CreditCard aCreditCard, MerchantProcessor merchantProcessor,IDictionary aCatalog)
+        {
+            Cashier aCashier = new Cashier();
+            Sale aSale = aCashier.CheckoutFor(aCreditCard, Cart, aCatalog, Client, merchantProcessor);
+            return aSale;
         }
     }
 }
