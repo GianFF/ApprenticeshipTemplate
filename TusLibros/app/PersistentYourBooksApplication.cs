@@ -10,15 +10,14 @@ using TusLibros.model.entities;
 
 namespace TusLibros.app
 {
-    internal class PersistentYourBooksApplication : IYourBooksApplication
+    public class PersistentYourBooksApplication : IYourBooksApplication
     {
         public IClock Clock { get; set; }
         public MerchantProcessor MerchantProcessor { get; }
 
-        public PersistentYourBooksApplication(IClock clock, MerchantProcessor merchantProcessor)
+        public PersistentYourBooksApplication(IClock aClock)
         {
-            Clock = clock;
-            MerchantProcessor = merchantProcessor;
+            Clock = aClock;
         }
 
         public Guid CreateCart(Guid clientId, String password)
@@ -43,22 +42,38 @@ namespace TusLibros.app
             ITransaction transaction = session.BeginTransaction();
 
             var userSession = GetAndVerifyUserSessionExpired(aCartId, session);
-            userSession.AddQuantityOfAnItem(aBook,quantity);            
+            userSession.AddQuantityOfAnItem(aBook,quantity, Clock);            
             session.SaveOrUpdate(userSession);
 
             transaction.Commit();
         }
 
-        public List<Sale> PurchasesFor(Client aClient)
+        public Tuple<IDictionary, int> PurchasesFor(Client aClient)
         {
             ISession session = SessionManager.OpenSession();
 
             var sales = GetSalesByClientId(aClient, session);
 
-            return sales;
+            Tuple<IDictionary, int> detailsPurchases = Tuple.Create(BooksAndQuantities(sales), TotalAmountFor(sales));
+
+            return detailsPurchases;
         }
 
-        public Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, IDictionary aCatalog)
+        private int TotalAmountFor(List<Sale> sales)
+        {
+            return sales.Sum(aSale => aSale.Total());
+        }
+
+        private IDictionary BooksAndQuantities(List<Sale> sales)
+        {
+            var listBooksWithOccurrences = new Dictionary<string, int>();
+
+            sales.ForEach(aSale => aSale.AddBooksWithOcurrencies(listBooksWithOccurrences));
+
+            return listBooksWithOccurrences;
+        }
+
+        public Guid CheckoutCart(Guid aCartId, CreditCard aCreditCard, IDictionary<string, int> aCatalog)
         {
             ISession session = SessionManager.OpenSession();
             ITransaction transaction = session.BeginTransaction();
@@ -73,10 +88,10 @@ namespace TusLibros.app
             session.Delete(userSession);
 
             transaction.Commit();
-            return aSale;
+            return aSale.TransactionId;
         }
 
-        public IDictionary ListCart(Guid aCartId)
+        public IDictionary<string, int> ListCart(Guid aCartId)
         {
             Cart cart = GetCart(aCartId);
             return cart.Items;
@@ -171,6 +186,11 @@ namespace TusLibros.app
 
             session.Delete(aClient);
             transaction.Commit();
+        }
+
+        public Sale GetSale(Guid saleId)
+        {
+            throw new NotImplementedException();
         }
 
         private static void DeleteSalesByClientId(ISession session, Client aClient)

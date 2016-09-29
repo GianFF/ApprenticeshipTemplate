@@ -6,7 +6,7 @@ namespace TusLibros.app.environment
     {
         public IYourBooksApplication GetApplication(DevelopmentEnvironment developmentEnvironment)
         {
-            return new TransientYourBooksApplication(developmentEnvironment.GlobalClock, developmentEnvironment.MerchantProcessor);
+            return new TransientYourBooksApplication(developmentEnvironment.Clock);
         }
     }
 }

@@ -1,12 +1,10 @@
-﻿using TusLibros.model.entities;
-
-namespace TusLibros.app.environment
+﻿namespace TusLibros.app.environment
 {
     public class PersitentDataBaseStrategy : IPersistentStrategy
     {
-        public IYourBooksApplication GetApplication(DevelopmentEnvironment enviroment)
+        public IYourBooksApplication GetApplication(DevelopmentEnvironment developmentEnvironment)
         {
-            return new PersistentYourBooksApplication(enviroment.GlobalClock, enviroment.MerchantProcessor);
+            return new PersistentYourBooksApplication(developmentEnvironment.Clock);
         }
     }
 }

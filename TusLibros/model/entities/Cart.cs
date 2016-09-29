@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using FluentNHibernate.Conventions;
 using NHibernate.Util;
 
@@ -19,7 +20,7 @@ namespace TusLibros.model.entities
 
         public virtual int TotalItems()
         {
-            return Items.Count;
+            return Items.Values.Sum();
         }
 
         public virtual void AddItemSomeTimes(string aBook, int aNumber)
@@ -47,7 +48,7 @@ namespace TusLibros.model.entities
             return Items[aBook];
         }
 
-        public List<SaleDetail> CreateSaleDetailWith(IDictionary aCatalog)
+        public List<SaleDetail> CreateSaleDetailWith(IDictionary<string, int> aCatalog)
         {
             var details = new List<SaleDetail>();
             
@@ -55,6 +56,18 @@ namespace TusLibros.model.entities
             books.ForEach(aBook => details.Add(new SaleDetail(aBook, QuantityOf(aBook), (int) aCatalog[aBook])));//TODO: revisar el casteo, pero fijarse el tema de la DB
             return details;
 
+        }
+
+        public bool VerifyIfContainsInvalidBooks(IDictionary<string, int> aCatalog)
+        {
+            return Items.Keys.Any(aBook => !aCatalog.ContainsKey(aBook));
+        }
+
+        public IList<int> MapItemsToPrices(IDictionary<string,int> aCatalog)
+        {
+            IList<int> lista = new List<int>();
+            Items.Keys.ForEach(aBook => lista.Add(aCatalog[aBook] * Items[aBook]));
+            return lista;
         }
     }
 }

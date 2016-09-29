@@ -1,20 +1,16 @@
-﻿using System;
-using TusLibros.clocks;
-using TusLibros.model.entities;
+﻿using TusLibros.clocks;
 
 namespace TusLibros.app.environment
 {
     public class DevelopmentEnvironment
     {
         public IPersistentStrategy PersistentStrategy;
-        public IClock GlobalClock;
-        public MerchantProcessor MerchantProcessor;
+        public IClock Clock;
 
         public DevelopmentEnvironment(IPersistentStrategy aPersistentStrategy)
         {
-            GlobalClock = new DevelopmentClock();
-            MerchantProcessor = new MerchantProcessor();
             PersistentStrategy = aPersistentStrategy;
+            Clock = new DevelopmentClock();
         }
 
         public IYourBooksApplication GetApplication()

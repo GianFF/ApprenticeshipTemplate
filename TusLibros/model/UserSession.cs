@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TusLibros.app;
+using TusLibros.clocks;
 using TusLibros.model.entities;
 
 namespace TusLibros.model
@@ -21,7 +22,7 @@ namespace TusLibros.model
             this.Cart = new Cart();
             this.LastActionDateTime = lastActionDateTime;
             this.Client = client;
-            this.CartId = GlobalConfiguration.GeneratorId();
+            this.CartId = Guid.NewGuid();
         }
 
         public virtual void VerifyCartExpired(DateTime timeNow)
@@ -35,10 +36,10 @@ namespace TusLibros.model
             LastActionDateTime = lastActionDateTime;
         }
 
-        public void AddQuantityOfAnItem(string aBook, int quantity)
+        public void AddQuantityOfAnItem(string aBook, int quantity, IClock aClock)
         {
             Cart.AddItemSomeTimes(aBook,quantity);
-            UpdateLastActionTime(DateTime.Now);
+            UpdateLastActionTime(aClock.TimeNow());
         }
 
         public IDictionary<string,int> ListCart()
@@ -46,7 +47,7 @@ namespace TusLibros.model
             return Cart.Items;
         }
 
-        public Sale CheckoutCartWith(CreditCard aCreditCard, MerchantProcessor merchantProcessor,IDictionary aCatalog)
+        public Sale CheckoutCartWith(CreditCard aCreditCard, MerchantProcessor merchantProcessor, IDictionary<string, int> aCatalog)
         {
             Cashier aCashier = new Cashier();
             Sale aSale = aCashier.CheckoutFor(aCreditCard, Cart, aCatalog, Client, merchantProcessor);

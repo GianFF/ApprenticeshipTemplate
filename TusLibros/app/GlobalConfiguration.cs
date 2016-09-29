@@ -1,4 +1,6 @@
 ﻿using System;
+using TusLibros.clocks;
+using TusLibros.model.entities;
 
 namespace TusLibros.app
 {
@@ -15,9 +17,6 @@ namespace TusLibros.app
             "User ID=" + UserDataBaseGlobal + ";" +
             "Password=" + PasswordDataBaseGlobal + ";";
 
-        public static Guid GeneratorId()
-        {
-            throw new NotImplementedException();
-        }
+        public static MerchantProcessor MerchantProcessor= new MerchantProcessor();
     }
 }
