@@ -224,10 +224,16 @@ namespace TusLibros.app
 
         private UserSession GetAndVerifyUserSessionExpired(Guid aCartId, ISession session)
         {
-            UserSession userSession =
-                session.QueryOver<UserSession>().Where(uS => uS.Cart.Id == aCartId).SingleOrDefault<UserSession>();
+            var userSession = GetUserSessionByCartId(aCartId, session);
 
             userSession.VerifyCartExpired(Clock.TimeNow());
+            return userSession;
+        }
+
+        private static UserSession GetUserSessionByCartId(Guid aCartId, ISession session)
+        {
+            UserSession userSession =
+                session.QueryOver<UserSession>().Where(uS => uS.CartId == aCartId).SingleOrDefault<UserSession>();
             return userSession;
         }
 
@@ -235,9 +241,9 @@ namespace TusLibros.app
         {
             ISession session = SessionManager.OpenSession();
 
-            Cart cart = session.Get<Cart>(aCartId);
+            UserSession userSession = GetUserSessionByCartId(aCartId, session);
 
-            return cart;
+            return userSession.Cart;
         }
 
         private static Client GetClientByUserNameAndPassword(string userName, string password, ISession session)
