@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace TusLibros.model.entities
 {
     public class SaleDetail
     {
+        public virtual Guid Id { get; protected set; }
         public virtual string Book { get; set; }
         public virtual int Quantity { get; set; }
         public virtual int Price { get; set; }
+
+        public SaleDetail(){}
 
         public SaleDetail(string aBook, int aQuantity, int aPrice)
         {
@@ -15,7 +19,7 @@ namespace TusLibros.model.entities
             Price = aPrice;
         }
 
-        public void AddBookWithOcurrencie(Dictionary<string, int> listBooksWithOccurrences)
+        public virtual void AddBookWithOcurrencie(Dictionary<string, int> listBooksWithOccurrences)
         {
             if (listBooksWithOccurrences.ContainsKey(Book))
             {

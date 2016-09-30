@@ -21,7 +21,7 @@ namespace TusLibros.app
         bool PurchasesContainsASaleForAClient(Sale aSale, Client aClient);
         bool ContainsThisQuantityOfBook(Guid aCartId, string aBook, int quantity);       
         void DeleteUser(string userName, string password);
-        Sale GetSale(Guid saleId);
+        Sale GetSale(Guid transactionId);
         IClock Clock { get; set; }
     }
 }

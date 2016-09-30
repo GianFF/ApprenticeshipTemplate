@@ -52,7 +52,7 @@ namespace TusLibros.model.entities
             var details = new List<SaleDetail>();
             
             var books = Items.Keys;
-            books.ForEach(aBook => details.Add(new SaleDetail(aBook, QuantityOf(aBook), (int) aCatalog[aBook])));//TODO: revisar el casteo, pero fijarse el tema de la DB
+            books.ForEach(aBook => details.Add(new SaleDetail(aBook, QuantityOf(aBook), aCatalog[aBook])));
             return details;
 
         }

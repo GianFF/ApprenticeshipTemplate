@@ -12,6 +12,10 @@ namespace TusLibros.db.mappings
             Map(s => s.TransactionId);
             References(s => s.Client);
             References(s => s.CreditCard).Cascade.All();
+            HasMany(s => s.SaleDetails)
+                .KeyColumn("idSale")
+                .Table("SaleDetails").Cascade.All();
+
         }
     }
 }

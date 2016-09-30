@@ -72,6 +72,7 @@
     <Compile Include="app\TransientYourBooksApplication.cs" />
     <Compile Include="clocks\DevelopmentClock.cs" />
     <Compile Include="clocks\ProductionClock.cs" />
+    <Compile Include="db\mappings\SaleDetailMap.cs" />
     <Compile Include="db\mappings\CreditCardMap.cs" />
     <Compile Include="db\mappings\ClientMap.cs" />
     <Compile Include="db\mappings\SaleMap.cs" />

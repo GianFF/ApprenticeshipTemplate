@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Util;
 
 namespace TusLibros.model.entities
 {
@@ -11,7 +12,7 @@ namespace TusLibros.model.entities
         public virtual DateTime Date { get; set; }
         public virtual Client Client { get; set; }
         public virtual CreditCard CreditCard { get; set; }
-        public virtual List<SaleDetail> SaleDetails { get; set; }
+        public virtual IList<SaleDetail> SaleDetails { get; set; }
         public virtual Guid TransactionId { get; set; }
 
         public Sale() { }

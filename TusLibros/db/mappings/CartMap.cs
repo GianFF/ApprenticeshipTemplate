@@ -10,8 +10,8 @@ namespace TusLibros.db.mappings
         {
             Id(x => x.Id);
             HasMany(x => x.Items)
-                .AsMap<int>("keyColumn")
-                .Element("valueColumn", c => c.Type<string>());
+                .AsMap<string>("book")
+                .Element("quantity", c => c.Type<int>());
         }
     }
 }

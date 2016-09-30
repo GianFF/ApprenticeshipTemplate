@@ -118,9 +118,9 @@ namespace TusLibros.app
             return userSession.Cart;
         }
 
-        public Sale GetSale(Guid saleId)
+        public Sale GetSale(Guid transactionId)
         {
-            return Sales.Find(aSale => aSale.TransactionId == saleId);
+            return Sales.Find(aSale => aSale.TransactionId == transactionId);
         }
 
         private Client GetClient(Guid clientId, string password)

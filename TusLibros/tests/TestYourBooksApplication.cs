@@ -152,9 +152,9 @@ namespace TusLibros.tests
 
             application.AddAQuantityOfAnItem(1, objectProvider.ABook(), aCartId);
 
-            Guid saleId = application.CheckoutCart(aCartId, objectProvider.AValidCreditCard(), objectProvider.ACatalog());
+            Guid transactionId = application.CheckoutCart(aCartId, objectProvider.AValidCreditCard(), objectProvider.ACatalog());
 
-            Sale sale = application.GetSale(saleId);
+            Sale sale = application.GetSale(transactionId);
 
             Assert.IsTrue(application.IsSaleRegistered(sale));
         }
@@ -197,7 +197,7 @@ namespace TusLibros.tests
             IYourBooksApplication application = objectProvider.YourBooksApplication();
 
             application.RegisterClient("marcos", "123");
-            Client aClient = application.Login("marcos", "123");
+            Client aClient = application.Login("marcos", "123"); //TODO: revisar si no queremos seguir desacoplando los ID de la base de datos.
 
             Guid aCartId = application.CreateCart(aClient.Id, aClient.Password);
 
@@ -215,9 +215,9 @@ namespace TusLibros.tests
             Client aClient = application.Login("marcos", "123");
             Guid aCartId = application.CreateCart(aClient.Id, aClient.Password);
             application.AddAQuantityOfAnItem(1, objectProvider.ABook(), aCartId);
-            Guid saleId = application.CheckoutCart(aCartId, objectProvider.AValidCreditCard(), objectProvider.ACatalog());
+            Guid transactionId = application.CheckoutCart(aCartId, objectProvider.AValidCreditCard(), objectProvider.ACatalog());
 
-            Sale aSale = application.GetSale(saleId);
+            Sale aSale = application.GetSale(transactionId);
 
             Assert.IsTrue(application.PurchasesContainsASaleForAClient(aSale, aClient));
         }

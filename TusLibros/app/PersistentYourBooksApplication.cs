@@ -13,7 +13,6 @@ namespace TusLibros.app
     public class PersistentYourBooksApplication : IYourBooksApplication
     {
         public IClock Clock { get; set; }
-        public MerchantProcessor MerchantProcessor { get; }
 
         public PersistentYourBooksApplication(IClock aClock)
         {
@@ -83,7 +82,7 @@ namespace TusLibros.app
             var aClient = userSession.Client;
 
             Cashier aCashier = new Cashier();
-            Sale aSale = aCashier.CheckoutFor(aCreditCard, aCart, aCatalog, aClient, MerchantProcessor);
+            Sale aSale = aCashier.CheckoutFor(aCreditCard, aCart, aCatalog, aClient, GlobalConfiguration.MerchantProcessor);
             session.SaveOrUpdate(aSale);
             session.Delete(userSession);
 
@@ -188,9 +187,13 @@ namespace TusLibros.app
             transaction.Commit();
         }
 
-        public Sale GetSale(Guid saleId)
+        public Sale GetSale(Guid transactionId)
         {
-            throw new NotImplementedException();
+            ISession session = SessionManager.OpenSession();
+
+            Sale sale = session.QueryOver<Sale>().Where(aSale => aSale.TransactionId == transactionId).SingleOrDefault<Sale>();
+
+            return sale;
         }
 
         private static void DeleteSalesByClientId(ISession session, Client aClient)
@@ -257,8 +260,7 @@ namespace TusLibros.app
 
         private static List<Sale> GetSalesByClientId(Client aClient, ISession session)
         {
-            List<Sale> sales =
-                session.QueryOver<Sale>().Where(sale => sale.Client.Id == aClient.Id).List<Sale>().ToList();
+            List<Sale> sales = session.QueryOver<Sale>().Where(sale => sale.Client.Id == aClient.Id).List<Sale>().ToList();
             return sales;
         }
 

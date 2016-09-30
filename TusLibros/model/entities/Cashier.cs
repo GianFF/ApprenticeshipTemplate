@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Util;
-using TusLibros.app;
-using TusLibros.app.environment;
 
 namespace TusLibros.model.entities
 {
@@ -12,9 +8,7 @@ namespace TusLibros.model.entities
     {
         public virtual Guid Id { get; protected set; }
 
-        public Cashier()
-        {
-        }
+        public Cashier(){}
 
         public int PriceFor(Cart aCart, IDictionary<string,int> aCatalog)
         {
