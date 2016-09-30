@@ -10,57 +10,69 @@ using TusLibros.model.entities;
 
 namespace TusLibros.app
 {
-    internal class PersistentYourBooksApplication : IYourBooksApplication
+    public class PersistentYourBooksApplication : IYourBooksApplication
     {
         public IClock Clock { get; set; }
-        public MerchantProcessor MerchantProcessor { get; }
 
-
-        public PersistentYourBooksApplication(IClock clock, MerchantProcessor merchantProcessor)
+        public PersistentYourBooksApplication(IClock aClock)
         {
-            Clock = clock;
-            MerchantProcessor = merchantProcessor;
+            Clock = aClock;
         }
 
-        public Cart CreateCart(Guid clientId, String password)
+        public Guid CreateCart(Guid clientId, String password)
         {
             Cart aCart = new Cart();
 
             ISession session = SessionManager.OpenSession();
             ITransaction transaction = session.BeginTransaction();
+
             Client aClient = GetClient(clientId, password, session);
-            session.SaveOrUpdate(new UserSession(aCart, Clock.TimeNow(), aClient));
+            UserSession userSession = new UserSession(Clock.TimeNow(), aClient);
+            session.SaveOrUpdate(userSession);
 
             transaction.Commit();
 
-            return aCart;
+            return userSession.CartId; //por el momento manejo esto como GUID porque no se ocurre otra cosa.
         }       
 
-        public Cart AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId) // TODO: NO OLVIDAR AGREGAR LOS TRY CATCH
+        public void AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId) // TODO: NO OLVIDAR AGREGAR LOS TRY CATCH
         {
             ISession session = SessionManager.OpenSession();
             ITransaction transaction = session.BeginTransaction();
 
             var userSession = GetAndVerifyUserSessionExpired(aCartId, session);
-            Cart aCart = userSession.Cart;
-            aCart.AddItemSomeTimes(aBook, quantity);
-            userSession.UpdateLastActionTime(Clock.TimeNow());
+            userSession.AddQuantityOfAnItem(aBook,quantity, Clock);            
             session.SaveOrUpdate(userSession);
 
             transaction.Commit();
-            return aCart;
         }
 
-        public List<Sale> PurchasesFor(Client aClient)
+        public Tuple<IDictionary, int> PurchasesFor(Client aClient)
         {
             ISession session = SessionManager.OpenSession();
 
             var sales = GetSalesByClientId(aClient, session);
 
-            return sales;
+            Tuple<IDictionary, int> detailsPurchases = Tuple.Create(BooksAndQuantities(sales), TotalAmountFor(sales));
+
+            return detailsPurchases;
         }
 
-        public Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, IDictionary aCatalog)
+        private int TotalAmountFor(List<Sale> sales)
+        {
+            return sales.Sum(aSale => aSale.Total());
+        }
+
+        private IDictionary BooksAndQuantities(List<Sale> sales)
+        {
+            var listBooksWithOccurrences = new Dictionary<string, int>();
+
+            sales.ForEach(aSale => aSale.AddBooksWithOcurrencies(listBooksWithOccurrences));
+
+            return listBooksWithOccurrences;
+        }
+
+        public Guid CheckoutCart(Guid aCartId, CreditCard aCreditCard, IDictionary<string, int> aCatalog)
         {
             ISession session = SessionManager.OpenSession();
             ITransaction transaction = session.BeginTransaction();
@@ -70,18 +82,18 @@ namespace TusLibros.app
             var aClient = userSession.Client;
 
             Cashier aCashier = new Cashier();
-            Sale aSale = aCashier.CheckoutFor(aCreditCard, aCart, aCatalog, aClient, MerchantProcessor);
+            Sale aSale = aCashier.CheckoutFor(aCreditCard, aCart, aCatalog, aClient, GlobalConfiguration.MerchantProcessor);
             session.SaveOrUpdate(aSale);
             session.Delete(userSession);
 
             transaction.Commit();
-            return aSale;
+            return aSale.TransactionId;
         }
 
-        public IDictionary ListCart(Guid aCartId)
+        public IDictionary<string, int> ListCart(Guid aCartId)
         {
             Cart cart = GetCart(aCartId);
-            return cart.ListBooksWithOccurrences();
+            return cart.Items;
         }
 
         public Client Login(string userName, string password)
@@ -175,6 +187,15 @@ namespace TusLibros.app
             transaction.Commit();
         }
 
+        public Sale GetSale(Guid transactionId)
+        {
+            ISession session = SessionManager.OpenSession();
+
+            Sale sale = session.QueryOver<Sale>().Where(aSale => aSale.TransactionId == transactionId).SingleOrDefault<Sale>();
+
+            return sale;
+        }
+
         private static void DeleteSalesByClientId(ISession session, Client aClient)
         {
             var sales = GetSalesByClientId(aClient, session);
@@ -206,10 +227,16 @@ namespace TusLibros.app
 
         private UserSession GetAndVerifyUserSessionExpired(Guid aCartId, ISession session)
         {
-            UserSession userSession =
-                session.QueryOver<UserSession>().Where(uS => uS.Cart.Id == aCartId).SingleOrDefault<UserSession>();
+            var userSession = GetUserSessionByCartId(aCartId, session);
 
             userSession.VerifyCartExpired(Clock.TimeNow());
+            return userSession;
+        }
+
+        private static UserSession GetUserSessionByCartId(Guid aCartId, ISession session)
+        {
+            UserSession userSession =
+                session.QueryOver<UserSession>().Where(uS => uS.CartId == aCartId).SingleOrDefault<UserSession>();
             return userSession;
         }
 
@@ -217,9 +244,9 @@ namespace TusLibros.app
         {
             ISession session = SessionManager.OpenSession();
 
-            Cart cart = session.Get<Cart>(aCartId);
+            UserSession userSession = GetUserSessionByCartId(aCartId, session);
 
-            return cart;
+            return userSession.Cart;
         }
 
         private static Client GetClientByUserNameAndPassword(string userName, string password, ISession session)
@@ -233,8 +260,7 @@ namespace TusLibros.app
 
         private static List<Sale> GetSalesByClientId(Client aClient, ISession session)
         {
-            List<Sale> sales =
-                session.QueryOver<Sale>().Where(sale => sale.Client.Id == aClient.Id).List<Sale>().ToList();
+            List<Sale> sales = session.QueryOver<Sale>().Where(sale => sale.Client.Id == aClient.Id).List<Sale>().ToList();
             return sales;
         }
 

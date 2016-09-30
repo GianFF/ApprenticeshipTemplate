@@ -97,7 +97,7 @@ namespace TusLibros.tests.support {
             return "valid user";
         }
 
-        public IDictionary ACatalog()
+        public IDictionary<string, int> ACatalog()
         {
             var catalog = new Dictionary<string,int>();
 

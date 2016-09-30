@@ -11,6 +11,7 @@ namespace TusLibros.db.mappings
             References(u => u.Cart).Cascade.All();
             References(u => u.Client);
             Map(u => u.LastActionDateTime);
+            Map(u => u.CartId);
         }
     }
 }

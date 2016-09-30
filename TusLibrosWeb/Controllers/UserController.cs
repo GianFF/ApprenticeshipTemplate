@@ -11,14 +11,14 @@ namespace TusLibrosWeb.Controllers
         private static IYourBooksApplication Application = Environment.GetApplication();
 
         //Get login page
-        public ActionResult Index()
+        public ActionResult Login()
         {
             return View();
         }
 
         // Post: login user
         [HttpPost]
-        public ActionResult Index(LoginViewModel model, string returnUrl)
+        public ActionResult Login(LoginViewModel model, string returnUrl)
         {
             Application.RegisterClient(model.UserName, model.Password);
             return View();

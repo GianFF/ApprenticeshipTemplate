@@ -71,7 +71,8 @@
     <Compile Include="app\IYourBooksApplication.cs" />
     <Compile Include="app\TransientYourBooksApplication.cs" />
     <Compile Include="clocks\DevelopmentClock.cs" />
-    <Compile Include="clocks\IntegrationClock.cs" />
+    <Compile Include="clocks\ProductionClock.cs" />
+    <Compile Include="db\mappings\SaleDetailMap.cs" />
     <Compile Include="db\mappings\CreditCardMap.cs" />
     <Compile Include="db\mappings\ClientMap.cs" />
     <Compile Include="db\mappings\SaleMap.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="db\ConfigurationMappingDataBase.cs" />
     <Compile Include="db\SessionManager.cs" />
     <Compile Include="model\entities\Sale.cs" />
+    <Compile Include="model\entities\SaleDetail.cs" />
     <Compile Include="model\UserSession.cs" />
     <Compile Include="clocks\IClock.cs" />
     <Compile Include="app\environment\PersitentDataBaseStrategy.cs" />

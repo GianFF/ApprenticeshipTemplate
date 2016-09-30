@@ -1,4 +1,5 @@
 ﻿using FluentNHibernate.Mapping;
+using NHibernate.Type;
 using TusLibros.model.entities;
 
 namespace TusLibros.db.mappings
@@ -9,8 +10,8 @@ namespace TusLibros.db.mappings
         {
             Id(x => x.Id);
             HasMany(x => x.Items)
-                .KeyColumn("idCart")
-                .Table("Books").Element("nameBook");
+                .AsMap<string>("book")
+                .Element("quantity", c => c.Type<int>());
         }
     }
 }

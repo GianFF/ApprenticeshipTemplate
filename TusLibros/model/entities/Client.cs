@@ -5,16 +5,14 @@ namespace TusLibros.model.entities
     public class Client
     {
         public virtual Guid Id { get; protected set; }
-
         public virtual String UserName { get; set; }
-
         public virtual String Password { get; set; }
 
         public Client() { }
 
-        public Client(String anUserNAme, String aPassword)
+        public Client(String anUserName, String aPassword)
         {         
-            UserName = anUserNAme;
+            UserName = anUserName;
             Password = aPassword;
         }
 

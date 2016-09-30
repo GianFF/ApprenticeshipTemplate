@@ -1,76 +1,80 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TusLibros.clocks;
 using TusLibros.model;
 using TusLibros.model.entities;
 
 namespace TusLibros.app
 {
-    internal class TransientYourBooksApplication : IYourBooksApplication
+    public class TransientYourBooksApplication : IYourBooksApplication
     {
-        public IClock Clock { get; set; }
         public List<UserSession> UserSessions { get; set; }
         public List<Sale> Sales { get; set; }
         public List<Client> Clients { get; set; }
-        public MerchantProcessor MerchantProcessor { get; }
+        public IClock Clock { get; set; }
 
-        public TransientYourBooksApplication(IClock clock, MerchantProcessor merchantProcessor)
+        public TransientYourBooksApplication(IClock aClock)
         {
             UserSessions = new List<UserSession>();
             Sales = new List<Sale>();
             Clients = new List<Client>();
-            Clock = clock;
-            MerchantProcessor = merchantProcessor;
+            Clock = aClock;
         }
 
-        public Cart CreateCart(Guid clientId, String password)
+        public Guid CreateCart(Guid clientId, String password)
         {
-            Cart aCart = new Cart();
             Client aClient = GetClient(clientId, password);
-            UserSessions.Add(new UserSession(aCart, Clock.TimeNow(), aClient));
-            return aCart;
+            UserSession userSession = new UserSession(Clock.TimeNow(), aClient);
+            UserSessions.Add(userSession);
+            return userSession.CartId; 
         }
-        
-        public Cart AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId)
+
+        public void AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId)
         {
-            UserSession userSession = UserSession(aCartId);
+            UserSession userSession = FindUserSessionByCartId(aCartId);
             userSession.VerifyCartExpired(Clock.TimeNow());
-            Cart aCart = userSession.Cart;
-            aCart.AddItemSomeTimes(aBook, quantity);
-            userSession.UpdateLastActionTime(Clock.TimeNow());
-            return aCart;
-        }        
 
-        public List<Sale> PurchasesFor(Client aClient)
-        {
-            return Sales.FindAll(sale => sale.ForClient(aClient));
+            userSession.AddQuantityOfAnItem(aBook, quantity,Clock);
+
+            UserSessions.Add(userSession);
         }
 
-        public Sale CheckoutCart(Guid aCartId, CreditCard aCreditCard, IDictionary aCatalog)
+        public IDictionary<string, int> ListCart(Guid aCartId)
         {
-            var aCart = GetCart(aCartId);
-            Cashier aCashier = new Cashier();
-            Client aClient = UserSession(aCartId).Client;
-            Sale aSale = aCashier.CheckoutFor(aCreditCard, aCart, aCatalog, aClient, MerchantProcessor);
+            UserSession userSession = FindUserSessionByCartId(aCartId);
+            return userSession.ListCart();
+        }
 
+        public Guid CheckoutCart(Guid aCartId, CreditCard aCreditCard, IDictionary<string, int> aCatalog) //TODO: sacar el catalogo de acá.
+        {
+            UserSession userSession = FindUserSessionByCartId(aCartId);
+            Sale aSale = userSession.CheckoutCartWith(aCreditCard, GlobalConfiguration.MerchantProcessor, aCatalog);
             Sales.Add(aSale);
-            return aSale;
+
+            return aSale.TransactionId;
+        }
+
+        public Tuple<IDictionary, int> PurchasesFor(Client aClient)
+        {
+            List<Sale> sales = Sales.FindAll(sale => sale.ForClient(aClient));
+
+            Tuple<IDictionary, int> detailsPurchases = Tuple.Create(BooksAndQuantities(sales), TotalAmountFor(sales));
+
+            return detailsPurchases;
         }
 
         public bool IsSaleRegistered(Sale aSale)
         {
             return Sales.Contains(aSale);
         }
+
         public bool PurchasesContainsASaleForAClient(Sale aSale, Client aClient)
         {
-            return PurchasesFor(aClient).Contains(aSale);
-        }
+            List<Sale> sales = Sales.FindAll(sale => sale.ForClient(aClient));
 
-        public IDictionary ListCart(Guid aCartId)
-        {
-            var aCart = GetCart(aCartId);
-            return  aCart.ListBooksWithOccurrences();
+            return sales.Contains(aSale);
         }
 
         public bool ContainsThisQuantityOfBook(Guid aCartId, string aBook, int quantityOfBook)
@@ -103,21 +107,40 @@ namespace TusLibros.app
             Clients.Remove(aClient);
         }
 
-        private UserSession UserSession(Guid aCartId)
+        private UserSession FindUserSessionByCartId(Guid aCartId)
         {
-            return UserSessions.Find(session => session.Cart.Id == aCartId);
+            return UserSessions.Find(session => session.CartId == aCartId);
         }
 
         public Cart GetCart(Guid aCartId)
         {
-            UserSession userSession = UserSession(aCartId);
+            UserSession userSession = FindUserSessionByCartId(aCartId);
             return userSession.Cart;
+        }
+
+        public Sale GetSale(Guid transactionId)
+        {
+            return Sales.Find(aSale => aSale.TransactionId == transactionId);
         }
 
         private Client GetClient(Guid clientId, string password)
         {
             Client aClient = Clients.Find(client => client.Id == clientId && client.Password == password);
             return aClient;
+        }
+        
+        private IDictionary BooksAndQuantities(List<Sale> sales)
+        {
+            var listBooksWithOccurrences = new Dictionary<string, int>();
+
+            sales.ForEach(aSale => aSale.AddBooksWithOcurrencies(listBooksWithOccurrences));
+
+            return listBooksWithOccurrences;
+        }
+
+        private int TotalAmountFor(List<Sale> sales)
+        {
+            return sales.Sum(aSale => aSale.Total());
         }
     }
 }

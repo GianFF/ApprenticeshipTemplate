@@ -1,4 +1,6 @@
 ﻿using System;
+using TusLibros.clocks;
+using TusLibros.model.entities;
 
 namespace TusLibros.app
 {
@@ -14,5 +16,7 @@ namespace TusLibros.app
             "Database=" + DataBaseGlobal + ";" +
             "User ID=" + UserDataBaseGlobal + ";" +
             "Password=" + PasswordDataBaseGlobal + ";";
+
+        public static MerchantProcessor MerchantProcessor= new MerchantProcessor();
     }
 }

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace TusLibros.clocks
 {
-    class IntegrationClock : IClock
+    class ProductionClock : IClock
     {
         public DateTime ClockTime { get; set; }
 
-        public IntegrationClock()
+        public ProductionClock()
         {
             ClockTime = DateTime.Now;
         }
