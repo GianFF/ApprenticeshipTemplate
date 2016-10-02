@@ -17,9 +17,9 @@ namespace TusLibros.model
 
         public UserSession(){}
 
-        public UserSession(DateTime lastActionDateTime, Client client)
+        public UserSession(DateTime lastActionDateTime, Client client, Cart aCart)
         {
-            this.Cart = new Cart();
+            this.Cart = aCart;
             this.LastActionDateTime = lastActionDateTime;
             this.Client = client;
             this.CartId = Guid.NewGuid();
@@ -47,9 +47,8 @@ namespace TusLibros.model
             return Cart.Items;
         }
 
-        public virtual Sale CheckoutCartWith(CreditCard aCreditCard, MerchantProcessor merchantProcessor, IDictionary<string, int> aCatalog)
+        public virtual Sale CheckoutCartWith(Cashier aCashier, CreditCard aCreditCard, MerchantProcessor merchantProcessor, IDictionary<string, int> aCatalog)
         {
-            Cashier aCashier = new Cashier();
             Sale aSale = aCashier.CheckoutFor(aCreditCard, Cart, aCatalog, Client, merchantProcessor);
             return aSale;
         }

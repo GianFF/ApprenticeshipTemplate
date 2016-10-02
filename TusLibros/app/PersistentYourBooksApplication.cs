@@ -27,7 +27,7 @@ namespace TusLibros.app
             ITransaction transaction = session.BeginTransaction();
 
             Client aClient = GetClient(clientId, password, session);
-            UserSession userSession = new UserSession(Clock.TimeNow(), aClient);
+            UserSession userSession = new UserSession(Clock.TimeNow(), aClient, aCart);
             session.SaveOrUpdate(userSession);
 
             transaction.Commit();

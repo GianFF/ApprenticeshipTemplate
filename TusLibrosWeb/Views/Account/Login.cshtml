@@ -1,0 +1,49 @@
+﻿@model TusLibrosWeb.Models.UserViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login de prueba</title>
+</head>
+<body>
+<div>
+    <form method="post">
+        <fieldset>
+            <legend>Login</legend>
+            <div>
+                <label for="UserName">User Name:</label>
+                <input type="text" name="UserName" value=""/>
+            </div>
+            <div>
+                <label for="Password">Password:</label>
+                <input type="password" name="Password" value="" />
+            </div>
+            <div>
+                <label>&nbsp;</label>
+                <input type="submit" value="Login" class="submit" />
+            </div>
+        </fieldset>
+    </form>
+    <p>
+        @Html.ActionLink("Register as a new user", "Register")
+    </p>
+    @* Enable this once you have account confirmation enabled for password reset functionality
+        <p>
+            @Html.ActionLink("Forgot your password?", "ForgotPassword")
+        </p>*@
+    
+    @*  PARA RENDERIZAR OTRA VIEW:
+
+    <div class="col-md-4">
+        <section id="socialLoginForm">
+            @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+        </section>
+    </div>
+    *@
+</div>
+</body>
+</html>

@@ -16,6 +16,7 @@ namespace TusLibros.app
 
         Client Login(string userName, string password);
         void RegisterClient(string userName, string password);
+
         Cart GetCart(Guid aCartId);
         bool IsSaleRegistered(Sale sale);
         bool PurchasesContainsASaleForAClient(Sale aSale, Client aClient);

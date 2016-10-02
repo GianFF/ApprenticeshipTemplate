@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using TusLibros.app;
-using TusLibros.app.environment;
+using TusLibros.model.entities;
 
 namespace TusLibrosWeb.Models
 {
-    public class LoginViewModel
+    public class UserViewModel
     {
         [Required]
         [Display(Name = "UserName")]

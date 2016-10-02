@@ -26,7 +26,8 @@ namespace TusLibros.app
         public Guid CreateCart(Guid clientId, String password)
         {
             Client aClient = GetClient(clientId, password);
-            UserSession userSession = new UserSession(Clock.TimeNow(), aClient);
+            Cart aCart = new Cart();
+            UserSession userSession = new UserSession(Clock.TimeNow(), aClient, aCart);
             UserSessions.Add(userSession);
             return userSession.CartId; 
         }
@@ -50,7 +51,8 @@ namespace TusLibros.app
         public Guid CheckoutCart(Guid aCartId, CreditCard aCreditCard, IDictionary<string, int> aCatalog) //TODO: sacar el catalogo de acá.
         {
             UserSession userSession = FindUserSessionByCartId(aCartId);
-            Sale aSale = userSession.CheckoutCartWith(aCreditCard, GlobalConfiguration.MerchantProcessor, aCatalog);
+            Cashier aCashier = new Cashier();
+            Sale aSale = userSession.CheckoutCartWith(aCashier,aCreditCard, GlobalConfiguration.MerchantProcessor, aCatalog);
             Sales.Add(aSale);
 
             return aSale.TransactionId;

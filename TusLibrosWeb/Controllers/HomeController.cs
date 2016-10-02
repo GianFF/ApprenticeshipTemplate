@@ -5,22 +5,13 @@ using TusLibrosWeb.Models;
 
 namespace TusLibrosWeb.Controllers
 {
-    public class UserController : Controller
+    public class HomeController : Controller
     {
         private static DevelopmentEnvironment Environment = new DevelopmentEnvironment(new PersitentDataBaseStrategy());
         private static IYourBooksApplication Application = Environment.GetApplication();
 
-        //Get login page
-        public ActionResult Login()
+        public ActionResult Index()
         {
-            return View();
-        }
-
-        // Post: login user
-        [HttpPost]
-        public ActionResult Login(LoginViewModel model, string returnUrl)
-        {
-            Application.RegisterClient(model.UserName, model.Password);
             return View();
         }
     }
