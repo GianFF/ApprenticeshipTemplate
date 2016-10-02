@@ -52,6 +52,16 @@ namespace TusLibrosWeb.Tests.Controllers
             Assert.IsNotNull(result);
         }
 
+        [TestMethod]
+        public void RegisterReturnsARedirectToLoginAccount()
+        {
+            UserViewModel userView = new UserViewModel { Password = "123", UserName = "gian pepe" };
+
+            var result = Controller.Register(userView, "") as RedirectToRouteResult;
+
+            Assert.IsTrue(result.RouteValues.ContainsValue("Login"));
+            Assert.IsTrue(result.RouteValues.ContainsValue("Account"));
+        }
         /*//Get register page
         public ActionResult Register()
         {
