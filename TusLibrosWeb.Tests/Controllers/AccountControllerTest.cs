@@ -1,5 +1,7 @@
 ﻿using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TusLibros.app;
+using TusLibros.app.environment;
 using TusLibrosWeb.Controllers;
 using TusLibrosWeb.Models;
 
@@ -8,48 +10,49 @@ namespace TusLibrosWeb.Tests.Controllers
     [TestClass]
     public class AccountControllerTest
     {
-        [TestMethod]
-        public void GetLogin()
+        private DevelopmentEnvironment Environment;
+        private IYourBooksApplication Application;
+        private AccountController Controller;
+
+        [TestInitialize]
+        public void SetUp()
         {
-            // Arrange
-            AccountController controller = new AccountController();
-
-            // Act
-            ViewResult result = controller.Login() as ViewResult;
-
-            // Assert
-            Assert.Equals("Login",result.ViewName);
+            Environment = new DevelopmentEnvironment(new TransientDataBaseStrategy());
+            Application = Environment.GetApplication();
+            Controller = new AccountController(Application);
         }
 
         [TestMethod]
-        public void PostLogin()
-//                    public void ReturnsTempData()
-
+        public void ReturnLoginView()
         {
-            // Arrange
-            AccountController controller = new AccountController();
+            ViewResult result = Controller.Login() as ViewResult;
+
+//            Assert.AreEqual("Login",result.ViewName);
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void LoginReturnsARedirectToIndexHome()
+        {
             UserViewModel userView = new UserViewModel {Password = "123", UserName = "gian pepe"};
-            controller.Register(userView, "");
-
-            // Act
-            var result = controller.Login(userView, "") as ViewResult;
-
-            Assert.AreEqual("ClientID", result.TempData["ClientId"]); 
-            /*HomeController controllerUnderTest = new HomeController();
-            var result = controllerUnderTest.Details("a1") as ViewResult;
-            Assert.AreEqual("foo", result.TempData["Name"]);*/
-
-
-
-            //ViewBag.ClientId = client.Id
-            // Assert
-            //Assert.AreEqual("Index", result.RouteValues["action"]);
-            //Assert.IsNull(result.RouteValues["controller"]); // means we redirected to the same controller
+            Controller.Register(userView, "");
+            
+            var result = Controller.Login(userView, "") as RedirectToRouteResult;
+            
+            Assert.IsTrue(result.RouteValues.ContainsValue("Index"));
+            Assert.IsTrue(result.RouteValues.ContainsValue("Home"));
         }
 
-        /*
+        [TestMethod]
+        public void ReturnRegisterView()
+        {
+            ViewResult result = Controller.Register() as ViewResult;
 
-        //Get register page
+            //Assert.AreEqual("Register", result.ViewName);
+            Assert.IsNotNull(result);
+        }
+
+        /*//Get register page
         public ActionResult Register()
         {
             return View();
@@ -62,7 +65,6 @@ namespace TusLibrosWeb.Tests.Controllers
             Application.RegisterClient(model.UserName, model.Password);
 
             return RedirectToAction("Login", "Account");
-        }
-        */
+        }*/
     }
 }

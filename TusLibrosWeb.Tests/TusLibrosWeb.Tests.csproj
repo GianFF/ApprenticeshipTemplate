@@ -85,6 +85,10 @@
       <Project>{9E3E96ED-3ED2-4D2F-9DD9-843632063DF9}</Project>
       <Name>TusLibrosWeb</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TusLibros\TusLibros.csproj">
+      <Project>{79EE4DAF-10B1-4368-AEDC-068C5B073FBF}</Project>
+      <Name>TusLibros</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

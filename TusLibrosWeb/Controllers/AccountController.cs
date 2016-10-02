@@ -1,5 +1,4 @@
 ﻿using System.Web.Mvc;
-using TusLibros.app.environment;
 using TusLibros.app;
 using TusLibrosWeb.Models;
 
@@ -7,9 +6,12 @@ namespace TusLibrosWeb.Controllers
 {
     public class AccountController : Controller
     {
-        private static DevelopmentEnvironment Environment = new DevelopmentEnvironment(new TransientDataBaseStrategy());
-        private static IYourBooksApplication Application = Environment.GetApplication(); //TODO: esto estatico en todos lados, no va
+        private IYourBooksApplication Application;
 
+        public AccountController(IYourBooksApplication anApplication)
+        {
+            Application = anApplication;
+        }
         //Get login page
         public ActionResult Login()
         {
