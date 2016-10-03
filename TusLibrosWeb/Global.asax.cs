@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Routing;
 
 namespace TusLibrosWeb
@@ -13,6 +9,14 @@ namespace TusLibrosWeb
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+            RegisterTusLibrosControllerFactory();
+        }
+
+        // Register TusLibrosControllerFactory() to MVC framework.
+        private void RegisterTusLibrosControllerFactory()
+        {
+            IControllerFactory factory = new TusLibrosControllerFactory();
+            ControllerBuilder.Current.SetControllerFactory(factory);
         }
     }
 }

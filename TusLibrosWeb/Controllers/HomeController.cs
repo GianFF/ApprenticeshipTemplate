@@ -7,8 +7,12 @@ namespace TusLibrosWeb.Controllers
 {
     public class HomeController : Controller
     {
-        private static DevelopmentEnvironment Environment = new DevelopmentEnvironment(new PersitentDataBaseStrategy());
-        private static IYourBooksApplication Application = Environment.GetApplication();
+        private IYourBooksApplication Application;
+
+        public HomeController(IYourBooksApplication anApplication)
+        {
+            Application = anApplication;
+        }
 
         public ActionResult Index()
         {
