@@ -17,18 +17,8 @@ namespace TusLibrosWeb.Tests.Controllers
         [TestInitialize]
         public void SetUp()
         {
-            Environment = new DevelopmentEnvironment(new TransientDataBaseStrategy());
-            Application = Environment.GetApplication();
-            Controller = new AccountController(Application);
-        }
-
-        [TestMethod]
-        public void ReturnLoginView()
-        {
-            ViewResult result = Controller.Login() as ViewResult;
-
-//            Assert.AreEqual("Login",result.ViewName);
-            Assert.IsNotNull(result);
+            Application = new TestObjectProvider().ProvideTransientAplpliApplication(); 
+            Controller = new AccountController(Application); //TODO pedirle al object provider el controller.
         }
 
         [TestMethod]
@@ -49,7 +39,7 @@ namespace TusLibrosWeb.Tests.Controllers
             ViewResult result = Controller.Register() as ViewResult;
 
             //Assert.AreEqual("Register", result.ViewName);
-            Assert.IsNotNull(result);
+            Assert.IsNotNull(result); //TODO: no testear que algo no se null.
         }
 
         [TestMethod]
