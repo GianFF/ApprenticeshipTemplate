@@ -10,7 +10,12 @@ namespace TusLibrosWeb.Tests
     {
         public TestObjectProvider() { }
 
-        public IYourBooksApplication ProvideTransientAplpliApplication()
+        public AccountController GetAccountController()
+        {
+            return new AccountController(GetTransientAplpliApplication());
+        }
+
+        private IYourBooksApplication GetTransientAplpliApplication()
         {
             DevelopmentEnvironment environment = new DevelopmentEnvironment(new TransientDataBaseStrategy());
 

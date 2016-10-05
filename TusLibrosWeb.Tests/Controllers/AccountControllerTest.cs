@@ -1,7 +1,6 @@
 ﻿using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TusLibros.app;
-using TusLibros.app.environment;
+using MvcContrib.TestHelper;
 using TusLibrosWeb.Controllers;
 using TusLibrosWeb.Models;
 
@@ -10,61 +9,67 @@ namespace TusLibrosWeb.Tests.Controllers
     [TestClass]
     public class AccountControllerTest
     {
-        private DevelopmentEnvironment Environment;
-        private IYourBooksApplication Application;
-        private AccountController Controller;
+        //TODO: refactorear los tests para no romper encapsulamiento ni hacer test implementativos.
+
+        private TestObjectProvider TestObjectProvider;
 
         [TestInitialize]
         public void SetUp()
         {
-            Application = new TestObjectProvider().ProvideTransientAplpliApplication(); 
-            Controller = new AccountController(Application); //TODO pedirle al object provider el controller.
+            TestObjectProvider = new TestObjectProvider();
         }
 
         [TestMethod]
-        public void LoginReturnsARedirectToIndexHome()
+        public void AnUserCanBeRegisteredWithAnUserNameAndAPasswordIfThereIsNotAnotherUserWithThatName()
         {
-            UserViewModel userView = new UserViewModel {Password = "123", UserName = "gian pepe"};
-            Controller.Register(userView, "");
-            
-            var result = Controller.Login(userView, "") as RedirectToRouteResult;
-            
-            Assert.IsTrue(result.RouteValues.ContainsValue("Index"));
-            Assert.IsTrue(result.RouteValues.ContainsValue("Home"));
+            AccountController controller = TestObjectProvider.GetAccountController();
+            UserViewModel userView = new UserViewModel { Password = "123", UserName = "pepe" };
+
+
+            var response = controller.Register(userView, "");
+
+            response.AssertActionRedirect().ToAction("Login");
+
+            controller.Login(userView, "");
+            Assert.IsTrue(controller.TempData.ContainsKey("ClientId"));
         }
 
         [TestMethod]
-        public void ReturnRegisterView()
+        public void AnUserCanNotBeRegisteredWithAnUserNameAndAPasswordIfThereIsAnotherUserWithThatName()
         {
-            ViewResult result = Controller.Register() as ViewResult;
+            AccountController controller = TestObjectProvider.GetAccountController();
+            UserViewModel userView = new UserViewModel { Password = "123", UserName = "pepe" };
 
-            //Assert.AreEqual("Register", result.ViewName);
-            Assert.IsNotNull(result); //TODO: no testear que algo no se null.
+            controller.Register(userView, "");
+            var response = controller.Register(userView, "");
+
+            Assert.AreEqual("User already registered", controller.TempData["ErrorMessage"]);
+            response.AssertViewRendered().ForView("Register");
         }
 
         [TestMethod]
-        public void RegisterReturnsARedirectToLoginAccount()
+        public void AnUserCanLoginWithAUserNameAndAPasswordIfItIsRegistered()
         {
-            UserViewModel userView = new UserViewModel { Password = "123", UserName = "gian pepe" };
+            AccountController controller = TestObjectProvider.GetAccountController();
+            UserViewModel userView = new UserViewModel {Password = "123", UserName = "pepe"};
 
-            var result = Controller.Register(userView, "") as RedirectToRouteResult;
+            controller.Register(userView, "");
+            var result = controller.Login(userView, "") as RedirectToRouteResult;
 
-            Assert.IsTrue(result.RouteValues.ContainsValue("Login"));
-            Assert.IsTrue(result.RouteValues.ContainsValue("Account"));
-        }
-        /*//Get register page
-        public ActionResult Register()
-        {
-            return View();
+            Assert.IsTrue(controller.TempData.ContainsKey("ClientId"));
+            result.AssertActionRedirect().ToAction("Index");
         }
 
-        // Post: register user
-        [HttpPost]
-        public ActionResult Register(UserViewModel model, string returnUrl)
+        [TestMethod]
+        public void AnUserCanNotLoginWithAUserNameAndAPasswordIfItIsNotRegistered()
         {
-            Application.RegisterClient(model.UserName, model.Password);
+            AccountController controller = TestObjectProvider.GetAccountController();
+            UserViewModel userView = new UserViewModel { Password = "123", UserName = "pepe" };
 
-            return RedirectToAction("Login", "Account");
-        }*/
+            var result = controller.Login(userView, "");
+
+            Assert.AreEqual("Invalid user or password", controller.TempData["ErrorMessage"]);
+            result.AssertViewRendered().ForView("Login");
+        }
     }
 }
