@@ -86,7 +86,12 @@ namespace TusLibros.app
 
         public Client Login(string userName, string password)
         {
-            return Clients.Find(client => client.SameUserNameAndPassword(userName, password));
+            Client aClient = Clients.Find(client => client.SameUserNameAndPassword(userName, password));
+
+            if (aClient == null)
+                throw new ArgumentException("Invalid user or password");
+
+            return aClient;
         }
 
         public void RegisterClient(string userName, string password)
