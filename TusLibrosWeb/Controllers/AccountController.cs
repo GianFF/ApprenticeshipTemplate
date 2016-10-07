@@ -1,8 +1,7 @@
-﻿using System;
-using System.Net;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using TusLibros.app;
 using TusLibros.model.entities;
+using TusLibros.model.exceptions;
 using TusLibrosWeb.Models;
 
 namespace TusLibrosWeb.Controllers
@@ -26,11 +25,11 @@ namespace TusLibrosWeb.Controllers
         {
             Client client; //TODO: LOGIN NO DEBERIA DEVOLVER UN CLIENT, SINO UN GUID
 
-            try
+            try //TODO: ver si no hay una mejor practica para cachear excepciones del servidor. (Que se quieran mostrar en la vista)
             {
                 client = Application.Login(model.UserName, model.Password);
             }
-            catch (ArgumentException exception)
+            catch (LoginException exception)
             {
                 TempData["ErrorMessage"] = exception.Message;
 
@@ -53,7 +52,7 @@ namespace TusLibrosWeb.Controllers
             {
                 Application.RegisterClient(model.UserName, model.Password);
             }
-            catch (ArgumentException exception)
+            catch (RegisterException exception)
             {
                 TempData["ErrorMessage"] = exception.Message;
 

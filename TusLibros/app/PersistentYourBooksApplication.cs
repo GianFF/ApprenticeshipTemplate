@@ -7,6 +7,7 @@ using TusLibros.clocks;
 using TusLibros.db;
 using TusLibros.model;
 using TusLibros.model.entities;
+using TusLibros.model.exceptions;
 
 namespace TusLibros.app
 {
@@ -103,7 +104,7 @@ namespace TusLibros.app
             var aClient = GetClientByUserNameAndPassword(userName, password, session);
 
             if (aClient == null)
-                throw new ArgumentException("Invalid user or password");
+                throw new LoginException("Invalid user or password");
 
             return aClient;
         }
@@ -154,7 +155,7 @@ namespace TusLibros.app
         {
             Client aClient = session.QueryOver<Client>().Where(each => each.UserName == userName).SingleOrDefault<Client>();
             if (aClient != null)
-                throw new ArgumentException("User already registered");
+                throw new RegisterException("User already registered");
         }
 
         public void DeleteUser(string userName, string password) 

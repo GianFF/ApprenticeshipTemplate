@@ -25,7 +25,7 @@ namespace TusLibros.db
 
         private static void BuildSchema(Configuration config)
         {
-            new SchemaExport(config).Create(false, true); //Ver de usar execute con el ultimo parametro true para que dropee todo.
+            new SchemaExport(config).Create(false, true); //TODO: Ver de usar execute con el ultimo parametro true para que dropee todo.
         }
     }
 }

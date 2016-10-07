@@ -45,7 +45,7 @@ namespace TusLibros.tests
                 application.RegisterClient("marcos", "123");
                 Assert.Fail();
             }
-            catch (ArgumentException e)
+            catch (RegisterException e)
             {
                 Assert.AreEqual("User already registered", e.Message);
             }

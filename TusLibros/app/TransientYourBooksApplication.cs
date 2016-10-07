@@ -5,6 +5,7 @@ using System.Linq;
 using TusLibros.clocks;
 using TusLibros.model;
 using TusLibros.model.entities;
+using TusLibros.model.exceptions;
 
 namespace TusLibros.app
 {
@@ -89,7 +90,7 @@ namespace TusLibros.app
             Client aClient = Clients.Find(client => client.SameUserNameAndPassword(userName, password));
 
             if (aClient == null)
-                throw new ArgumentException("Invalid user or password");
+                throw new LoginException("Invalid user or password");
 
             return aClient;
         }
@@ -105,7 +106,7 @@ namespace TusLibros.app
         {
             bool existsUserName = Clients.Exists(client => client.SameUserName(userName));
             if (existsUserName)
-                throw new ArgumentException("User already registered");
+                throw new RegisterException("User already registered");
         }
 
         public void DeleteUser(string userName, string password)

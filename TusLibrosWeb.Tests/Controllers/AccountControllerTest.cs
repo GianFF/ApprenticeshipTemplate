@@ -9,8 +9,6 @@ namespace TusLibrosWeb.Tests.Controllers
     [TestClass]
     public class AccountControllerTest
     {
-        //TODO: refactorear los tests para no romper encapsulamiento ni hacer test implementativos.
-
         private TestObjectProvider TestObjectProvider;
 
         [TestInitialize]
@@ -20,7 +18,7 @@ namespace TusLibrosWeb.Tests.Controllers
         }
 
         [TestMethod]
-        public void AnUserCanBeRegisteredWithAnUserNameAndAPasswordIfThereIsNotAnotherUserWithThatName()
+        public void AnUserCanBeRegisteredWithAnUserNameAndAPasswordIfThereIsNotAnotherUserWithThatUserName()
         {
             AccountController controller = TestObjectProvider.GetAccountController();
             UserViewModel userView = new UserViewModel { Password = "123", UserName = "pepe" };
@@ -29,9 +27,6 @@ namespace TusLibrosWeb.Tests.Controllers
             var response = controller.Register(userView, "");
 
             response.AssertActionRedirect().ToAction("Login");
-
-            controller.Login(userView, "");
-            Assert.IsTrue(controller.TempData.ContainsKey("ClientId"));
         }
 
         [TestMethod]
