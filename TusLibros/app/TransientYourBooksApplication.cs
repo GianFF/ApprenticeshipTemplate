@@ -16,6 +16,11 @@ namespace TusLibros.app
         public List<Client> Clients { get; set; }
         public IClock Clock { get; set; }
 
+        public Client UserIdentifiedBy(Guid anId)
+        {
+            return Clients.Find(client => client.Id.Equals(anId));
+        }
+
         public TransientYourBooksApplication(IClock aClock)
         {
             UserSessions = new List<UserSession>();

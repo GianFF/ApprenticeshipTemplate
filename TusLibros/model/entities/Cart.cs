@@ -54,8 +54,13 @@ namespace TusLibros.model.entities
             var books = Items.Keys;
             books.ForEach(aBook => details.Add(new SaleDetail(aBook, QuantityOf(aBook), aCatalog[aBook])));
             return details;
-
         }
+
+        public IEnumerable<T> CollectItems<T>(Func<string, T> aBlock)
+        {
+            return Items.Keys.Select(aBlock);
+        }
+
 
         public virtual bool VerifyIfContainsInvalidBooks(IDictionary<string, int> aCatalog)
         {

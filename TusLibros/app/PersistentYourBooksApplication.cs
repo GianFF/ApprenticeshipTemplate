@@ -13,7 +13,23 @@ namespace TusLibros.app
 {
     public class PersistentYourBooksApplication : IYourBooksApplication
     {
+        private ISession session;
         public IClock Clock { get; set; }
+
+        public static PersistentYourBooksApplication Create() //TODO: usar esto para construir la aplicacion
+        { 
+            return new PersistentYourBooksApplication(SessionManager.OpenSession()); 
+        }
+
+        public PersistentYourBooksApplication(ISession aSession)
+        {
+            session = aSession;
+        }
+
+        public Client UserIdentifiedBy(Guid anId)
+        {
+            throw new NotImplementedException();
+        }
 
         public PersistentYourBooksApplication(IClock aClock)
         {
@@ -34,9 +50,26 @@ namespace TusLibros.app
             transaction.Commit();
 
             return userSession.CartId; //por el momento manejo esto como GUID porque no se ocurre otra cosa.
-        }       
+        }
 
-        public void AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId) // TODO: NO OLVIDAR AGREGAR LOS TRY CATCH
+        public void DuringTransactionDo(Action anAction) //TODO: forma de sacar para fuera el transaction commit y rollback. UTILIZAR EN DONDE CORRESPONDA
+        {
+            using (var transaction = SessionManager.OpenSession().BeginTransaction())
+            {
+                try
+                {
+                    anAction();
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
+        }
+
+        public void AddAQuantityOfAnItem(int quantity, string aBook, Guid aCartId)
         {
             ISession session = SessionManager.OpenSession();
             ITransaction transaction = session.BeginTransaction();

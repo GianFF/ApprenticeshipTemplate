@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using TusLibros.app;
 using TusLibros.model.entities;
 using TusLibros.model.exceptions;
@@ -56,9 +57,24 @@ namespace TusLibrosWeb.Controllers
             {
                 TempData["ErrorMessage"] = exception.Message;
 
-                return View("Register");
+                return View("Register");//TODO: ver si se le puede meter el mensaje de error a la view. Tipo: View("Register", exception.Message);
             }
             return RedirectToAction("Login", "Account");
+        }
+
+        public string UserAlreadyRegisteredMessage()
+        {
+            return (string) TempData["ErrorMessage"];
+        }
+
+        public bool IsLogged(string anUsername)//TODO: refactorear lo mas posible
+        {
+            if (!TempData.ContainsKey("ClientId")) return false;
+
+            var id = (Guid) TempData["ClientId"];
+            var user = Application.UserIdentifiedBy(id);
+
+            return user.UserName == anUsername;
         }
     }
 }

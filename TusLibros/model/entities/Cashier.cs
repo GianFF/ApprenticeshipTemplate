@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Schema;
 
 namespace TusLibros.model.entities
 {
@@ -20,7 +21,6 @@ namespace TusLibros.model.entities
         protected int SumPricesIn(IList<int> productPrices)
         {
             return productPrices.Sum();
-           
         }
 
         public Sale CheckoutFor(CreditCard aCreditCard, Cart aCart, IDictionary<string,int> aCatalog, Client aClient, MerchantProcessor merchantProcessor)
@@ -32,9 +32,10 @@ namespace TusLibros.model.entities
             return new Sale(aCreditCard, CreateSaleDetail(aCart, aCatalog), aClient, DateTime.Now);
         }
 
-        private List<SaleDetail> CreateSaleDetail(Cart aCart, IDictionary<string, int> aCatalog) //TODO: preguntar a quien le corresponde "armar" el detalle.
+        private List<SaleDetail> CreateSaleDetail(Cart aCart, IDictionary<string, int> aCatalog)
         {
-            return aCart.CreateSaleDetailWith(aCatalog);
+            var saleDetails = aCart.CollectItems(item => new SaleDetail(item, aCart.QuantityOf(item), aCatalog[item]));
+            return (List<SaleDetail>)saleDetails;
         }
 
         private void VerifyIfTheCartHasValidBooks(Cart aCart, IDictionary<string, int> aCatalog)

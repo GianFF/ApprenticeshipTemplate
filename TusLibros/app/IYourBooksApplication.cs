@@ -24,5 +24,6 @@ namespace TusLibros.app
         void DeleteUser(string userName, string password);
         Sale GetSale(Guid transactionId);
         IClock Clock { get; set; }
+        Client UserIdentifiedBy(Guid anId);
     }
 }
